@@ -18,8 +18,6 @@ phases:
       - ln -s "${CODEBUILD_SRC_DIR}" "/go/src/${PACKAGE}"
       # Print all environment variables (handy for AWS CodeBuild logs)
       - env
-      # Install golint
-      - go get -u github.com/golang/lint/golint
 
   pre_build:
     commands:
@@ -27,8 +25,6 @@ phases:
       - cd "/go/src/${PACKAGE}"
       # Fetch all dependencies
       - go get -t ./...
-      # Ensure that the code passes all lint tests
-      - golint -set_exit_status
       # Check for common Go problems with 'go vet'
       - go vet .
       # Run all tests included with the application
