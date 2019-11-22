@@ -17,15 +17,15 @@ func TestHandler(t *testing.T) {
 			// Test that the handler responds with the correct response
 			// when a valid name is provided in the HTTP body
 			request: events.APIGatewayProxyRequest{Body: "Paul"},
-			expect:  "Hello Paul",
+			expect:  "Hello again Paul",
 			err:     nil,
 		},
 		{
 			// Test that the handler responds ErrNameNotProvided
 			// when no name is provided in the HTTP body
 			request: events.APIGatewayProxyRequest{Body: ""},
-			expect:  "Hello Paul",
-			err:     nil,
+			expect:  "",
+			err:     ErrNameNotProvided,
 		},
 	}
 
