@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"digitalfridgedoor/fridgedoorlambdas/database"
 	"encoding/json"
 	"os"
 	"strings"
@@ -39,7 +38,7 @@ func connect() []byte {
 	findCtx, cancel := context.WithTimeout(databaseCtx, duration5s)
 	defer cancel()
 
-	connection := database.Connect(databaseCtx, connectionString)
+	connection := Connect(databaseCtx, connectionString)
 	defer connection.Disconnect()
 
 	parentID, _ := primitive.ObjectIDFromHex("5dac430246ba29343620c1df")
