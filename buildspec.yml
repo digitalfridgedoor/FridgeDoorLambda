@@ -18,7 +18,13 @@ phases:
       - ln -s "${CODEBUILD_SRC_DIR}" "/go/src/${PACKAGE}"
       # Print all environment variables (handy for AWS CodeBuild logs)
       - env
-      - git config --global url.git@github.com:.insteadOf https://github.com/
+      # Match local setup
+      - echo $GOPATH
+      - mkdir -p "${GOPATH}/src/digitalfridgedoor/fridgedoorlambda"
+      - cp -r "${CODEBUILD_SRC_DIR}"/** "${GOPATH}/src/digitalfridgedoor/fridgedoorlambda"
+      - ls "${CODEBUILD_SRC_DIR}"
+      - echo linked to...
+      - ls "${GOPATH}/src/digitalfridgedoor/fridgedoorlambda"
 
   pre_build:
     commands:
