@@ -22,13 +22,15 @@ var connection Connection
 // It uses Amazon API Gateway request/responses provided by the aws-lambda-go/events package,
 // However you could use other event sources (S3, Kinesis etc), or JSON-decoded primitive types such as 'string'.
 func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-
 	c := getCategories()
 
-	return events.APIGatewayProxyResponse{
-		Body:       string(c),
-		StatusCode: 200,
-	}, nil
+	// Let's create the response we'll eventually send, being sure to have CORS headers in place
+	resp := events.APIGatewayProxyResponse{Headers: make(map[string]string)}
+	resp.Headers["Access-Control-Allow-Origin"] = "*"
+	resp.Body = string(c)
+	resp.StatusCode = 200
+
+	return resp, nil
 }
 
 func main() {
