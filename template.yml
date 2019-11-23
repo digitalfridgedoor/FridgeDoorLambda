@@ -1,5 +1,9 @@
 AWSTemplateFormatVersion: 2010-09-09
 Transform: AWS::Serverless-2016-10-31
+Parameters:
+  ConnectionString :
+    Type : 'AWS::SSM::Parameter::Value<String>'
+    Default: mongodb
 Resources:
   HelloFunction:
     Type: AWS::Serverless::Function
@@ -14,6 +18,9 @@ Resources:
           Properties:
             Path: /
             Method: post
+      Environment:
+        Variables:
+          connectionstring: !Ref ConnectionString
   GetSentence:
     Type: AWS::Serverless::Function
     Properties:
@@ -27,3 +34,6 @@ Resources:
           Properties:
             Path: /
             Method: get
+      Environment:
+        Variables:
+          connectionstring: !Ref ConnectionString
