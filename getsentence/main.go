@@ -16,13 +16,17 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
+var connection Connection
+
 // Handler is your Lambda function handler
 // It uses Amazon API Gateway request/responses provided by the aws-lambda-go/events package,
 // However you could use other event sources (S3, Kinesis etc), or JSON-decoded primitive types such as 'string'.
 func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 
+	c := getCategories()
+
 	return events.APIGatewayProxyResponse{
-		Body:       "string(c)",
+		Body:       string(c),
 		StatusCode: 200,
 	}, nil
 }
@@ -64,19 +68,20 @@ func getConnectionString() string {
 	return *paramOutput.Parameter.Value
 }
 
-func connect() []byte {
+func connect() {
 	connectionString := getConnectionString() // getEnvironmentVariable("connectionstring")
 	fmt.Printf("Got connection string: len=%v\n", len(connectionString))
 
-	databaseCtx := context.Background()
+	fmt.Printf("Connecting...\n")
+	connection = Connect(context.Background(), connectionString)
+	fmt.Printf("Connected.\n")
+}
 
+func getCategories() []byte {
 	duration5s, _ := time.ParseDuration("5s")
-	findCtx, cancel := context.WithTimeout(databaseCtx, duration5s)
+	findCtx, cancel := context.WithTimeout(context.Background(), duration5s)
 	defer cancel()
 
-	fmt.Printf("Connecting...\n")
-	connection := Connect(databaseCtx, connectionString)
-	fmt.Printf("Connected.\n")
 	defer connection.Disconnect()
 
 	parentID, _ := primitive.ObjectIDFromHex("5dac430246ba29343620c1df")
