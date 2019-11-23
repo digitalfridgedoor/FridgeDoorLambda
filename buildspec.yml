@@ -38,4 +38,5 @@ phases:
 
 artifacts:
   files:
+  - configuration.json
   - packaged.yml
