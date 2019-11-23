@@ -61,13 +61,17 @@ func getConnectionString() string {
 		WithDecryption: &withDecryption,
 	})
 
+	if err != nil {
+		fmt.Printf("err: %v\n", err)
+	}
+
 	return param.String()
 }
 
 func connect() { //[]byte {
 	connectionString := getConnectionString() // getEnvironmentVariable("connectionstring")
 	fmt.Printf("Got connection string! len=%v\n", len(connectionString))
-	fmt.Printf("Got connection string! %v\n", connectionString[0:3])
+	fmt.Printf("Got connection string! %v\n", connectionString[0:8])
 
 	// databaseCtx := context.Background()
 
