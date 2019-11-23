@@ -1,5 +1,10 @@
 AWSTemplateFormatVersion: 2010-09-09
 Transform: AWS::Serverless-2016-10-31
+Parameters: 
+  VpcSubnetIds: 
+    Type: List<AWS::EC2::Subnet::Id>
+    Description: VPC Subnet IDs that Lambda will use (min 2 for HA)
+
 Resources:
   HelloFunction:
     Type: AWS::Serverless::Function
@@ -28,4 +33,4 @@ Resources:
             Path: /
             Method: get
       VpcConfig:
-        SubnetIds: "subnet-05165c1c4e56afe1b"
+        SubnetIds: !Ref VpcSubnetIds
