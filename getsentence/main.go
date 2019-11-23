@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"net/http"
 	"os"
 	"strings"
 	"time"
@@ -30,20 +29,9 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 
 func main() {
 
-	// connect()
-	makeCall()
+	connect()
 
 	lambda.Start(Handler)
-}
-
-func makeCall() {
-	response, err := http.Get("http://example.com/")
-
-	if err != nil {
-		fmt.Printf("err: %v\n", err)
-	}
-
-	fmt.Printf("response: %v\n", response)
 }
 
 func getConnectionString() string {
