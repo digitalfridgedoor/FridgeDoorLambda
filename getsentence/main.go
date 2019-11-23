@@ -9,6 +9,9 @@ import (
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/ssm"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
@@ -29,8 +32,29 @@ func main() {
 	lambda.Start(Handler)
 }
 
+func getConnectionString() string {
+	region := "eu-west-2"
+	sess, err := session.NewSessionWithOptions(session.Options{
+		Config:            aws.Config{Region: aws.String(region)},
+		SharedConfigState: session.SharedConfigEnable,
+	})
+	if err != nil {
+		panic(err)
+	}
+
+	ssmsvc := ssm.New(sess, aws.NewConfig().WithRegion(region))
+	keyname := "/alias/aws/ssm/mongodb"
+	withDecryption := true
+	param, err := ssmsvc.GetParameter(&ssm.GetParameterInput{
+		Name:           &keyname,
+		WithDecryption: &withDecryption,
+	})
+
+	return param.String()
+}
+
 func connect() []byte {
-	connectionString := getEnvironmentVariable("connectionstring")
+	connectionString := getConnectionString() // getEnvironmentVariable("connectionstring")
 
 	databaseCtx := context.Background()
 
