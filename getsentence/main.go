@@ -72,7 +72,9 @@ func connect() []byte {
 	findCtx, cancel := context.WithTimeout(databaseCtx, duration5s)
 	defer cancel()
 
+	fmt.Printf("Connecting...\n")
 	connection := Connect(databaseCtx, connectionString)
+	fmt.Printf("Connected.\n")
 	defer connection.Disconnect()
 
 	parentID, _ := primitive.ObjectIDFromHex("5dac430246ba29343620c1df")
