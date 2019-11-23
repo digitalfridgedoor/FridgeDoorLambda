@@ -55,6 +55,8 @@ func getConnectionString() string {
 		WithDecryption: &withDecryption,
 	})
 
+	fmt.Println("success")
+
 	if err != nil {
 		fmt.Printf("err: %v\n", err)
 	}
