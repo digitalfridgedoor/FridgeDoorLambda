@@ -1,19 +1,15 @@
 package main
 
 import (
-	"context"
-	"encoding/json"
 	"fmt"
 	"os"
 	"strings"
-	"time"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/ssm"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 // Handler is your Lambda function handler
@@ -21,10 +17,10 @@ import (
 // However you could use other event sources (S3, Kinesis etc), or JSON-decoded primitive types such as 'string'.
 func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 
-	c := connect()
+	connect()
 
 	return events.APIGatewayProxyResponse{
-		Body:       string(c),
+		Body:       "string(c)",
 		StatusCode: 200,
 	}, nil
 }
@@ -44,7 +40,7 @@ func getConnectionString() string {
 	}
 
 	ssmsvc := ssm.New(sess, aws.NewConfig().WithRegion(region))
-	keyname := "/alias/aws/ssm/mongodb"
+	keyname := "/alias/aws/ssm/mongohgigiugidb"
 	withDecryption := true
 	param, err := ssmsvc.GetParameter(&ssm.GetParameterInput{
 		Name:           &keyname,
@@ -54,23 +50,24 @@ func getConnectionString() string {
 	return param.String()
 }
 
-func connect() []byte {
+func connect() { //[]byte {
 	connectionString := getConnectionString() // getEnvironmentVariable("connectionstring")
-	fmt.Printf("Got connection string! %v\n", connectionString)
+	fmt.Printf("Got connection string! len=%v\n", len(connectionString))
+	fmt.Printf("Got connection string! %v\n", connectionString[0:3])
 
-	databaseCtx := context.Background()
+	// databaseCtx := context.Background()
 
-	duration5s, _ := time.ParseDuration("5s")
-	findCtx, cancel := context.WithTimeout(databaseCtx, duration5s)
-	defer cancel()
+	// duration5s, _ := time.ParseDuration("5s")
+	// findCtx, cancel := context.WithTimeout(databaseCtx, duration5s)
+	// defer cancel()
 
-	connection := Connect(databaseCtx, connectionString)
-	defer connection.Disconnect()
+	// connection := Connect(databaseCtx, connectionString)
+	// defer connection.Disconnect()
 
-	parentID, _ := primitive.ObjectIDFromHex("5dac430246ba29343620c1df")
-	cats := connection.IngredientByParentID(findCtx, parentID)
-	b, _ := json.Marshal(cats)
-	return b
+	// parentID, _ := primitive.ObjectIDFromHex("5dac430246ba29343620c1df")
+	// cats := connection.IngredientByParentID(findCtx, parentID)
+	// b, _ := json.Marshal(cats)
+	// return b
 }
 
 func getEnvironmentVariable(key string) string {
