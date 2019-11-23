@@ -4,7 +4,8 @@ Resources:
   HelloFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: main
+      CodeUri: bin/
+      Handler: hello
       Runtime: go1.x
       Tracing: Active
       Events:
@@ -13,3 +14,16 @@ Resources:
           Properties:
             Path: /
             Method: post
+  GetSentence:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: bin/
+      Handler: getsentence
+      Runtime: go1.x
+      Tracing: Active
+      Events:
+        GetEvent:
+          Type: Api
+          Properties:
+            Path: /
+            Method: get

@@ -26,14 +26,13 @@ phases:
       # Fetch all dependencies
       - go get -t ./...
       # Check for common Go problems with 'go vet'
-      - go vet .
       # Run all tests included with the application
-      - go test .
+      - ./govet_gotest.sh
 
   build:
     commands:
       # Build the go application
-      - go build -o main
+      - ./gobuild.sh
       # Package the application with AWS SAM
       - aws cloudformation package --template-file template.yml --s3-bucket ${S3_BUCKET} --output-template-file packaged.yml
 
