@@ -19,6 +19,7 @@ phases:
       # Print all environment variables (handy for AWS CodeBuild logs)
       - env
       # Match local setup
+      - export GOROOT=/usr/local/go
       - echo $GOPATH
       - mkdir -p "${GOPATH}/src/digitalfridgedoor/fridgedoorlambda"
       - cp -r "${CODEBUILD_SRC_DIR}"/** "${GOPATH}/src/digitalfridgedoor/fridgedoorlambda"
