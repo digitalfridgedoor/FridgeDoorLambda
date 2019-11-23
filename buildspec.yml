@@ -21,7 +21,7 @@ phases:
       # Match local setup
       - echo $GOPATH
       - mkdir -p "${GOPATH}/digitalfridgedoor/fridgedoorlambda"
-      - cp "${CODEBUILD_SRC_DIR}"/** "${GOPATH}/digitalfridgedoor/fridgedoorlambda"
+      - cp -r "${CODEBUILD_SRC_DIR}"/** "${GOPATH}/digitalfridgedoor/fridgedoorlambda"
       - ls "${CODEBUILD_SRC_DIR}"
       - echo linked to...
       - ls "${GOPATH}/digitalfridgedoor/fridgedoorlambda"
