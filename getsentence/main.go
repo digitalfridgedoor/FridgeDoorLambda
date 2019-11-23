@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"os"
 	"strings"
 	"time"
@@ -55,6 +56,8 @@ func getConnectionString() string {
 
 func connect() []byte {
 	connectionString := getConnectionString() // getEnvironmentVariable("connectionstring")
+	fmt.Printf("Got connection string! len=%v\n", len(connectionString))
+	fmt.Printf("Got connection string! %v\n", connectionString[0:5])
 
 	databaseCtx := context.Background()
 
