@@ -17,8 +17,6 @@ import (
 // However you could use other event sources (S3, Kinesis etc), or JSON-decoded primitive types such as 'string'.
 func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 
-	connect()
-
 	return events.APIGatewayProxyResponse{
 		Body:       "string(c)",
 		StatusCode: 200,
@@ -26,6 +24,9 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 }
 
 func main() {
+
+	connect()
+
 	lambda.Start(Handler)
 }
 
@@ -40,8 +41,21 @@ func getConnectionString() string {
 	}
 
 	ssmsvc := ssm.New(sess, aws.NewConfig().WithRegion(region))
-	keyname := "/alias/aws/ssm/mongohgigiugidb"
+	keyname := "mongodb"
 	withDecryption := true
+	ptype := "SecureString"
+	value := "testing"
+	output, err := ssmsvc.PutParameter(&ssm.PutParameterInput{
+		Name:  &keyname,
+		Type:  &ptype,
+		Value: &value,
+	})
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println(output.String())
+
 	param, err := ssmsvc.GetParameter(&ssm.GetParameterInput{
 		Name:           &keyname,
 		WithDecryption: &withDecryption,
