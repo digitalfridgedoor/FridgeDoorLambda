@@ -40,6 +40,9 @@ func main() {
 	connect()
 
 	lambda.Start(Handler)
+
+	connection.Disconnect()
+
 }
 
 func getConnectionString() string {
@@ -82,15 +85,15 @@ func connect() {
 }
 
 func getCategories() []byte {
+	fmt.Printf("get categories.\n")
 	duration5s, _ := time.ParseDuration("5s")
 	findCtx, cancel := context.WithTimeout(context.Background(), duration5s)
 	defer cancel()
 
-	defer connection.Disconnect()
-
 	parentID, _ := primitive.ObjectIDFromHex("5dac430246ba29343620c1df")
 	cats := connection.IngredientByParentID(findCtx, parentID)
 	b, _ := json.Marshal(cats)
+	fmt.Printf("end.\n")
 	return b
 }
 

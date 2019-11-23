@@ -21,6 +21,9 @@ phases:
       # Match local setup
       - mkdir -p "digitalfridgedoor/fridgedoorlambda"
       - ln -s "${CODEBUILD_SRC_DIR}" "digitalfridgedoor/fridgedoorlambda"
+      - ls "${CODEBUILD_SRC_DIR}"
+      - echo linked to...
+      - ls digitalfridgedoor/fridgedoorlambda
 
   pre_build:
     commands:
