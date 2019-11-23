@@ -18,6 +18,9 @@ phases:
       - ln -s "${CODEBUILD_SRC_DIR}" "/go/src/${PACKAGE}"
       # Print all environment variables (handy for AWS CodeBuild logs)
       - env
+      # Match local setup
+      - mkdir -p "digitalfridgedoor/fridgedoorlambda"
+      - ln -s "${CODEBUILD_SRC_DIR}" "digitalfridgedoor/fridgedoorlambda"
 
   pre_build:
     commands:
