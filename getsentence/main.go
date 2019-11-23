@@ -43,18 +43,18 @@ func getConnectionString() string {
 	ssmsvc := ssm.New(sess, aws.NewConfig().WithRegion(region))
 	keyname := "mongodb"
 	withDecryption := true
-	ptype := "SecureString"
-	value := "testing"
-	output, err := ssmsvc.PutParameter(&ssm.PutParameterInput{
-		Name:  &keyname,
-		Type:  &ptype,
-		Value: &value,
-	})
-	if err != nil {
-		panic(err)
-	}
+	// ptype := "SecureString"
+	// value := "testing"
+	// output, err := ssmsvc.PutParameter(&ssm.PutParameterInput{
+	// 	Name:  &keyname,
+	// 	Type:  &ptype,
+	// 	Value: &value,
+	// })
+	// if err != nil {
+	// 	panic(err)
+	// }
 
-	fmt.Println(output.String())
+	fmt.Println("getting parameter")
 
 	param, err := ssmsvc.GetParameter(&ssm.GetParameterInput{
 		Name:           &keyname,
