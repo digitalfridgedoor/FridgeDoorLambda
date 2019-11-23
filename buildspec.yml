@@ -18,6 +18,7 @@ phases:
       - ln -s "${CODEBUILD_SRC_DIR}" "/go/src/${PACKAGE}"
       # Print all environment variables (handy for AWS CodeBuild logs)
       - env
+      - git config --global url.git@github.com-digitalfridgedoor:.insteadOf https://github.com/
 
   pre_build:
     commands:

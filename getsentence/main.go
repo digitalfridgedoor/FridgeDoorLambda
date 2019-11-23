@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"../database"
+	"digitalfridgedoor/fridgedoorlambda/database"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
