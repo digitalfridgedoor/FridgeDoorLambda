@@ -66,7 +66,7 @@ func getConnectionString() string {
 
 func connect() []byte {
 	connectionString := getConnectionString() // getEnvironmentVariable("connectionstring")
-	fmt.Printf("Got connection string. len=%v\n", len(connectionString))
+	fmt.Printf("Got connection string: len=%v\n", len(connectionString))
 
 	databaseCtx := context.Background()
 
