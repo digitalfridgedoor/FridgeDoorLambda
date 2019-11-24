@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"digitalfridgedoor/fridgedoorlambda/database"
+	"github.com/digitalfridgedoor/fridgedoordatabase"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
@@ -18,7 +18,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-var connection database.Connection
+var connection fridgedoordatabase.Connection
 
 // Handler is your Lambda function handler
 // It uses Amazon API Gateway request/responses provided by the aws-lambda-go/events package,
@@ -80,7 +80,7 @@ func connect() {
 	fmt.Printf("Got connection string: len=%v\n", len(connectionString))
 
 	fmt.Printf("Connecting...\n")
-	connection = database.Connect(context.Background(), connectionString)
+	connection = fridgedoordatabase.Connect(context.Background(), connectionString)
 	fmt.Printf("Connected.\n")
 }
 
