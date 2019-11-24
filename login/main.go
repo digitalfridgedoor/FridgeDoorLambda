@@ -12,7 +12,6 @@ import (
 	"github.com/aws/aws-lambda-go/lambda"
 )
 
-var errMissingParameter = errors.New("Parameter is missing")
 var errFind = errors.New("Cannot find expected entity")
 var errParseResult = errors.New("Result cannot be parsed")
 
@@ -24,28 +23,23 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	// stdout and stderr are sent to AWS CloudWatch Logs
 	log.Printf("Processing Lambda request  %s\n", request.RequestContext.RequestID)
 
-	// If no name is provided in the HTTP request body, throw an error
-	recipeID, ok := request.PathParameters["id"]
-	if !ok || recipeID == "" {
-		return events.APIGatewayProxyResponse{}, errMissingParameter
-	}
-
+	fridgedoorapi.Connect()
 	connection, err := fridgedoorapi.Recipe()
-
-	chicken, err := connection.FindOne(context.Background(), recipeID)
 	if err != nil {
 		return events.APIGatewayProxyResponse{}, errFind
 	}
 
-	b, err := json.Marshal(chicken)
+	recipes, err := connection.List(context.Background())
+	if err != nil {
+		return events.APIGatewayProxyResponse{}, errFind
+	}
+
+	b, err := json.Marshal(recipes)
 	if err != nil {
 		return events.APIGatewayProxyResponse{}, errParseResult
 	}
 
-	resp := events.APIGatewayProxyResponse{Headers: make(map[string]string)}
-	resp.Headers["Access-Control-Allow-Origin"] = "*"
-	resp.Body = string(b)
-	resp.StatusCode = 200
+	resp := fridgedoorapi.ResponseSuccessful(string(b))
 	return resp, nil
 }
 

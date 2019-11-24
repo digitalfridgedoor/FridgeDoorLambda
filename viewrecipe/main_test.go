@@ -1,10 +1,10 @@
 package main
 
 import (
-	"digitalfridgedoor/fridgedoorapi"
 	"encoding/json"
 	"testing"
 
+	"github.com/digitalfridgedoor/fridgedoorapi"
 	"github.com/digitalfridgedoor/fridgedoordatabase/recipe"
 
 	"github.com/aws/aws-lambda-go/events"
