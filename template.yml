@@ -9,6 +9,15 @@ Parameters:
     Description: VPC Subnet IDs that Lambda will use (min 2 for HA)
 
 Resources:
+  DfdApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Prod
+      Auth:
+        DefaultAuthorizer: DfdCognitoAuthorizer
+        Authorizers:
+          DfdCognitoAuthorizer:
+            UserPoolArn: arn:aws:cognito-idp:eu-west-2:266057577872:userpool/eu-west-2_qV7DA3Gge
   ViewRecipes:
     Type: AWS::Serverless::Function
     Properties:
@@ -20,6 +29,7 @@ Resources:
         GetEvent:
           Type: Api
           Properties:
+            RestApiId: !Ref DfdApi
             Path: /recipe
             Method: get
       Policies:
@@ -40,6 +50,7 @@ Resources:
         GetEvent:
           Type: Api
           Properties:
+            RestApiId: !Ref DfdApi
             Path: /recipe/{id}
             Method: get
       Policies:
