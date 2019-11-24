@@ -40,7 +40,6 @@ func TestValidation(t *testing.T) {
 func TestHandler(t *testing.T) {
 
 	// Arrange
-
 	pathParameters := make(map[string]string)
 	pathParameters["id"] = "5dbc80036eb36874255e7fcd"
 	apirequest := events.APIGatewayProxyRequest{PathParameters: pathParameters}
@@ -49,7 +48,7 @@ func TestHandler(t *testing.T) {
 	connected := connect()
 	if !connected {
 		fmt.Println("Cannot connect, skipping test")
-		return
+		t.SkipNow()
 	}
 
 	response, err := Handler(apirequest)
