@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/aws/aws-lambda-go/events"
@@ -26,7 +27,11 @@ func TestHandler(t *testing.T) {
 		},
 	}
 
-	connect()
+	connected := connect()
+	if !connected {
+		fmt.Println("Cannot connect, skipping test")
+		return
+	}
 
 	for _, test := range tests {
 		response, err := Handler(test.request)

@@ -68,26 +68,40 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 }
 
 func main() {
+	connected := connect()
+	if connected {
+		lambda.Start(Handler)
+
+		connection.Disconnect()
+	}
+
 	lambda.Start(Handler)
 }
 
-func connect() {
-	connectionString := getConnectionString() // getEnvironmentVariable("connectionstring")
+func connect() bool {
+	connectionString, err := getConnectionString()
+
+	if err != nil {
+		fmt.Printf("Error getting connection string, %v.\n", err)
+		return false
+	}
 	fmt.Printf("Got connection string: len=%v\n", len(connectionString))
 
 	fmt.Printf("Connecting...\n")
 	connection = fridgedoordatabase.Connect(context.Background(), connectionString)
 	fmt.Printf("Connected.\n")
+
+	return true
 }
 
-func getConnectionString() string {
+func getConnectionString() (string, error) {
 	region := "eu-west-2"
 	sess, err := session.NewSessionWithOptions(session.Options{
 		Config:            aws.Config{Region: aws.String(region)},
 		SharedConfigState: session.SharedConfigEnable,
 	})
 	if err != nil {
-		panic(err)
+		return "", err
 	}
 
 	ssmsvc := ssm.New(sess, aws.NewConfig().WithRegion(region))
@@ -104,8 +118,8 @@ func getConnectionString() string {
 	fmt.Println("success")
 
 	if err != nil {
-		fmt.Printf("err: %v\n", err)
+		return "", err
 	}
 
-	return *paramOutput.Parameter.Value
+	return *paramOutput.Parameter.Value, nil
 }

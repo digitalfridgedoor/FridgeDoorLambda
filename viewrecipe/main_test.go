@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"testing"
 
 	"github.com/digitalfridgedoor/fridgedoordatabase/recipe"
@@ -47,7 +48,12 @@ func TestHandler(t *testing.T) {
 	apirequest := events.APIGatewayProxyRequest{Body: string(jsonRequest)}
 
 	// Act
-	connect()
+	connected := connect()
+	if !connected {
+		fmt.Println("Cannot connect, skipping test")
+		return
+	}
+
 	response, err := Handler(apirequest)
 
 	// Assert
