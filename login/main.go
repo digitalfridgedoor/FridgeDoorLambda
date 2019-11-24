@@ -1,9 +1,6 @@
 package main
 
 import (
-	"context"
-	"encoding/json"
-	"errors"
 	"log"
 
 	"github.com/digitalfridgedoor/fridgedoorapi"
@@ -11,9 +8,6 @@ import (
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 )
-
-var errFind = errors.New("Cannot find expected entity")
-var errParseResult = errors.New("Result cannot be parsed")
 
 // Handler is your Lambda function handler
 // It uses Amazon API Gateway request/responses provided by the aws-lambda-go/events package,
@@ -23,23 +17,7 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	// stdout and stderr are sent to AWS CloudWatch Logs
 	log.Printf("Processing Lambda request  %s\n", request.RequestContext.RequestID)
 
-	fridgedoorapi.Connect()
-	connection, err := fridgedoorapi.Recipe()
-	if err != nil {
-		return events.APIGatewayProxyResponse{}, errFind
-	}
-
-	recipes, err := connection.List(context.Background())
-	if err != nil {
-		return events.APIGatewayProxyResponse{}, errFind
-	}
-
-	b, err := json.Marshal(recipes)
-	if err != nil {
-		return events.APIGatewayProxyResponse{}, errParseResult
-	}
-
-	resp := fridgedoorapi.ResponseSuccessful(string(b))
+	resp := fridgedoorapi.ResponseSuccessful("string(b)")
 	return resp, nil
 }
 
