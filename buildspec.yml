@@ -19,7 +19,9 @@ phases:
       # Print all environment variables (handy for AWS CodeBuild logs)
       - env
       # Match local setup
-      - ls "/go/src/${PACKAGE}"
+      - cd "/go/src/${PACKAGE}"
+      - ls
+      - pwd
 
   pre_build:
     commands:
