@@ -21,12 +21,12 @@ func TestValidation(t *testing.T) {
 		{
 			request: events.APIGatewayProxyRequest{Body: "Paul"},
 			expect:  "",
-			err:     errBodyCannotBeParsed,
+			err:     errMissingParameter,
 		},
 		{
 			request: events.APIGatewayProxyRequest{Body: ""},
 			expect:  "",
-			err:     errBodyCannotBeParsed,
+			err:     errMissingParameter,
 		},
 	}
 
@@ -40,12 +40,10 @@ func TestValidation(t *testing.T) {
 func TestHandler(t *testing.T) {
 
 	// Arrange
-	validRequest := &ViewRecipeRequest{
-		RecipeID: "5dbc80036eb36874255e7fcd",
-	}
 
-	jsonRequest, _ := json.Marshal(validRequest)
-	apirequest := events.APIGatewayProxyRequest{Body: string(jsonRequest)}
+	pathParameters := make(map[string]string)
+	pathParameters["id"] = "5dbc80036eb36874255e7fcd"
+	apirequest := events.APIGatewayProxyRequest{PathParameters: pathParameters}
 
 	// Act
 	connected := connect()

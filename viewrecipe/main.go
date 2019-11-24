@@ -19,14 +19,9 @@ import (
 
 var connection fridgedoordatabase.Connection
 
-var errBodyCannotBeParsed = errors.New("Body is empty or does not contain expected properties")
+var errMissingParameter = errors.New("Parameter is missing")
 var errFind = errors.New("Cannot find expected entity")
 var errParseResult = errors.New("Result cannot be parsed")
-
-// ViewRecipeRequest is the expected type for this lambda
-type ViewRecipeRequest struct {
-	RecipeID string `json:"recipeID"`
-}
 
 // Handler is your Lambda function handler
 // It uses Amazon API Gateway request/responses provided by the aws-lambda-go/events package,
@@ -37,21 +32,15 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	log.Printf("Processing Lambda request  %s\n", request.RequestContext.RequestID)
 
 	// If no name is provided in the HTTP request body, throw an error
-	if len(request.Body) < 1 {
-		return events.APIGatewayProxyResponse{}, errBodyCannotBeParsed
-	}
-
-	var parsedRequest ViewRecipeRequest
-
-	err := json.Unmarshal([]byte(request.Body), &parsedRequest)
-	if err != nil || parsedRequest.RecipeID == "" {
-		return events.APIGatewayProxyResponse{}, errBodyCannotBeParsed
+	recipeID, ok := request.PathParameters["id"]
+	if !ok || recipeID == "" {
+		return events.APIGatewayProxyResponse{}, errMissingParameter
 	}
 
 	connection := recipe.New(connection)
 
-	chicken, err := connection.FindOne(context.Background(), parsedRequest.RecipeID)
-	if err != nil || parsedRequest.RecipeID == "" {
+	chicken, err := connection.FindOne(context.Background(), recipeID)
+	if err != nil {
 		return events.APIGatewayProxyResponse{}, errFind
 	}
 
