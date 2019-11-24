@@ -4,11 +4,10 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"os"
-	"strings"
 	"time"
 
 	"github.com/digitalfridgedoor/fridgedoordatabase"
+	"github.com/digitalfridgedoor/fridgedoordatabase/ingredient"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
@@ -91,20 +90,9 @@ func getCategories() []byte {
 	defer cancel()
 
 	parentID, _ := primitive.ObjectIDFromHex("5dac430246ba29343620c1df")
-	cats := connection.IngredientByParentID(findCtx, parentID)
+	ingredientConnection := ingredient.New(connection)
+	cats := ingredientConnection.IngredientByParentID(findCtx, parentID)
 	b, _ := json.Marshal(cats)
 	fmt.Printf("end.\n")
 	return b
-}
-
-func getEnvironmentVariable(key string) string {
-	for _, e := range os.Environ() {
-		pair := strings.SplitN(e, "=", 2)
-		if pair[0] == key {
-			return pair[1]
-		}
-	}
-
-	os.Exit(1)
-	return ""
 }
