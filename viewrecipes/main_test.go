@@ -2,9 +2,9 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"testing"
 
+	"github.com/digitalfridgedoor/fridgedoorapi"
 	"github.com/digitalfridgedoor/fridgedoordatabase/recipe"
 
 	"github.com/aws/aws-lambda-go/events"
@@ -17,11 +17,7 @@ func TestHandler(t *testing.T) {
 	apirequest := events.APIGatewayProxyRequest{}
 
 	// Act
-	connected := connect()
-	if !connected {
-		fmt.Println("Cannot connect, skipping test")
-		t.SkipNow()
-	}
+	fridgedoorapi.ConnectOrSkip(t)
 
 	response, err := Handler(apirequest)
 

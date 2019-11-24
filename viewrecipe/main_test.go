@@ -1,8 +1,8 @@
 package main
 
 import (
+	"digitalfridgedoor/fridgedoorapi"
 	"encoding/json"
-	"fmt"
 	"testing"
 
 	"github.com/digitalfridgedoor/fridgedoordatabase/recipe"
@@ -45,11 +45,7 @@ func TestHandler(t *testing.T) {
 	apirequest := events.APIGatewayProxyRequest{PathParameters: pathParameters}
 
 	// Act
-	connected := connect()
-	if !connected {
-		fmt.Println("Cannot connect, skipping test")
-		t.SkipNow()
-	}
+	fridgedoorapi.ConnectOrSkip(t)
 
 	response, err := Handler(apirequest)
 
