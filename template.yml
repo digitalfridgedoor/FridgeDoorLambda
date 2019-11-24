@@ -7,9 +7,25 @@ Parameters:
   VpcSubnetIds: 
     Type: List<AWS::EC2::Subnet::Id>
     Description: VPC Subnet IDs that Lambda will use (min 2 for HA)
+  CognitoUserPoolName:
+    Default: DigitalFridgeDoor
+    Description: The Cognito UserPool name
+    Type: String
+  CognitoUserPoolClientName:
+    Default: DigitalFridgeDoorClient
+    Description: The Cognito UserPool client name
+    Type: String
 
 Resources:
-  HelloFunction:
+  DigitalFridgeDoor:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Prod
+      Auth:
+        DefaultAuthorizer: DfdCognitoAuthorizer
+        Authorizers:
+          DfdCognitoAuthorizer:
+            UserPoolArn: !GetAtt DfdCognitoUserPool.Arn
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: bin/
@@ -82,3 +98,22 @@ Resources:
       VpcConfig:
         SecurityGroupIds: !Ref SecurityGroupIds
         SubnetIds: !Ref VpcSubnetIds
+  DfdCognitoUserPool:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      UserPoolName: !Ref CognitoUserPoolName
+      Policies:
+        PasswordPolicy:
+          MinimumLength: 8
+      UsernameAttributes:
+        - email
+      Schema:
+        - AttributeDataType: String
+          Name: email
+          Required: false
+  DfdCognitoUserPoolClient:
+    Type: AWS::Cognito::UserPoolClient
+    Properties:
+      UserPoolId: !Ref DfdCognitoUserPool
+      ClientName: !Ref CognitoUserPoolClientName
+      GenerateSecret: false
