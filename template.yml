@@ -42,7 +42,7 @@ Resources:
       VpcConfig:
         SecurityGroupIds: !Ref SecurityGroupIds
         SubnetIds: !Ref VpcSubnetIds
-  GetSentence:
+  ViewRecipe:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: bin/
