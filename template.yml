@@ -36,7 +36,7 @@ Resources:
             Path: /
             Method: get
       Policies:
-        - ReadSsmParameter: {}
+        - VPCAccessPolicy: {}
         # This policy gives permission for Lambdas to create/manage ENIs
         # SAM Policy templates you can use: https://github.com/awslabs/serverless-application-model/blob/develop/examples/2016-10-31/policy_templates/all_policy_templates.yaml
       VpcConfig:
@@ -56,7 +56,7 @@ Resources:
             Path: /recipe/{id}
             Method: get
       Policies:
-        - ReadSsmParameter: {}
+        - VPCAccessPolicy: {}
         # This policy gives permission for Lambdas to create/manage ENIs
         # SAM Policy templates you can use: https://github.com/awslabs/serverless-application-model/blob/develop/examples/2016-10-31/policy_templates/all_policy_templates.yaml
       VpcConfig:
