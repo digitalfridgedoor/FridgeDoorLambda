@@ -42,10 +42,11 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 		return events.APIGatewayProxyResponse{}, errParseResult
 	}
 
-	return events.APIGatewayProxyResponse{
-		Body:       string(b),
-		StatusCode: 200,
-	}, nil
+	resp := events.APIGatewayProxyResponse{Headers: make(map[string]string)}
+	resp.Headers["Access-Control-Allow-Origin"] = "*"
+	resp.Body = string(b)
+	resp.StatusCode = 200
+	return resp, nil
 
 }
 
