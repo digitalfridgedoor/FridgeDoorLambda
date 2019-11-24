@@ -7,57 +7,8 @@ Parameters:
   VpcSubnetIds: 
     Type: List<AWS::EC2::Subnet::Id>
     Description: VPC Subnet IDs that Lambda will use (min 2 for HA)
-  CognitoUserPoolName:
-    Default: DigitalFridgeDoor
-    Description: The Cognito UserPool name
-    Type: String
-  CognitoUserPoolClientName:
-    Default: DigitalFridgeDoorClient
-    Description: The Cognito UserPool client name
-    Type: String
 
 Resources:
-  DigitalFridgeDoor:
-    Type: AWS::Serverless::Api
-    Properties:
-      StageName: Prod
-      Auth:
-        DefaultAuthorizer: DfdCognitoAuthorizer
-        Authorizers:
-          DfdCognitoAuthorizer:
-            UserPoolArn: !GetAtt DfdCognitoUserPool.Arn
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: bin/
-      Handler: hello
-      Runtime: go1.x
-      Tracing: Active
-      Events:
-        GetEvent:
-          Type: Api
-          Properties:
-            Path: /
-            Method: post
-  GetSentence:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: bin/
-      Handler: getsentence
-      Runtime: go1.x
-      Tracing: Active
-      Events:
-        GetEvent:
-          Type: Api
-          Properties:
-            Path: /
-            Method: get
-      Policies:
-        - VPCAccessPolicy: {}
-        # This policy gives permission for Lambdas to create/manage ENIs
-        # SAM Policy templates you can use: https://github.com/awslabs/serverless-application-model/blob/develop/examples/2016-10-31/policy_templates/all_policy_templates.yaml
-      VpcConfig:
-        SecurityGroupIds: !Ref SecurityGroupIds
-        SubnetIds: !Ref VpcSubnetIds
   ViewRecipes:
     Type: AWS::Serverless::Function
     Properties:
@@ -98,22 +49,3 @@ Resources:
       VpcConfig:
         SecurityGroupIds: !Ref SecurityGroupIds
         SubnetIds: !Ref VpcSubnetIds
-  DfdCognitoUserPool:
-    Type: AWS::Cognito::UserPool
-    Properties:
-      UserPoolName: !Ref CognitoUserPoolName
-      Policies:
-        PasswordPolicy:
-          MinimumLength: 8
-      UsernameAttributes:
-        - email
-      Schema:
-        - AttributeDataType: String
-          Name: email
-          Required: false
-  DfdCognitoUserPoolClient:
-    Type: AWS::Cognito::UserPoolClient
-    Properties:
-      UserPoolId: !Ref DfdCognitoUserPool
-      ClientName: !Ref CognitoUserPoolClientName
-      GenerateSecret: false
