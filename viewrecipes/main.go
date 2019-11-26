@@ -33,7 +33,7 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	for k := range request.RequestContext.Authorizer {
 		authorizer = k + ","
 	}
-	log.Printf("authorizer  %s\n", authorizer)
+	log.Printf("authorizer %s\n", authorizer)
 
 	connection, err := fridgedoorapi.Recipe()
 	if err != nil {
