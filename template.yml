@@ -13,9 +13,15 @@ Resources:
     Type: AWS::Serverless::Api
     Properties:
       StageName: Prod
+      Auth:
+        DefaultAuthorizer: DfdCognitoAuthorizer
+        AddDefaultAuthorizerToCorsPreflight: false # removes MyAuthorizer from the automatically created OPTIONS methods
+        Authorizers:
+          DfdCognitoAuthorizer:
+            UserPoolArn: arn:aws:cognito-idp:eu-west-2:266057577872:userpool/eu-west-2_qV7DA3Gge
       Cors:
         AllowMethods: "'OPTIONS,POST,GET'"
-        AllowHeaders: "'Content-Type,Authorization'"
+        AllowHeaders: "'Content-Type,Authorization,dfd-auth'"
         AllowOrigin: "'*'"
   ViewRecipes:
     Type: AWS::Serverless::Function
