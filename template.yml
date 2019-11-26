@@ -37,6 +37,13 @@ Resources:
             RestApiId: !Ref DfdApi
             Path: /recipe
             Method: get
+        Opts:
+          Type: Api
+          Properties:
+            Path: /recipe
+            Method: options
+            Auth:
+              Authorizer: NONE
       Policies:
         - VPCAccessPolicy: {}
         # This policy gives permission for Lambdas to create/manage ENIs
