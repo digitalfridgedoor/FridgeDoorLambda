@@ -13,12 +13,6 @@ Resources:
     Type: AWS::Serverless::Api
     Properties:
       StageName: Prod
-      Auth:
-        DefaultAuthorizer: DfdCognitoAuthorizer
-        AddDefaultAuthorizerToCorsPreflight: false # removes MyAuthorizer from the automatically created OPTIONS methods
-        Authorizers:
-          DfdCognitoAuthorizer:
-            UserPoolArn: arn:aws:cognito-idp:eu-west-2:266057577872:userpool/eu-west-2_qV7DA3Gge
       Cors:
         AllowMethods: "'OPTIONS,POST,GET'"
         AllowHeaders: "'Content-Type,Authorization,dfd-auth'"
@@ -37,13 +31,6 @@ Resources:
             RestApiId: !Ref DfdApi
             Path: /recipe
             Method: get
-        Opts:
-          Type: Api
-          Properties:
-            Path: /recipe
-            Method: options
-            Auth:
-              Authorizer: NONE
       Policies:
         - VPCAccessPolicy: {}
         # This policy gives permission for Lambdas to create/manage ENIs
