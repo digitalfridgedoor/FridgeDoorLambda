@@ -6,14 +6,16 @@ import (
 	"errors"
 	"log"
 
+	"go.mongodb.org/mongo-driver/bson/primitive"
+
 	"github.com/digitalfridgedoor/fridgedoorapi"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 )
 
-var errFind = errors.New("Cannot find expected entity")
-var errParseResult = errors.New("Result cannot be parsed")
+var errServer = errors.New("Server Error")
+var errBadRequest = errors.New("Bad request")
 
 // Handler is your Lambda function handler
 // It uses Amazon API Gateway request/responses provided by the aws-lambda-go/events package,
@@ -23,30 +25,28 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	// stdout and stderr are sent to AWS CloudWatch Logs
 	log.Printf("Processing Lambda request  %s\n", request.RequestContext.RequestID)
 
-	headers := ""
-	for k := range request.Headers {
-		headers = k + ","
+	// If no name is provided in the HTTP request body, throw an error
+	name, ok := request.PathParameters["name"]
+	if !ok || name == "" {
+		return events.APIGatewayProxyResponse{StatusCode: 400}, errBadRequest
 	}
-	log.Printf("Headers  %s\n", headers)
-
-	log.Printf("authorizer claims: %s\n", request.RequestContext.Authorizer["claims"])
 
 	connection, err := fridgedoorapi.Recipe()
 	if err != nil {
-		return events.APIGatewayProxyResponse{}, errFind
+		return events.APIGatewayProxyResponse{StatusCode: 500}, errServer
 	}
 
-	recipes, err := connection.List(context.Background())
+	userID, err := primitive.ObjectIDFromHex("5d8f7300a7888700270f7752")
+
+	recipe, err := connection.Create(context.Background(), userID, name)
+
 	if err != nil {
-		return events.APIGatewayProxyResponse{}, errFind
+		return events.APIGatewayProxyResponse{StatusCode: 500}, errServer
 	}
 
-	b, err := json.Marshal(recipes)
-	if err != nil {
-		return events.APIGatewayProxyResponse{}, errParseResult
-	}
+	json, err := json.Marshal(recipe)
 
-	resp := fridgedoorapi.ResponseSuccessful(string(b))
+	resp := fridgedoorapi.ResponseSuccessful(string(json))
 	return resp, nil
 }
 

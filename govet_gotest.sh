@@ -1,9 +1,7 @@
-go vet ./getsentence
-go vet ./hello
+go vet ./createrecipe
 go vet ./viewrecipe
 go vet ./viewrecipes
 
-go test ./getsentence
-go test ./hello
+go test ./createrecipe
 go test ./viewrecipe
 go test ./viewrecipes
