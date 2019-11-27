@@ -23,13 +23,8 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	// stdout and stderr are sent to AWS CloudWatch Logs
 	log.Printf("Processing Lambda request  %s\n", request.RequestContext.RequestID)
 
-	headers := ""
-	for k := range request.Headers {
-		headers = k + ","
-	}
-	log.Printf("Headers  %s\n", headers)
-
-	log.Printf("authorizer claims: %s\n", request.RequestContext.Authorizer["claims"])
+	username, ok := fridgedoorapi.ParseUsername(&request)
+	log.Printf("username: %v  %s\n", ok, username)
 
 	connection, err := fridgedoorapi.Recipe()
 	if err != nil {
