@@ -24,7 +24,7 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	log.Printf("Processing Lambda request  %s\n", request.RequestContext.RequestID)
 
 	username, ok := fridgedoorapi.ParseUsername(&request)
-	log.Printf("username: %v  %s\n", ok, username)
+	log.Printf("username is: %v  %s\n", ok, username)
 
 	connection, err := fridgedoorapi.Recipe()
 	if err != nil {
