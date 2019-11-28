@@ -33,7 +33,7 @@ var errMissingProperties = errors.New("Request is missing properties")
 func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 
 	// stdout and stderr are sent to AWS CloudWatch Logs
-	log.Printf("Processing a new Lambda request  %s\n", request.RequestContext.RequestID)
+	log.Printf("Processing a new Lambda request %s\n", request.RequestContext.RequestID)
 
 	r := &UpdateRecipeRequest{}
 	err := json.Unmarshal([]byte(request.Body), r)
