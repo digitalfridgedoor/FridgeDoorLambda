@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"log"
 
 	"github.com/digitalfridgedoor/fridgedoorapi"
@@ -35,7 +36,8 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 
 	recipes, err := connection.List(context.Background())
 	if err != nil {
-		return events.APIGatewayProxyResponse{}, errFind
+		fmt.Printf("Error retrieving list: %v.\n", err)
+		return events.APIGatewayProxyResponse{}, err
 	}
 
 	b, err := json.Marshal(recipes)
