@@ -31,6 +31,7 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 
 	connection, err := fridgedoorapi.Recipe()
 	if err != nil {
+		fmt.Printf("Error Connecting: %v.\n", err)
 		return events.APIGatewayProxyResponse{}, errFind
 	}
 
