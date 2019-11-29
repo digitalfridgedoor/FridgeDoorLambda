@@ -30,12 +30,13 @@ function generate(goDirs) {
         const { exists, templateyml } = readFunctionTemplate(`../functions${dir}`)
         if (exists) {
             let clean = dir.replace(/^\//, '');
-            functionTemplate = replaceProperty(functionTemplate, 'Name', clean);
-            functionTemplate = replaceProperty(functionTemplate, 'Handler', clean);
-            functionTemplate = replaceProperty(functionTemplate, 'Path', templateyml[0]["Path"]);
-            functionTemplate = replaceProperty(functionTemplate, 'Method', templateyml[0]["Method"]);
+            let template = functionTemplate;
+            template = replaceProperty(template, 'Name', clean);
+            template = replaceProperty(template, 'Handler', clean);
+            template = replaceProperty(template, 'Path', templateyml[0]["Path"]);
+            template = replaceProperty(template, 'Method', templateyml[0]["Method"]);
 
-            lines.push(functionTemplate);
+            lines.push(template);
         }
     })
 

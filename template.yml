@@ -38,11 +38,11 @@ Resources:
       VpcConfig:
         SecurityGroupIds: !Ref SecurityGroupIds
         SubnetIds: !Ref VpcSubnetIds
-  updaterecipe:
+  viewrecipe:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: bin/
-      Handler: updaterecipe
+      Handler: viewrecipe
       Runtime: go1.x
       Tracing: Active
       Events:
@@ -50,8 +50,8 @@ Resources:
           Type: Api
           Properties:
             RestApiId: !Ref DfdApi
-            Path: /recipe
-            Method: post
+            Path: /recipe/{id}
+            Method: get
       Policies:
         - VPCAccessPolicy: {}
         # This policy gives permission for Lambdas to create/manage ENIs
@@ -59,11 +59,11 @@ Resources:
       VpcConfig:
         SecurityGroupIds: !Ref SecurityGroupIds
         SubnetIds: !Ref VpcSubnetIds
-  updaterecipe:
+  viewrecipes:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: bin/
-      Handler: updaterecipe
+      Handler: viewrecipes
       Runtime: go1.x
       Tracing: Active
       Events:
@@ -72,7 +72,7 @@ Resources:
           Properties:
             RestApiId: !Ref DfdApi
             Path: /recipe
-            Method: post
+            Method: get
       Policies:
         - VPCAccessPolicy: {}
         # This policy gives permission for Lambdas to create/manage ENIs
