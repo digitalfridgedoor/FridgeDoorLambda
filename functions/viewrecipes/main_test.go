@@ -14,7 +14,17 @@ import (
 func TestHandler(t *testing.T) {
 
 	// Arrange
-	apirequest := events.APIGatewayProxyRequest{}
+	claims := make(map[string]interface{})
+	claims["cognito:username"] = "Test"
+	authorizor := make(map[string]interface{})
+	authorizor["claims"] = claims
+
+	context := events.APIGatewayProxyRequestContext{
+		Authorizer: authorizor,
+	}
+	apirequest := events.APIGatewayProxyRequest{
+		RequestContext: context,
+	}
 
 	// Act
 	fridgedoorapi.ConnectOrSkip(t)

@@ -1,5 +1,7 @@
 mkdir bin
 
-go build -o bin/updaterecipe ./updaterecipe
-go build -o bin/viewrecipe ./viewrecipe
-go build -o bin/viewrecipes ./viewrecipes
+go build -o bin/createrecipe ./functions/createrecipe
+go build -o bin/updaterecipe ./functions/updaterecipe
+go build -o bin/viewingredients ./functions/viewingredients
+go build -o bin/viewrecipe ./functions/viewrecipe
+go build -o bin/viewrecipes ./functions/viewrecipes

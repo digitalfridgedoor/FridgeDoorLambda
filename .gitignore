@@ -2,3 +2,4 @@ main
 deployment.zip
 packaged.yml
 bin
+node_modules

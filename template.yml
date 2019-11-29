@@ -17,11 +17,11 @@ Resources:
         AllowMethods: "'OPTIONS,POST,GET'"
         AllowHeaders: "'Content-Type,Authorization,dfd-auth'"
         AllowOrigin: "'*'"
-  ViewRecipes:
+  updaterecipe:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: bin/
-      Handler: viewrecipes
+      Handler: updaterecipe
       Runtime: go1.x
       Tracing: Active
       Events:
@@ -30,7 +30,7 @@ Resources:
           Properties:
             RestApiId: !Ref DfdApi
             Path: /recipe
-            Method: get
+            Method: post
       Policies:
         - VPCAccessPolicy: {}
         # This policy gives permission for Lambdas to create/manage ENIs
@@ -38,11 +38,11 @@ Resources:
       VpcConfig:
         SecurityGroupIds: !Ref SecurityGroupIds
         SubnetIds: !Ref VpcSubnetIds
-  ViewRecipe:
+  updaterecipe:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: bin/
-      Handler: viewrecipe
+      Handler: updaterecipe
       Runtime: go1.x
       Tracing: Active
       Events:
@@ -50,8 +50,8 @@ Resources:
           Type: Api
           Properties:
             RestApiId: !Ref DfdApi
-            Path: /recipe/{id}
-            Method: get
+            Path: /recipe
+            Method: post
       Policies:
         - VPCAccessPolicy: {}
         # This policy gives permission for Lambdas to create/manage ENIs
@@ -59,7 +59,7 @@ Resources:
       VpcConfig:
         SecurityGroupIds: !Ref SecurityGroupIds
         SubnetIds: !Ref VpcSubnetIds
-  UpdateRecipe:
+  updaterecipe:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: bin/

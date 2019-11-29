@@ -23,8 +23,10 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	// stdout and stderr are sent to AWS CloudWatch Logs
 	log.Printf("Processing Lambda request  %s\n", request.RequestContext.RequestID)
 
-	username, ok := fridgedoorapi.ParseUsername(&request)
-	log.Printf("username is: %v  %s\n", ok, username)
+	_, ok := fridgedoorapi.ParseUsername(&request)
+	if !ok {
+		return events.APIGatewayProxyResponse{StatusCode: 401, Body: "rejected from lambda"}, errFind
+	}
 
 	connection, err := fridgedoorapi.Recipe()
 	if err != nil {
