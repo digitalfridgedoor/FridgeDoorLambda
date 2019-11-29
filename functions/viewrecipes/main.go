@@ -26,7 +26,9 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 
 	_, ok := fridgedoorapi.ParseUsername(&request)
 	if !ok {
-		return events.APIGatewayProxyResponse{StatusCode: 401, Body: "rejected from lambda"}, errFind
+		fmt.Println("Cannot parse username.")
+
+		// return events.APIGatewayProxyResponse{StatusCode: 401, Body: "rejected from lambda"}, errFind
 	}
 
 	connection, err := fridgedoorapi.Recipe()
