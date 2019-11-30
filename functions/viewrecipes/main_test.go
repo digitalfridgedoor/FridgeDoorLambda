@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"github.com/digitalfridgedoor/fridgedoorapi"
-	"github.com/digitalfridgedoor/fridgedoordatabase/recipe"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/stretchr/testify/assert"
@@ -33,11 +32,10 @@ func TestHandler(t *testing.T) {
 
 	// Assert
 	assert.Nil(t, err)
-	recipes := []*recipe.Description{}
+	recipeCollection := UserRecipeCollection{}
 
-	err = json.Unmarshal([]byte(response.Body), &recipes)
+	err = json.Unmarshal([]byte(response.Body), &recipeCollection)
 	assert.Nil(t, err)
-	assert.NotNil(t, recipes)
-	assert.Greater(t, len(recipes), 0)
-	assert.GreaterOrEqual(t, 25, len(recipes))
+	assert.NotNil(t, recipeCollection)
+	assert.Equal(t, len(recipeCollection.Recipes), 0)
 }

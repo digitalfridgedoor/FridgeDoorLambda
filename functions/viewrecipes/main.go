@@ -8,13 +8,20 @@ import (
 	"log"
 
 	"github.com/digitalfridgedoor/fridgedoorapi"
+	"github.com/digitalfridgedoor/fridgedoordatabase/recipe"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 )
 
+var errConnect = errors.New("Cannot connect")
 var errFind = errors.New("Cannot find expected entity")
 var errParseResult = errors.New("Result cannot be parsed")
+
+// UserRecipeCollection is the type returned by viewrecipes handler
+type UserRecipeCollection struct {
+	Recipes map[string][]*recipe.Description `json:"recipes"`
+}
 
 // Handler is your Lambda function handler
 // It uses Amazon API Gateway request/responses provided by the aws-lambda-go/events package,
@@ -24,26 +31,39 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	// stdout and stderr are sent to AWS CloudWatch Logs
 	log.Printf("Processing Lambda request ViewRecipes %s\n", request.RequestContext.RequestID)
 
-	_, ok := fridgedoorapi.ParseUsername(&request)
+	username, ok := fridgedoorapi.ParseUsername(&request)
 	if !ok {
 		fmt.Println("Cannot parse username.")
-
-		// return events.APIGatewayProxyResponse{StatusCode: 401, Body: "rejected from lambda"}, errFind
+		return events.APIGatewayProxyResponse{StatusCode: 401}, errConnect
 	}
 
-	connection, err := fridgedoorapi.Recipe()
+	uv, err := fridgedoorapi.UserView()
 	if err != nil {
 		fmt.Printf("Error Connecting: %v.\n", err)
-		return events.APIGatewayProxyResponse{}, errFind
+		return events.APIGatewayProxyResponse{}, errConnect
 	}
 
-	recipes, err := connection.List(context.Background())
+	userview, err := uv.GetByUsername(context.Background(), username)
 	if err != nil {
-		fmt.Printf("Error retrieving list: %v.\n", err)
-		return events.APIGatewayProxyResponse{}, err
+		fmt.Printf("Error getting userview: %v.\n", err)
+		return events.APIGatewayProxyResponse{}, errConnect
 	}
 
-	b, err := json.Marshal(recipes)
+	recipes := make(map[string][]*recipe.Description)
+
+	for name, recipeCollection := range userview.Collections {
+		descriptions, err := fridgedoorapi.GetCollectionRecipes(context.Background(), recipeCollection)
+		if err != nil {
+			fmt.Printf("Error reading collection: %v.\n", err)
+			recipes[name] = descriptions
+		}
+	}
+
+	userRecipeCollection := &UserRecipeCollection{
+		Recipes: recipes,
+	}
+
+	b, err := json.Marshal(userRecipeCollection)
 	if err != nil {
 		return events.APIGatewayProxyResponse{}, errParseResult
 	}
