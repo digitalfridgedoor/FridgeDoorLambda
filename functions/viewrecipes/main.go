@@ -31,19 +31,7 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	// stdout and stderr are sent to AWS CloudWatch Logs
 	log.Printf("Processing Lambda request ViewRecipes %s\n", request.RequestContext.RequestID)
 
-	username, ok := fridgedoorapi.ParseUsername(&request)
-	if !ok {
-		fmt.Println("Cannot parse username.")
-		return events.APIGatewayProxyResponse{StatusCode: 401}, errConnect
-	}
-
-	uv, err := fridgedoorapi.UserView()
-	if err != nil {
-		fmt.Printf("Error Connecting: %v.\n", err)
-		return events.APIGatewayProxyResponse{}, errConnect
-	}
-
-	userview, err := uv.GetByUsername(context.Background(), username)
+	userview, err := fridgedoorapi.GetOrCreateUserView(context.Background(), &request)
 	if err != nil {
 		fmt.Printf("Error getting userview: %v.\n", err)
 		return events.APIGatewayProxyResponse{}, errConnect
