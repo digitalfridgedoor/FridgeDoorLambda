@@ -4,9 +4,8 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"log"
-
-	"go.mongodb.org/mongo-driver/bson/primitive"
 
 	"github.com/digitalfridgedoor/fridgedoorapi"
 
@@ -26,19 +25,19 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	log.Printf("Processing a new Lambda request CreateRecipe %s\n", request.RequestContext.RequestID)
 
 	// If no name is provided in the HTTP request body, throw an error
-	name, ok := request.PathParameters["name"]
-	if !ok || name == "" {
+	name, nameok := request.PathParameters["name"]
+	category, categoryok := request.PathParameters["category"]
+	if !nameok || !categoryok || name == "" || category == "" {
 		return events.APIGatewayProxyResponse{StatusCode: 400}, errBadRequest
 	}
 
-	connection, err := fridgedoorapi.Recipe()
+	ctx := context.Background()
+
+	recipe, err := fridgedoorapi.CreateRecipe(ctx, &request, category, name)
 	if err != nil {
+		fmt.Printf("Error creating recipe: %v.\n", err)
 		return events.APIGatewayProxyResponse{StatusCode: 500}, errServer
 	}
-
-	userID, err := primitive.ObjectIDFromHex("5d8f7300a7888700270f7752")
-
-	recipe, err := connection.Create(context.Background(), userID, name)
 
 	if err != nil {
 		return events.APIGatewayProxyResponse{StatusCode: 500}, errServer
