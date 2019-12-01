@@ -18,8 +18,8 @@ var errBadRequest = errors.New("Bad request")
 
 // CreateRecipeRequest is the expected type for updating recipe
 type CreateRecipeRequest struct {
-	Name     string `json:"name"`
-	Category string `json:"category"`
+	Name       string `json:"name"`
+	Collection string `json:"collection"`
 }
 
 // Handler is your Lambda function handler
@@ -36,14 +36,14 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 		fmt.Printf("Error attempting to parse body: %v.\n", err)
 		return events.APIGatewayProxyResponse{StatusCode: 400}, errBadRequest
 	}
-	if r.Name == "" || r.Category == "" {
+	if r.Name == "" || r.Collection == "" {
 		fmt.Printf("Missing fields: %v.\n", r)
 		return events.APIGatewayProxyResponse{StatusCode: 400}, errBadRequest
 	}
 
 	ctx := context.Background()
 
-	recipe, err := fridgedoorapi.CreateRecipe(ctx, &request, r.Category, r.Name)
+	recipe, err := fridgedoorapi.CreateRecipe(ctx, &request, r.Collection, r.Name)
 	if err != nil {
 		fmt.Printf("Error creating recipe: %v.\n", err)
 		return events.APIGatewayProxyResponse{StatusCode: 500}, errServer
