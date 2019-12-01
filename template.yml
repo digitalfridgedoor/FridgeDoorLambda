@@ -15,7 +15,7 @@ Resources:
       StageName: Prod
       Cors:
         AllowMethods: "'OPTIONS,POST,GET,PUT'"
-        AllowHeaders: "'Content-Type,Authorization,dfd-auth'"
+        AllowHeaders: "'Content-Type,Authorization'"
         AllowOrigin: "'*'"
       Auth:
         Authorizers:
@@ -28,6 +28,7 @@ Resources:
       Handler: createrecipe
       Runtime: go1.x
       Tracing: Active
+      Role: arn:aws:iam::266057577872:role/dfd-api-lambda-role
       Events:
         GetEvent:
           Type: Api
@@ -51,6 +52,7 @@ Resources:
       Handler: updaterecipe
       Runtime: go1.x
       Tracing: Active
+      Role: arn:aws:iam::266057577872:role/dfd-api-lambda-role
       Events:
         GetEvent:
           Type: Api
@@ -74,6 +76,7 @@ Resources:
       Handler: viewrecipe
       Runtime: go1.x
       Tracing: Active
+      Role: arn:aws:iam::266057577872:role/dfd-api-lambda-role
       Events:
         GetEvent:
           Type: Api
@@ -97,6 +100,7 @@ Resources:
       Handler: viewrecipes
       Runtime: go1.x
       Tracing: Active
+      Role: arn:aws:iam::266057577872:role/dfd-api-lambda-role
       Events:
         GetEvent:
           Type: Api

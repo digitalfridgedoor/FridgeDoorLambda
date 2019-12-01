@@ -5,6 +5,7 @@
       Handler: {{Handler}}
       Runtime: go1.x
       Tracing: Active
+      Role: arn:aws:iam::266057577872:role/dfd-api-lambda-role
       Events:
         GetEvent:
           Type: Api
