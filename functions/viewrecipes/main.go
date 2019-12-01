@@ -43,6 +43,7 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 		descriptions, err := fridgedoorapi.GetCollectionRecipes(context.Background(), recipeCollection)
 		if err != nil {
 			fmt.Printf("Error reading collection: %v.\n", err)
+		} else {
 			recipes[name] = descriptions
 		}
 	}
