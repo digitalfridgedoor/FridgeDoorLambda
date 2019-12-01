@@ -16,6 +16,12 @@ import (
 var errServer = errors.New("Server Error")
 var errBadRequest = errors.New("Bad request")
 
+// CreateRecipeRequest is the expected type for updating recipe
+type CreateRecipeRequest struct {
+	Name     string `json:"name"`
+	Category string `json:"category"`
+}
+
 // Handler is your Lambda function handler
 // It uses Amazon API Gateway request/responses provided by the aws-lambda-go/events package,
 // However you could use other event sources (S3, Kinesis etc), or JSON-decoded primitive types such as 'string'.
@@ -24,16 +30,20 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	// stdout and stderr are sent to AWS CloudWatch Logs
 	log.Printf("Processing a new Lambda request  CreateRecipe %s\n", request.RequestContext.RequestID)
 
-	// If no name is provided in the HTTP request body, throw an error
-	name, nameok := request.PathParameters["name"]
-	category, categoryok := request.PathParameters["category"]
-	if !nameok || !categoryok || name == "" || category == "" {
+	r := &CreateRecipeRequest{}
+	err := json.Unmarshal([]byte(request.Body), r)
+	if err != nil {
+		fmt.Printf("Error attempting to parse body: %v.\n", err)
+		return events.APIGatewayProxyResponse{StatusCode: 400}, errBadRequest
+	}
+	if r.Name == "" || r.Category == "" {
+		fmt.Printf("Missing fields: %v.\n", r)
 		return events.APIGatewayProxyResponse{StatusCode: 400}, errBadRequest
 	}
 
 	ctx := context.Background()
 
-	recipe, err := fridgedoorapi.CreateRecipe(ctx, &request, category, name)
+	recipe, err := fridgedoorapi.CreateRecipe(ctx, &request, r.Category, r.Name)
 	if err != nil {
 		fmt.Printf("Error creating recipe: %v.\n", err)
 		return events.APIGatewayProxyResponse{StatusCode: 500}, errServer

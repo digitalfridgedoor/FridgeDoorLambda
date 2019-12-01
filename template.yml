@@ -29,7 +29,7 @@ Resources:
           Type: Api
           Properties:
             RestApiId: !Ref DfdApi
-            Path: /recipe/{id}
+            Path: /recipe
             Method: put
       Policies:
         - VPCAccessPolicy: {}
