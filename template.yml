@@ -14,7 +14,7 @@ Resources:
     Properties:
       StageName: Prod
       Cors:
-        AllowMethods: "'OPTIONS,POST,GET'"
+        AllowMethods: "'OPTIONS,POST,GET,PUT'"
         AllowHeaders: "'Content-Type,Authorization,dfd-auth'"
         AllowOrigin: "'*'"
   createrecipe:
