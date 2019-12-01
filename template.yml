@@ -17,6 +17,10 @@ Resources:
         AllowMethods: "'OPTIONS,POST,GET,PUT'"
         AllowHeaders: "'Content-Type,Authorization,dfd-auth'"
         AllowOrigin: "'*'"
+      Auth:
+        Authorizers:
+          CognitoAuthorizer:
+            UserPoolArn: arn:aws:cognito-idp:eu-west-2:266057577872:userpool/eu-west-2_9F1r0K7GW
   createrecipe:
     Type: AWS::Serverless::Function
     Properties:
@@ -31,6 +35,8 @@ Resources:
             RestApiId: !Ref DfdApi
             Path: /recipe
             Method: put
+            Auth:
+              Authorizer: CognitoAuthorizer
       Policies:
         - VPCAccessPolicy: {}
         # This policy gives permission for Lambdas to create/manage ENIs
@@ -52,6 +58,8 @@ Resources:
             RestApiId: !Ref DfdApi
             Path: /recipe
             Method: post
+            Auth:
+              Authorizer: CognitoAuthorizer
       Policies:
         - VPCAccessPolicy: {}
         # This policy gives permission for Lambdas to create/manage ENIs
@@ -73,6 +81,8 @@ Resources:
             RestApiId: !Ref DfdApi
             Path: /recipe/{id}
             Method: get
+            Auth:
+              Authorizer: CognitoAuthorizer
       Policies:
         - VPCAccessPolicy: {}
         # This policy gives permission for Lambdas to create/manage ENIs
@@ -94,6 +104,8 @@ Resources:
             RestApiId: !Ref DfdApi
             Path: /recipe
             Method: get
+            Auth:
+              Authorizer: CognitoAuthorizer
       Policies:
         - VPCAccessPolicy: {}
         # This policy gives permission for Lambdas to create/manage ENIs

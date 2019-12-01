@@ -15,5 +15,9 @@ Resources:
       StageName: Prod
       Cors:
         AllowMethods: "'OPTIONS,POST,GET,PUT'"
-        AllowHeaders: "'Content-Type,Authorization,dfd-auth'"
+        AllowHeaders: "'Content-Type,Authorization'"
         AllowOrigin: "'*'"
+      Auth:
+        Authorizers:
+          CognitoAuthorizer:
+            UserPoolArn: arn:aws:cognito-idp:eu-west-2:266057577872:userpool/eu-west-2_9F1r0K7GW
