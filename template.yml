@@ -21,7 +21,7 @@ Resources:
         Authorizers:
           CognitoAuthorizer:
             UserPoolArn: arn:aws:cognito-idp:eu-west-2:266057577872:userpool/eu-west-2_9F1r0K7GW
-  ingredients_get:
+  ingredientsget:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: bin/
@@ -45,7 +45,7 @@ Resources:
       VpcConfig:
         SecurityGroupIds: !Ref SecurityGroupIds
         SubnetIds: !Ref VpcSubnetIds
-  recipe_get:
+  recipeget:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: bin/
@@ -69,7 +69,7 @@ Resources:
       VpcConfig:
         SecurityGroupIds: !Ref SecurityGroupIds
         SubnetIds: !Ref VpcSubnetIds
-  recipe_p_id_get:
+  recipep_idget:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: bin/
@@ -93,7 +93,7 @@ Resources:
       VpcConfig:
         SecurityGroupIds: !Ref SecurityGroupIds
         SubnetIds: !Ref VpcSubnetIds
-  recipe_post:
+  recipepost:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: bin/
@@ -117,7 +117,7 @@ Resources:
       VpcConfig:
         SecurityGroupIds: !Ref SecurityGroupIds
         SubnetIds: !Ref VpcSubnetIds
-  recipe_put:
+  recipeput:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: bin/

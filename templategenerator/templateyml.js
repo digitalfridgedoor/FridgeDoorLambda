@@ -24,8 +24,7 @@ function generate(lambdaDefinitions) {
             urlPath } = definition;
 
         let clean = localRelativePath
-            .replace(/^\//, '') // replace first / with nothing
-            .replace(/\//g, '_') // replace others with underscore
+            .replace(/\//g, '') // replace all / with nothing
             .replace(/[\{\}]/g, ''); // replace brackets with nothing
         let template = functionTemplate;
         template = replaceProperty(template, 'Name', clean);
