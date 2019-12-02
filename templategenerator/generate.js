@@ -35,7 +35,9 @@ function readLambdaDefinition(localPath, localRelativePath, relativePath, dir) {
         console.log(`Http path does not have go files: ${localRelativePath}`);
     }
 
-    const urlPath = relativePath.replace(/\/$/, '');
+    const urlPath = relativePath
+        .replace(/\/p_([\w]+)\//g, '/{$1}/')
+        .replace(/\/$/, '');
     localRelativePath = localRelativePath.replace(/\/$/, '');
 
     return {
