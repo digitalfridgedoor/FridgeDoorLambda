@@ -21,7 +21,7 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	// stdout and stderr are sent to AWS CloudWatch Logs
 	log.Printf("Processing Lambda request SearchIngredient  %s\n", request.RequestContext.RequestID)
 
-	q, _ := request.PathParameters["q"]
+	q, _ := request.QueryStringParameters["q"]
 
 	ings, err := fridgedoorapi.SearchIngredients(q)
 
