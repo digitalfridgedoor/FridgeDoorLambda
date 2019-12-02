@@ -14,9 +14,9 @@ Resources:
     Properties:
       StageName: Prod
       Cors:
-        AllowHeaders: Content-Type, Authorization
+        AllowHeaders: "'Content-Type,Authorization'"
         AllowMethods: "'OPTIONS,POST,GET,PUT'"
-        AllowOrigin: localhost, www.digitalfridgedoor.co.uk
+        AllowOrigin: "'*'"
       Auth:
         Authorizers:
           CognitoAuthorizer:
