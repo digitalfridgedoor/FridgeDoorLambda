@@ -21,11 +21,11 @@ Resources:
         Authorizers:
           CognitoAuthorizer:
             UserPoolArn: arn:aws:cognito-idp:eu-west-2:266057577872:userpool/eu-west-2_9F1r0K7GW
-  ingredientsget:
+  ingredientget:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: bin/
-      Handler: /ingredients/get
+      Handler: /ingredient/get
       Runtime: go1.x
       Tracing: Active
       Role: arn:aws:iam::266057577872:role/dfd-api-lambda-role
@@ -34,7 +34,7 @@ Resources:
           Type: Api
           Properties:
             RestApiId: !Ref DfdApi
-            Path: /ingredients
+            Path: /ingredient
             Method: get
             Auth:
               Authorizer: CognitoAuthorizer
