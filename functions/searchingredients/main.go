@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"encoding/json"
 	"errors"
 	"log"
@@ -12,7 +11,6 @@ import (
 	"github.com/aws/aws-lambda-go/lambda"
 )
 
-var errFind = errors.New("Cannot find expected entity")
 var errParseResult = errors.New("Result cannot be parsed")
 
 // Handler is your Lambda function handler
@@ -21,24 +19,13 @@ var errParseResult = errors.New("Result cannot be parsed")
 func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 
 	// stdout and stderr are sent to AWS CloudWatch Logs
-	log.Printf("Processing Lambda request ViewIngredients %s\n", request.RequestContext.RequestID)
+	log.Printf("Processing Lambda request SearchIngredient %s\n", request.RequestContext.RequestID)
 
-	_, ok := fridgedoorapi.ParseUsername(&request)
-	if !ok {
-		return events.APIGatewayProxyResponse{StatusCode: 401, Body: "rejected from lambda"}, errFind
-	}
+	q, _ := request.PathParameters["q"]
 
-	connection, err := fridgedoorapi.Recipe()
-	if err != nil {
-		return events.APIGatewayProxyResponse{}, errFind
-	}
+	ings, err := fridgedoorapi.SearchIngredients(q)
 
-	recipes, err := connection.List(context.Background())
-	if err != nil {
-		return events.APIGatewayProxyResponse{}, errFind
-	}
-
-	b, err := json.Marshal(recipes)
+	b, err := json.Marshal(ings)
 	if err != nil {
 		return events.APIGatewayProxyResponse{}, errParseResult
 	}
