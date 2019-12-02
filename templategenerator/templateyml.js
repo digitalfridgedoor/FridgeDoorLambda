@@ -25,6 +25,7 @@ function generate(lambdaDefinitions) {
 
         let clean = localRelativePath
             .replace(/\//g, '') // replace all / with nothing
+            .replace(/_/g, '') // replace all _ with nothing
             .replace(/[\{\}]/g, ''); // replace brackets with nothing
         let template = functionTemplate;
         template = replaceProperty(template, 'Name', clean);

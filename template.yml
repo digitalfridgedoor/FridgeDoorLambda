@@ -69,7 +69,7 @@ Resources:
       VpcConfig:
         SecurityGroupIds: !Ref SecurityGroupIds
         SubnetIds: !Ref VpcSubnetIds
-  recipep_idget:
+  recipepidget:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: bin/
