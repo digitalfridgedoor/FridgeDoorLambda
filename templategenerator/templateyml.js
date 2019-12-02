@@ -6,39 +6,35 @@ function readYmlTemplate(template) {
     return fileContents;
 }
 
-function readFunctionTemplate(goDir) {
-    try {
-        let fileContents = fs.readFileSync(`${goDir}/template.yml`, 'utf8');
-        return { exists: true, templateyml: yaml.safeLoadAll(fileContents) };
-    } catch{
-        return { exists: false };
-    }
-}
-
 function replaceProperty(original, property, replacement) {
     const regexp = new RegExp(`{{${property}}}`)
     return original.replace(regexp, replacement);
 }
 
-function generate(goDirs) {
+function generate(lambdaDefinitions) {
     const lines = [];
     const template = readYmlTemplate('base');
     lines.push(template);
 
     let functionTemplate = readYmlTemplate('function');
-    goDirs.forEach(dir => {
-        const { exists, templateyml } = readFunctionTemplate(`../functions${dir}`)
-        if (exists) {
-            let clean = dir.replace(/^\//, '');
-            let template = functionTemplate;
-            template = replaceProperty(template, 'Name', clean);
-            template = replaceProperty(template, 'Handler', clean);
-            template = replaceProperty(template, 'Path', templateyml[0]["Path"]);
-            template = replaceProperty(template, 'Method', templateyml[0]["Method"]);
+    lambdaDefinitions.forEach(definition => {
+        const {
+            localRelativePath,
+            method,
+            urlPath } = definition;
 
-            lines.push(template);
-        }
-    })
+        let clean = localRelativePath
+            .replace(/^\//, '') // replace first / with nothing
+            .replace(/\//g, '_') // replace others with underscore
+            .replace(/[\{\}]/g, ''); // replace brackets with nothing
+        let template = functionTemplate;
+        template = replaceProperty(template, 'Name', clean);
+        template = replaceProperty(template, 'Handler', localRelativePath);
+        template = replaceProperty(template, 'Path', urlPath);
+        template = replaceProperty(template, 'Method', method);
+
+        lines.push(template);
+    });
 
     return lines;
 }

@@ -12,31 +12,70 @@ function extension(file) {
     return null
 }
 
-const localBasePath = '../functions';
-const functionsDir = fs.readdirSync(localBasePath);
+function isHttpMethod(dir) {
+    return dir == 'get'
+        || dir == 'post'
+        || dir == 'put';
+}
 
-const goDirs = []
+const lambdaDefinitions = [];
 
-functionsDir.forEach(dir => {
-    console.log(dir)
-    let relativePath = '/' + dir;
-    let localPath = localBasePath + relativePath;
-    const files = fs.readdirSync(localPath);
-    let isGoDir = false;
-    files.forEach(file => {
-        const path = localPath + file;
-        if (extension(path) == 'go') {
-            isGoDir = true;
+function readLambdaDefinition(localPath, localRelativePath, relativePath, dir) {
+
+    const directoryContents = fs.readdirSync(localPath);
+
+    let hasGoFiles = false;
+    directoryContents.forEach(file => {
+        if (extension(file) == 'go') {
+            hasGoFiles = true;
         }
-    })
-    if (isGoDir) {
-        goDirs.push(relativePath);
-    }
-});
+    });
 
-const gobuild_sh = gobuild(goDirs);
-const govetgotest_sh = govetgotest(goDirs);
-const template_yml = templateyml(goDirs);
+    if (!hasGoFiles) {
+        console.log(`Http path does not have go files: ${localRelativePath}`);
+    }
+
+    const urlPath = relativePath.replace(/\/$/, '');
+    localRelativePath = localRelativePath.replace(/\/$/, '');
+
+    return {
+        localRelativePath, // for build scripts
+        method: dir,
+        urlPath,
+        hasGoFiles,
+    }
+}
+
+function traverseDirectory(localBasePath, relativePath) {
+    const directoryContents = fs.readdirSync(localBasePath);
+
+    directoryContents.forEach(file => {
+        let localRelativePath = relativePath + file + '/';
+        let localPath = localBasePath + file + '/';
+
+        const stat = fs.statSync(localPath)
+        if (stat.isDirectory()) {
+            if (isHttpMethod(file)) {
+                const definition = readLambdaDefinition(localPath, localRelativePath, relativePath, file)
+                lambdaDefinitions.push(definition);
+            } else {
+                traverseDirectory(localPath, localRelativePath)
+            }
+        } else if (stat.isFile()) {
+            console.log('Unexpected file', localPath, file)
+        } else {
+            console.error('unexpected file type')
+        }
+    });
+}
+
+const localBasePath = '../functions/';
+const relativePath = '/';
+traverseDirectory(localBasePath, relativePath);
+
+const gobuild_sh = gobuild(lambdaDefinitions);
+const govetgotest_sh = govetgotest(lambdaDefinitions);
+const template_yml = templateyml(lambdaDefinitions);
 
 fs.writeFileSync('../gobuild.sh', gobuild_sh.join('\n'));
 fs.writeFileSync('../govet_gotest.sh', govetgotest_sh.join('\n'));

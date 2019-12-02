@@ -1,9 +1,9 @@
-function generate(goDirs) {
+function generate(lambdaDefinitions) {
     const lines = [];
     lines.push('mkdir bin');
     lines.push('');
 
-    goDirs.forEach(dir => lines.push(`go build -o bin${dir} ./functions${dir}`))
+    lambdaDefinitions.forEach(({ localRelativePath }) => lines.push(`go build -o bin${localRelativePath} ./functions${localRelativePath}`))
 
     return lines;
 }

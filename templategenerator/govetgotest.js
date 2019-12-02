@@ -1,8 +1,8 @@
-function generate(goDirs) {
+function generate(lambdaDefinitions) {
     const lines = [];
-    goDirs.forEach(dir => lines.push(`go vet ./functions${dir}`));
+    lambdaDefinitions.forEach(({ localRelativePath }) => lines.push(`go vet ./functions${localRelativePath}`));
     lines.push('');
-    goDirs.forEach(dir => lines.push(`go test ./functions${dir}`));
+    lambdaDefinitions.forEach(({ localRelativePath }) => lines.push(`go test ./functions${localRelativePath}`));
 
     return lines;
 }

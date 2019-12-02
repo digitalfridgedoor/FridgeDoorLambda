@@ -1,11 +1,11 @@
-go vet ./functions/createrecipe
-go vet ./functions/searchingredients
-go vet ./functions/updaterecipe
-go vet ./functions/viewrecipe
-go vet ./functions/viewrecipes
+go vet ./functions/ingredients/get
+go vet ./functions/recipe/get
+go vet ./functions/recipe/post
+go vet ./functions/recipe/put
+go vet ./functions/recipe/{id}/get
 
-go test ./functions/createrecipe
-go test ./functions/searchingredients
-go test ./functions/updaterecipe
-go test ./functions/viewrecipe
-go test ./functions/viewrecipes
+go test ./functions/ingredients/get
+go test ./functions/recipe/get
+go test ./functions/recipe/post
+go test ./functions/recipe/put
+go test ./functions/recipe/{id}/get
