@@ -1,12 +1,12 @@
 package main
 
 import (
-	"digitalfridgedoor/fridgedoordatabase/ingredient"
 	"encoding/json"
 	"testing"
 	"unicode"
 
 	"github.com/digitalfridgedoor/fridgedoorapi"
+	"github.com/digitalfridgedoor/fridgedoordatabase/ingredient"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/stretchr/testify/assert"
