@@ -9,20 +9,16 @@ import (
 
 func addMethodStep(ctx context.Context, request *UpdateRecipeRequest) (*recipe.Recipe, error) {
 
-	if request.IngredientID == "" {
+	if request.Action == "" {
 		return nil, errMissingProperties
 	}
 
-	r, err := fridgedoorapi.AddMethodStep(context.Background(), request.RecipeID, request.IngredientID)
+	r, err := fridgedoorapi.AddMethodStep(context.Background(), request.RecipeID, request.Action)
 
 	return r, err
 }
 
 func removeMethodStep(ctx context.Context, request *UpdateRecipeRequest) (*recipe.Recipe, error) {
-
-	if request.IngredientID == "" {
-		return nil, errMissingProperties
-	}
 
 	r, err := fridgedoorapi.RemoveMethodStep(context.Background(), request.RecipeID, request.MethodStepIndex)
 

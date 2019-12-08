@@ -19,10 +19,12 @@ var errBadRequest = errors.New("Bad request")
 
 // UpdateRecipeRequest is the expected type for updating recipe
 type UpdateRecipeRequest struct {
-	RecipeID        string `json:"recipeID"`
-	MethodStepIndex int    `json:"methodStepIndex"`
-	IngredientID    string `json:"ingredientID"`
-	UpdateType      string `json:"updateType"`
+	RecipeID        string            `json:"recipeID"`
+	MethodStepIndex int               `json:"methodStepIndex"`
+	Action          string            `json:"action"`
+	IngredientID    string            `json:"ingredientID"`
+	UpdateType      string            `json:"updateType"`
+	Updates         map[string]string `json:"updates"`
 }
 
 var errCannotParse = errors.New("Could not parse request")
