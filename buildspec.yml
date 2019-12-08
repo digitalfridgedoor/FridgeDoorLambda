@@ -31,7 +31,7 @@ phases:
       - go get -t ./...
       # Check for common Go problems with 'go vet'
       # Run all tests included with the application
-      - ./govet_gotest.sh
+      # - ./govet_gotest.sh
 
   build:
     commands:

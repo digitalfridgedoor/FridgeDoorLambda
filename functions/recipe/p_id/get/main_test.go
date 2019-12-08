@@ -58,6 +58,6 @@ func TestHandler(t *testing.T) {
 	assert.NotNil(t, recipe)
 	assert.Equal(t, "5dbc80036eb36874255e7fcd", recipe.ID.Hex())
 	assert.Equal(t, "Nandos chicken", recipe.Name)
-	assert.Equal(t, 2, len(recipe.Ingredients))
+	assert.Equal(t, 0, len(recipe.Method))
 	assert.Equal(t, 1, len(recipe.Recipes))
 }

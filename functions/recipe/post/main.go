@@ -19,9 +19,10 @@ var errBadRequest = errors.New("Bad request")
 
 // UpdateRecipeRequest is the expected type for updating recipe
 type UpdateRecipeRequest struct {
-	RecipeID     string `json:"recipeID"`
-	IngredientID string `json:"ingredientID"`
-	UpdateType   string `json:"updateType"`
+	RecipeID        string `json:"recipeID"`
+	MethodStepIndex int    `json:"methodStepIndex"`
+	IngredientID    string `json:"ingredientID"`
+	UpdateType      string `json:"updateType"`
 }
 
 var errCannotParse = errors.New("Could not parse request")
@@ -42,15 +43,21 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 		return events.APIGatewayProxyResponse{StatusCode: 500}, errCannotParse
 	}
 
-	if r.RecipeID == "" || r.IngredientID == "" || r.UpdateType == "" {
+	if r.RecipeID == "" || r.UpdateType == "" {
 		return events.APIGatewayProxyResponse{StatusCode: 500}, errMissingProperties
 	}
 
-	if r.UpdateType == "ADD" {
-		r, err := fridgedoorapi.AddIngredient(context.Background(), r.RecipeID, r.IngredientID)
+	if r.UpdateType == "STEP_ADD" {
+		r, err := addMethodStep(context.Background(), r)
 		return createResponse(r, err)
-	} else if r.UpdateType == "DELETE" {
-		r, err := fridgedoorapi.RemoveIngredient(context.Background(), r.RecipeID, r.IngredientID)
+	} else if r.UpdateType == "STEP_DELETE" {
+		r, err := removeMethodStep(context.Background(), r)
+		return createResponse(r, err)
+	} else if r.UpdateType == "ING_ADD" {
+		r, err := addIngredient(context.Background(), r)
+		return createResponse(r, err)
+	} else if r.UpdateType == "ING_DELETE" {
+		r, err := removeIngredient(context.Background(), r)
 		return createResponse(r, err)
 	}
 
