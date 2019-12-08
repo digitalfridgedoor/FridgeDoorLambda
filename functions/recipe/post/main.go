@@ -58,6 +58,9 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	} else if r.UpdateType == "ING_ADD" {
 		r, err := addIngredient(context.Background(), r)
 		return createResponse(r, err)
+	} else if r.UpdateType == "ING_UPDATE" {
+		r, err := updateIngredient(context.Background(), r)
+		return createResponse(r, err)
 	} else if r.UpdateType == "ING_DELETE" {
 		r, err := removeIngredient(context.Background(), r)
 		return createResponse(r, err)
