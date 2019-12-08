@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"strings"
 	"testing"
 	"unicode"
 
@@ -53,8 +54,8 @@ func TestHandlerWithQuery(t *testing.T) {
 	assert.NotNil(t, ingredients)
 	assert.Greater(t, len(ingredients), 0)
 	for _, ing := range ingredients {
-		startswith := unicode.ToLower([]rune(ing.Name)[0])
-		assert.Equal(t, []rune("c")[0], startswith)
+		startswith := []rune("c")[0]
+		assert.True(t, oneWordStartsWith(ing.Name, startswith))
 	}
 }
 
@@ -71,4 +72,15 @@ func CreateTestAuthorizedRequest(username string) *events.APIGatewayProxyRequest
 	}
 
 	return request
+}
+
+func oneWordStartsWith(ing string, startswith rune) bool {
+	words := strings.Fields(ing)
+	for _, word := range words {
+		if unicode.ToLower([]rune(word)[0]) == startswith {
+			return true
+		}
+	}
+
+	return false
 }
