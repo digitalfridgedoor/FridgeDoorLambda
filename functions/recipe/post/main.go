@@ -52,6 +52,9 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	if r.UpdateType == "STEP_ADD" {
 		r, err := addMethodStep(context.Background(), r)
 		return createResponse(r, err)
+	} else if r.UpdateType == "STEP_UPDATE" {
+		r, err := updateMethodStep(context.Background(), r)
+		return createResponse(r, err)
 	} else if r.UpdateType == "STEP_DELETE" {
 		r, err := removeMethodStep(context.Background(), r)
 		return createResponse(r, err)
