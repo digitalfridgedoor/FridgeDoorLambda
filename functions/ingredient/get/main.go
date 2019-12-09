@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"log"
 
 	"github.com/digitalfridgedoor/fridgedoorapi"
@@ -24,6 +25,8 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	q, _ := request.QueryStringParameters["q"]
 
 	ings, err := fridgedoorapi.SearchIngredients(q)
+
+	fmt.Printf("Searching for %v, got %v results", q, len(ings))
 
 	b, err := json.Marshal(ings)
 	if err != nil {
