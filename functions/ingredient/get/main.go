@@ -26,7 +26,7 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 
 	ings, err := fridgedoorapi.SearchIngredients(q)
 
-	fmt.Printf("Searching for %v, got %v results", q, len(ings))
+	fmt.Printf("Searching for %v, got %v results.", q, len(ings))
 
 	b, err := json.Marshal(ings)
 	if err != nil {
