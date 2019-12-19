@@ -8,6 +8,7 @@ import (
 	"log"
 
 	"github.com/digitalfridgedoor/fridgedoorapi"
+	"github.com/digitalfridgedoor/fridgedoorapi/userviewapi"
 	"github.com/digitalfridgedoor/fridgedoordatabase/recipe"
 
 	"github.com/aws/aws-lambda-go/events"
@@ -31,7 +32,7 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	// stdout and stderr are sent to AWS CloudWatch Logs
 	log.Printf("Processing Lambda request ViewRecipes %s\n", request.RequestContext.RequestID)
 
-	userview, err := fridgedoorapi.GetOrCreateUserView(context.Background(), &request)
+	userview, err := userviewapi.GetOrCreateUserView(context.Background(), &request)
 	if err != nil {
 		fmt.Printf("Error getting userview: %v.\n", err)
 		return events.APIGatewayProxyResponse{}, errConnect
@@ -40,7 +41,7 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	recipes := make(map[string][]*recipe.Description)
 
 	for name, recipeCollection := range userview.Collections {
-		descriptions, err := fridgedoorapi.GetCollectionRecipes(context.Background(), recipeCollection)
+		descriptions, err := userviewapi.GetCollectionRecipes(context.Background(), recipeCollection)
 		if err != nil {
 			fmt.Printf("Error reading collection: %v.\n", err)
 		} else {

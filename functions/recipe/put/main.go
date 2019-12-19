@@ -8,6 +8,7 @@ import (
 	"log"
 
 	"github.com/digitalfridgedoor/fridgedoorapi"
+	"github.com/digitalfridgedoor/fridgedoorapi/recipeapi"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
@@ -43,7 +44,7 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 
 	ctx := context.Background()
 
-	recipe, err := fridgedoorapi.CreateRecipe(ctx, &request, r.Collection, r.Name)
+	recipe, err := recipeapi.CreateRecipe(ctx, &request, r.Collection, r.Name)
 	if err != nil {
 		fmt.Printf("Error creating recipe: %v.\n", err)
 		return events.APIGatewayProxyResponse{StatusCode: 500}, errServer

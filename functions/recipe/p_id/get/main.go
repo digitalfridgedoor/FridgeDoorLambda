@@ -7,6 +7,7 @@ import (
 	"log"
 
 	"github.com/digitalfridgedoor/fridgedoorapi"
+	"github.com/digitalfridgedoor/fridgedoorapi/recipeapi"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
@@ -24,20 +25,17 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	// stdout and stderr are sent to AWS CloudWatch Logs
 	log.Printf("Processing Lambda request ViewRecipe %s\n", request.RequestContext.RequestID)
 
-	// If no name is provided in the HTTP request body, throw an error
 	recipeID, ok := request.PathParameters["id"]
 	if !ok || recipeID == "" {
 		return events.APIGatewayProxyResponse{}, errMissingParameter
 	}
 
-	connection, err := fridgedoorapi.Recipe()
-
-	chicken, err := connection.FindOne(context.Background(), recipeID)
+	r, err := recipeapi.FindOne(context.Background(), recipeID)
 	if err != nil {
 		return events.APIGatewayProxyResponse{}, errFind
 	}
 
-	b, err := json.Marshal(chicken)
+	b, err := json.Marshal(r)
 	if err != nil {
 		return events.APIGatewayProxyResponse{}, errParseResult
 	}

@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 
-	"github.com/digitalfridgedoor/fridgedoorapi"
+	"github.com/digitalfridgedoor/fridgedoorapi/recipeapi"
 	"github.com/digitalfridgedoor/fridgedoordatabase/recipe"
 )
 
@@ -13,7 +13,7 @@ func addMethodStep(ctx context.Context, request *UpdateRecipeRequest) (*recipe.R
 		return nil, errMissingProperties
 	}
 
-	r, err := fridgedoorapi.AddMethodStep(context.Background(), request.RecipeID, request.Action)
+	r, err := recipeapi.AddMethodStep(context.Background(), request.RecipeID, request.Action)
 
 	return r, err
 }
@@ -24,14 +24,14 @@ func updateMethodStep(ctx context.Context, request *UpdateRecipeRequest) (*recip
 		return nil, errMissingProperties
 	}
 
-	r, err := fridgedoorapi.UpdateMethodStep(context.Background(), request.RecipeID, request.MethodStepIndex, request.Updates)
+	r, err := recipeapi.UpdateMethodStep(context.Background(), request.RecipeID, request.MethodStepIndex, request.Updates)
 
 	return r, err
 }
 
 func removeMethodStep(ctx context.Context, request *UpdateRecipeRequest) (*recipe.Recipe, error) {
 
-	r, err := fridgedoorapi.RemoveMethodStep(context.Background(), request.RecipeID, request.MethodStepIndex)
+	r, err := recipeapi.RemoveMethodStep(context.Background(), request.RecipeID, request.MethodStepIndex)
 
 	return r, err
 }
