@@ -23,6 +23,7 @@ type UpdateRecipeRequest struct {
 	MethodStepIndex int               `json:"methodStepIndex"`
 	Action          string            `json:"action"`
 	IngredientID    string            `json:"ingredientID"`
+	SubRecipeID     string            `json:"subRecipeID"`
 	UpdateType      string            `json:"updateType"`
 	Updates         map[string]string `json:"updates"`
 }
@@ -65,6 +66,12 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 		r, err := updateIngredient(context.Background(), r)
 		return createResponse(r, err)
 	} else if r.UpdateType == "ING_DELETE" {
+		r, err := removeIngredient(context.Background(), r)
+		return createResponse(r, err)
+	} else if r.UpdateType == "SUB_ADD" {
+		r, err := updateIngredient(context.Background(), r)
+		return createResponse(r, err)
+	} else if r.UpdateType == "SUB_DELETE" {
 		r, err := removeIngredient(context.Background(), r)
 		return createResponse(r, err)
 	}

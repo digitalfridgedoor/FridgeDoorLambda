@@ -15,7 +15,8 @@ function extension(file) {
 function isHttpMethod(dir) {
     return dir == 'get'
         || dir == 'post'
-        || dir == 'put';
+        || dir == 'put'
+        || dir == 'delete';
 }
 
 const lambdaDefinitions = [];
