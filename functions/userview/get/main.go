@@ -4,18 +4,25 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"log"
 
 	"github.com/digitalfridgedoor/fridgedoorapi"
-	"github.com/digitalfridgedoor/fridgedoorapi/recipeapi"
+	"github.com/digitalfridgedoor/fridgedoorapi/userviewapi"
+	"github.com/digitalfridgedoor/fridgedoordatabase/recipe"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 )
 
-var errMissingParameter = errors.New("Parameter is missing")
+var errConnect = errors.New("Cannot connect")
 var errFind = errors.New("Cannot find expected entity")
 var errParseResult = errors.New("Result cannot be parsed")
+
+// UserRecipeCollection is the type returned by viewrecipes handler
+type UserRecipeCollection struct {
+	Recipes map[string][]*recipe.Description `json:"recipes"`
+}
 
 // Handler is your Lambda function handler
 // It uses Amazon API Gateway request/responses provided by the aws-lambda-go/events package,
@@ -23,19 +30,15 @@ var errParseResult = errors.New("Result cannot be parsed")
 func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 
 	// stdout and stderr are sent to AWS CloudWatch Logs
-	log.Printf("Processing Lambda request ViewRecipe %s\n", request.RequestContext.RequestID)
+	log.Printf("Processing Lambda request ViewUserViews %s\n", request.RequestContext.RequestID)
 
-	recipeID, ok := request.PathParameters["id"]
-	if !ok || recipeID == "" {
-		return events.APIGatewayProxyResponse{}, errMissingParameter
-	}
-
-	r, err := recipeapi.FindOne(context.Background(), recipeID)
+	userviews, err := userviewapi.GetOtherUsersRecipes(context.Background())
 	if err != nil {
-		return events.APIGatewayProxyResponse{}, errFind
+		fmt.Printf("Error getting userview: %v.\n", err)
+		return events.APIGatewayProxyResponse{}, errConnect
 	}
 
-	b, err := json.Marshal(r)
+	b, err := json.Marshal(userviews)
 	if err != nil {
 		return events.APIGatewayProxyResponse{}, errParseResult
 	}

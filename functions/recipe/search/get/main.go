@@ -6,15 +6,15 @@ import (
 	"errors"
 	"log"
 
-	"github.com/digitalfridgedoor/fridgedoorapi"
 	"github.com/digitalfridgedoor/fridgedoorapi/recipeapi"
+
+	"github.com/digitalfridgedoor/fridgedoorapi"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 )
 
-var errMissingParameter = errors.New("Parameter is missing")
-var errFind = errors.New("Cannot find expected entity")
+var errFind = errors.New("Error finding results")
 var errParseResult = errors.New("Result cannot be parsed")
 
 // Handler is your Lambda function handler
@@ -23,19 +23,16 @@ var errParseResult = errors.New("Result cannot be parsed")
 func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 
 	// stdout and stderr are sent to AWS CloudWatch Logs
-	log.Printf("Processing Lambda request ViewRecipe %s\n", request.RequestContext.RequestID)
+	log.Printf("Processing Lambda request SearchRecipes %s\n", request.RequestContext.RequestID)
 
-	recipeID, ok := request.PathParameters["id"]
-	if !ok || recipeID == "" {
-		return events.APIGatewayProxyResponse{}, errMissingParameter
-	}
+	q, _ := request.QueryStringParameters["q"]
 
-	r, err := recipeapi.FindOne(context.Background(), recipeID)
+	recipes, err := recipeapi.FindByName(context.TODO(), &request, q)
 	if err != nil {
 		return events.APIGatewayProxyResponse{}, errFind
 	}
 
-	b, err := json.Marshal(r)
+	b, err := json.Marshal(recipes)
 	if err != nil {
 		return events.APIGatewayProxyResponse{}, errParseResult
 	}

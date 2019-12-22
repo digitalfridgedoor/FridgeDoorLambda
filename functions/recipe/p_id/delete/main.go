@@ -34,9 +34,7 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 		return events.APIGatewayProxyResponse{}, errFind
 	}
 
-	resp := events.APIGatewayProxyResponse{Headers: make(map[string]string)}
-	resp.Headers["Access-Control-Allow-Origin"] = "*"
-	resp.StatusCode = 200
+	resp := fridgedoorapi.ResponseSuccessful("")
 	return resp, nil
 }
 

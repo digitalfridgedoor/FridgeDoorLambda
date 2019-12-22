@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"github.com/digitalfridgedoor/fridgedoorapi"
-	"github.com/digitalfridgedoor/fridgedoordatabase/recipe"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/stretchr/testify/assert"
@@ -41,7 +40,7 @@ func TestHandler(t *testing.T) {
 
 	// Arrange
 	pathParameters := make(map[string]string)
-	pathParameters["id"] = "5dbc814c6eb36874255e7fd0"
+	pathParameters["id"] = "5dfe1b62101b819f99d4f3dd"
 	apirequest := events.APIGatewayProxyRequest{PathParameters: pathParameters}
 
 	// Act
@@ -51,13 +50,10 @@ func TestHandler(t *testing.T) {
 
 	// Assert
 	assert.Nil(t, err)
-	recipe := &recipe.Recipe{}
+	recipeCollection := UserRecipeCollection{}
 
-	err = json.Unmarshal([]byte(response.Body), recipe)
+	err = json.Unmarshal([]byte(response.Body), &recipeCollection)
 	assert.Nil(t, err)
-	assert.NotNil(t, recipe)
-	assert.Equal(t, "5dbc814c6eb36874255e7fd0", recipe.ID.Hex())
-	assert.Equal(t, "Macho peas", recipe.Name)
-	assert.Equal(t, 0, len(recipe.Method))
-	assert.Equal(t, 0, len(recipe.Recipes))
+	assert.NotNil(t, recipeCollection)
+	assert.Equal(t, 1, len(recipeCollection.Recipes))
 }

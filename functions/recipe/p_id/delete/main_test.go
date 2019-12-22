@@ -4,6 +4,8 @@ import (
 	"context"
 	"testing"
 
+	"github.com/digitalfridgedoor/fridgedoordatabase/userview"
+
 	"github.com/digitalfridgedoor/fridgedoorapi/recipeapi"
 
 	"github.com/digitalfridgedoor/fridgedoorapi"
@@ -44,7 +46,8 @@ func TestHandler(t *testing.T) {
 	ctx := context.Background()
 	collectionName := "public"
 	recipeName := "test-recipe"
-	request := createTestAuthorizedRequest("test-user")
+	testUser := "test-user"
+	request := createTestAuthorizedRequest(testUser)
 	recipe, err := recipeapi.CreateRecipe(ctx, request, collectionName, recipeName)
 	assert.Nil(t, err)
 
@@ -55,7 +58,7 @@ func TestHandler(t *testing.T) {
 
 	pathParameters := make(map[string]string)
 	pathParameters["id"] = recipe.ID.Hex()
-	deleterequest := createTestAuthorizedRequest("test-user")
+	deleterequest := createTestAuthorizedRequest(testUser)
 	deleterequest.PathParameters = pathParameters
 
 	// Act
@@ -70,6 +73,8 @@ func TestHandler(t *testing.T) {
 	r, err = recipeapi.FindOne(ctx, recipeID)
 	assert.NotNil(t, err)
 	assert.Nil(t, r)
+
+	userview.Delete(ctx, testUser)
 }
 
 func createTestAuthorizedRequest(username string) *events.APIGatewayProxyRequest {
