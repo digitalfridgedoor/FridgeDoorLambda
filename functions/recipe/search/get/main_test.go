@@ -15,7 +15,7 @@ func TestHandler(t *testing.T) {
 
 	// Arrange
 	claims := make(map[string]interface{})
-	claims["cognito:username"] = "Test"
+	claims["cognito:username"] = "7a401f20-86ca-442f-acf3-20d396c06d33"
 	authorizor := make(map[string]interface{})
 	authorizor["claims"] = claims
 
@@ -26,7 +26,7 @@ func TestHandler(t *testing.T) {
 		RequestContext: context,
 	}
 	apirequest.QueryStringParameters = make(map[string]string)
-	apirequest.QueryStringParameters["q"] = "mach"
+	apirequest.QueryStringParameters["q"] = "fi"
 
 	// Act
 	fridgedoorapi.ConnectOrSkip(t)
@@ -40,5 +40,5 @@ func TestHandler(t *testing.T) {
 	err = json.Unmarshal([]byte(response.Body), &recipes)
 	assert.Nil(t, err)
 	assert.NotNil(t, recipes)
-	assert.Equal(t, len(recipes), 0)
+	assert.Equal(t, 1, len(recipes))
 }
