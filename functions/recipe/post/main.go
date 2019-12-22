@@ -69,10 +69,10 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 		r, err := removeIngredient(context.Background(), r)
 		return createResponse(r, err)
 	} else if r.UpdateType == "SUB_ADD" {
-		r, err := updateIngredient(context.Background(), r)
+		r, err := addSubRecipe(context.Background(), r)
 		return createResponse(r, err)
 	} else if r.UpdateType == "SUB_DELETE" {
-		r, err := removeIngredient(context.Background(), r)
+		r, err := removeSubRecipe(context.Background(), r)
 		return createResponse(r, err)
 	}
 
