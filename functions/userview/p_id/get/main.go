@@ -9,7 +9,6 @@ import (
 
 	"github.com/digitalfridgedoor/fridgedoorapi"
 	"github.com/digitalfridgedoor/fridgedoorapi/userviewapi"
-	"github.com/digitalfridgedoor/fridgedoordatabase/recipe"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
@@ -18,11 +17,6 @@ import (
 var errMissingParameter = errors.New("Parameter is missing")
 var errFind = errors.New("Cannot find expected entity")
 var errParseResult = errors.New("Result cannot be parsed")
-
-// UserRecipeCollection is the type returned by viewrecipes handler
-type UserRecipeCollection struct {
-	Recipes map[string][]*recipe.Description `json:"recipes"`
-}
 
 // Handler is your Lambda function handler
 // It uses Amazon API Gateway request/responses provided by the aws-lambda-go/events package,
@@ -43,22 +37,7 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 		return events.APIGatewayProxyResponse{}, errFind
 	}
 
-	recipes := make(map[string][]*recipe.Description)
-
-	for name, recipeCollection := range userview.Collections {
-		descriptions, err := userviewapi.GetCollectionRecipes(context.Background(), recipeCollection)
-		if err != nil {
-			fmt.Printf("Error reading collection: %v.\n", err)
-		} else {
-			recipes[name] = descriptions
-		}
-	}
-
-	userRecipeCollection := &UserRecipeCollection{
-		Recipes: recipes,
-	}
-
-	b, err := json.Marshal(userRecipeCollection)
+	b, err := json.Marshal(userview)
 	if err != nil {
 		return events.APIGatewayProxyResponse{}, errParseResult
 	}

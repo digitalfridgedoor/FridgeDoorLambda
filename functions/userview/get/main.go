@@ -9,7 +9,6 @@ import (
 
 	"github.com/digitalfridgedoor/fridgedoorapi"
 	"github.com/digitalfridgedoor/fridgedoorapi/userviewapi"
-	"github.com/digitalfridgedoor/fridgedoordatabase/recipe"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
@@ -18,11 +17,6 @@ import (
 var errConnect = errors.New("Cannot connect")
 var errFind = errors.New("Cannot find expected entity")
 var errParseResult = errors.New("Result cannot be parsed")
-
-// UserRecipeCollection is the type returned by viewrecipes handler
-type UserRecipeCollection struct {
-	Recipes map[string][]*recipe.Description `json:"recipes"`
-}
 
 // Handler is your Lambda function handler
 // It uses Amazon API Gateway request/responses provided by the aws-lambda-go/events package,

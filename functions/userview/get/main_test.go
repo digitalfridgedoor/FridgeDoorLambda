@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/digitalfridgedoor/fridgedoorapi"
-	"github.com/digitalfridgedoor/fridgedoordatabase/userview"
+	"github.com/digitalfridgedoor/fridgedoorapi/userviewapi"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/stretchr/testify/assert"
@@ -33,7 +33,7 @@ func TestHandler(t *testing.T) {
 
 	// Assert
 	assert.Nil(t, err)
-	var recipes []*userview.View
+	var recipes []*userviewapi.View
 
 	err = json.Unmarshal([]byte(response.Body), &recipes)
 	assert.Nil(t, err)

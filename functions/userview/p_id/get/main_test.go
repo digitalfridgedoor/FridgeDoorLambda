@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"testing"
 
+	"github.com/digitalfridgedoor/fridgedoorapi/userviewapi"
+
 	"github.com/digitalfridgedoor/fridgedoorapi"
 
 	"github.com/aws/aws-lambda-go/events"
@@ -50,10 +52,10 @@ func TestHandler(t *testing.T) {
 
 	// Assert
 	assert.Nil(t, err)
-	recipeCollection := UserRecipeCollection{}
+	uv := &userviewapi.View{}
 
-	err = json.Unmarshal([]byte(response.Body), &recipeCollection)
+	err = json.Unmarshal([]byte(response.Body), &uv)
 	assert.Nil(t, err)
-	assert.NotNil(t, recipeCollection)
-	assert.Equal(t, 1, len(recipeCollection.Recipes))
+	assert.NotNil(t, uv)
+	assert.Equal(t, 1, len(uv.Collections))
 }
