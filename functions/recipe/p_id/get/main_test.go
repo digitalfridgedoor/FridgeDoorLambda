@@ -41,13 +41,14 @@ func TestHandler(t *testing.T) {
 
 	// Arrange
 	pathParameters := make(map[string]string)
-	pathParameters["id"] = "5dbc814c6eb36874255e7fd0"
-	apirequest := events.APIGatewayProxyRequest{PathParameters: pathParameters}
+	pathParameters["id"] = "5de3f416aaef34b1c212f7b7"
+	apirequest := createTestAuthorizedRequest("TestUser")
+	apirequest.PathParameters = pathParameters
 
 	// Act
 	fridgedoorapi.ConnectOrSkip(t)
 
-	response, err := Handler(apirequest)
+	response, err := Handler(*apirequest)
 
 	// Assert
 	assert.Nil(t, err)
@@ -56,8 +57,23 @@ func TestHandler(t *testing.T) {
 	err = json.Unmarshal([]byte(response.Body), recipe)
 	assert.Nil(t, err)
 	assert.NotNil(t, recipe)
-	assert.Equal(t, "5dbc814c6eb36874255e7fd0", recipe.ID.Hex())
-	assert.Equal(t, "Macho peas", recipe.Name)
-	assert.Equal(t, 0, len(recipe.Method))
+	assert.Equal(t, "5de3f416aaef34b1c212f7b7", recipe.ID.Hex())
+	assert.Equal(t, "Roast Dinner", recipe.Name)
+	assert.Equal(t, 1, len(recipe.Method))
 	assert.Equal(t, 0, len(recipe.Recipes))
+}
+
+func createTestAuthorizedRequest(username string) *events.APIGatewayProxyRequest {
+	claims := make(map[string]interface{})
+	claims["cognito:username"] = username
+	authorizer := make(map[string]interface{})
+	authorizer["claims"] = claims
+	context := events.APIGatewayProxyRequestContext{
+		Authorizer: authorizer,
+	}
+	request := &events.APIGatewayProxyRequest{
+		RequestContext: context,
+	}
+
+	return request
 }

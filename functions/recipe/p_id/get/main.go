@@ -30,7 +30,7 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 		return events.APIGatewayProxyResponse{}, errMissingParameter
 	}
 
-	r, err := recipeapi.FindOne(context.Background(), recipeID)
+	r, err := recipeapi.FindOne(context.Background(), &request, recipeID)
 	if err != nil {
 		return events.APIGatewayProxyResponse{}, errFind
 	}

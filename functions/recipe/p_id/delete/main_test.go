@@ -52,7 +52,7 @@ func TestHandler(t *testing.T) {
 	assert.Nil(t, err)
 
 	recipeID := recipe.ID.Hex()
-	r, err := recipeapi.FindOne(ctx, recipeID)
+	r, err := recipeapi.FindOne(ctx, request, recipeID)
 	assert.Nil(t, err)
 	assert.NotNil(t, r)
 
@@ -70,7 +70,7 @@ func TestHandler(t *testing.T) {
 	assert.Equal(t, 200, response.StatusCode)
 	assert.Nil(t, err)
 
-	r, err = recipeapi.FindOne(ctx, recipeID)
+	r, err = recipeapi.FindOne(ctx, request, recipeID)
 	assert.NotNil(t, err)
 	assert.Nil(t, r)
 
