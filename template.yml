@@ -15,7 +15,7 @@ Resources:
       StageName: Prod
       Cors:
         AllowHeaders: "'Content-Type,Authorization'"
-        AllowMethods: "'OPTIONS,POST,GET,PUT'"
+        AllowMethods: "'OPTIONS,POST,GET,PUT,DELETE'"
         AllowOrigin: "'*'"
       Auth:
         Authorizers:
