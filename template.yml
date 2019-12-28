@@ -21,6 +21,30 @@ Resources:
         Authorizers:
           CognitoAuthorizer:
             UserPoolArn: arn:aws:cognito-idp:eu-west-2:266057577872:userpool/eu-west-2_9F1r0K7GW
+  imageget:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: bin/
+      Handler: /image/get
+      Runtime: go1.x
+      Tracing: Active
+      Role: arn:aws:iam::266057577872:role/dfd-api-lambda-role
+      Events:
+        GetEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref DfdApi
+            Path: /image
+            Method: get
+            Auth:
+              Authorizer: CognitoAuthorizer
+      Policies:
+        - VPCAccessPolicy: {}
+        # This policy gives permission for Lambdas to create/manage ENIs
+        # SAM Policy templates you can use: https://github.com/awslabs/serverless-application-model/blob/develop/examples/2016-10-31/policy_templates/all_policy_templates.yaml
+      VpcConfig:
+        SecurityGroupIds: !Ref SecurityGroupIds
+        SubnetIds: !Ref VpcSubnetIds
   ingredientget:
     Type: AWS::Serverless::Function
     Properties:
@@ -84,6 +108,30 @@ Resources:
             RestApiId: !Ref DfdApi
             Path: /recipe
             Method: get
+            Auth:
+              Authorizer: CognitoAuthorizer
+      Policies:
+        - VPCAccessPolicy: {}
+        # This policy gives permission for Lambdas to create/manage ENIs
+        # SAM Policy templates you can use: https://github.com/awslabs/serverless-application-model/blob/develop/examples/2016-10-31/policy_templates/all_policy_templates.yaml
+      VpcConfig:
+        SecurityGroupIds: !Ref SecurityGroupIds
+        SubnetIds: !Ref VpcSubnetIds
+  recipeimagepost:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: bin/
+      Handler: /recipe/image/post
+      Runtime: go1.x
+      Tracing: Active
+      Role: arn:aws:iam::266057577872:role/dfd-api-lambda-role
+      Events:
+        GetEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref DfdApi
+            Path: /recipe/image
+            Method: post
             Auth:
               Authorizer: CognitoAuthorizer
       Policies:
