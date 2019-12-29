@@ -24,8 +24,8 @@ Resources:
   imageget:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: bin/
-      Handler: /image/get
+      CodeUri: bin/image/
+      Handler: /get
       Runtime: go1.x
       Tracing: Active
       Role: arn:aws:iam::266057577872:role/dfd-api-lambda-role
@@ -48,8 +48,8 @@ Resources:
   ingredientget:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: bin/
-      Handler: /ingredient/get
+      CodeUri: bin/ingredient/
+      Handler: /get
       Runtime: go1.x
       Tracing: Active
       Role: arn:aws:iam::266057577872:role/dfd-api-lambda-role
@@ -72,8 +72,8 @@ Resources:
   ingredientput:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: bin/
-      Handler: /ingredient/put
+      CodeUri: bin/ingredient/
+      Handler: /put
       Runtime: go1.x
       Tracing: Active
       Role: arn:aws:iam::266057577872:role/dfd-api-lambda-role
@@ -96,8 +96,8 @@ Resources:
   recipeget:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: bin/
-      Handler: /recipe/get
+      CodeUri: bin/recipe/
+      Handler: /get
       Runtime: go1.x
       Tracing: Active
       Role: arn:aws:iam::266057577872:role/dfd-api-lambda-role
@@ -120,8 +120,8 @@ Resources:
   recipeimagepost:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: bin/
-      Handler: /recipe/image/post
+      CodeUri: bin/recipe/image/
+      Handler: /post
       Runtime: go1.x
       Tracing: Active
       Role: arn:aws:iam::266057577872:role/dfd-api-lambda-role
@@ -144,8 +144,8 @@ Resources:
   recipepiddelete:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: bin/
-      Handler: /recipe/p_id/delete
+      CodeUri: bin/recipe/p_id/
+      Handler: /delete
       Runtime: go1.x
       Tracing: Active
       Role: arn:aws:iam::266057577872:role/dfd-api-lambda-role
@@ -168,8 +168,8 @@ Resources:
   recipepidget:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: bin/
-      Handler: /recipe/p_id/get
+      CodeUri: bin/recipe/p_id/
+      Handler: /get
       Runtime: go1.x
       Tracing: Active
       Role: arn:aws:iam::266057577872:role/dfd-api-lambda-role
@@ -192,8 +192,8 @@ Resources:
   recipepost:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: bin/
-      Handler: /recipe/post
+      CodeUri: bin/recipe/
+      Handler: /post
       Runtime: go1.x
       Tracing: Active
       Role: arn:aws:iam::266057577872:role/dfd-api-lambda-role
@@ -216,8 +216,8 @@ Resources:
   recipeput:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: bin/
-      Handler: /recipe/put
+      CodeUri: bin/recipe/
+      Handler: /put
       Runtime: go1.x
       Tracing: Active
       Role: arn:aws:iam::266057577872:role/dfd-api-lambda-role
@@ -240,8 +240,8 @@ Resources:
   recipesearchget:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: bin/
-      Handler: /recipe/search/get
+      CodeUri: bin/recipe/search/
+      Handler: /get
       Runtime: go1.x
       Tracing: Active
       Role: arn:aws:iam::266057577872:role/dfd-api-lambda-role
@@ -264,8 +264,8 @@ Resources:
   userviewget:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: bin/
-      Handler: /userview/get
+      CodeUri: bin/userview/
+      Handler: /get
       Runtime: go1.x
       Tracing: Active
       Role: arn:aws:iam::266057577872:role/dfd-api-lambda-role
@@ -288,8 +288,8 @@ Resources:
   userviewpidget:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: bin/
-      Handler: /userview/p_id/get
+      CodeUri: bin/userview/p_id/
+      Handler: /get
       Runtime: go1.x
       Tracing: Active
       Role: arn:aws:iam::266057577872:role/dfd-api-lambda-role
