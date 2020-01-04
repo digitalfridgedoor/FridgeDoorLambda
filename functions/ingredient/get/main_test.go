@@ -16,7 +16,7 @@ import (
 func TestHandler(t *testing.T) {
 
 	// Arrange
-	apirequest := CreateTestAuthorizedRequest("Test")
+	apirequest := CreateTestAuthorizedRequest("TestUser")
 
 	// Act
 	fridgedoorapi.ConnectOrSkip(t)
@@ -36,7 +36,7 @@ func TestHandler(t *testing.T) {
 func TestHandlerWithQuery(t *testing.T) {
 
 	// Arrange
-	apirequest := CreateTestAuthorizedRequest("Test")
+	apirequest := CreateTestAuthorizedRequest("TestUser")
 	apirequest.QueryStringParameters = make(map[string]string)
 	apirequest.QueryStringParameters["q"] = "c"
 

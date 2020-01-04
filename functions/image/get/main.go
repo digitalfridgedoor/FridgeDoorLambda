@@ -35,7 +35,7 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 
 	verb, ok := request.QueryStringParameters["verb"]
 	if !ok {
-		fmt.Println("Missing parameter 'type'.")
+		fmt.Println("Missing parameter 'verb'.")
 		return events.APIGatewayProxyResponse{}, errMissingParameters
 	}
 	key, ok := request.QueryStringParameters["key"]

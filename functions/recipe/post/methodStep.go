@@ -3,35 +3,35 @@ package main
 import (
 	"context"
 
+	"github.com/aws/aws-lambda-go/events"
 	"github.com/digitalfridgedoor/fridgedoorapi/recipeapi"
-	"github.com/digitalfridgedoor/fridgedoordatabase/recipe"
 )
 
-func addMethodStep(ctx context.Context, request *UpdateRecipeRequest) (*recipe.Recipe, error) {
+func addMethodStep(ctx context.Context, apiRequest *events.APIGatewayProxyRequest, request *UpdateRecipeRequest) (*recipeapi.Recipe, error) {
 
 	if request.Action == "" {
 		return nil, errMissingProperties
 	}
 
-	r, err := recipeapi.AddMethodStep(context.Background(), request.RecipeID, request.Action)
+	r, err := recipeapi.AddMethodStep(context.Background(), apiRequest, request.RecipeID, request.Action)
 
 	return r, err
 }
 
-func updateMethodStep(ctx context.Context, request *UpdateRecipeRequest) (*recipe.Recipe, error) {
+func updateMethodStep(ctx context.Context, apiRequest *events.APIGatewayProxyRequest, request *UpdateRecipeRequest) (*recipeapi.Recipe, error) {
 
 	if request.Updates == nil {
 		return nil, errMissingProperties
 	}
 
-	r, err := recipeapi.UpdateMethodStep(context.Background(), request.RecipeID, request.MethodStepIndex, request.Updates)
+	r, err := recipeapi.UpdateMethodStep(context.Background(), apiRequest, request.RecipeID, request.MethodStepIndex, request.Updates)
 
 	return r, err
 }
 
-func removeMethodStep(ctx context.Context, request *UpdateRecipeRequest) (*recipe.Recipe, error) {
+func removeMethodStep(ctx context.Context, apiRequest *events.APIGatewayProxyRequest, request *UpdateRecipeRequest) (*recipeapi.Recipe, error) {
 
-	r, err := recipeapi.RemoveMethodStep(context.Background(), request.RecipeID, request.MethodStepIndex)
+	r, err := recipeapi.RemoveMethodStep(context.Background(), apiRequest, request.RecipeID, request.MethodStepIndex)
 
 	return r, err
 }

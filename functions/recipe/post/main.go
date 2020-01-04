@@ -8,7 +8,7 @@ import (
 	"log"
 
 	"github.com/digitalfridgedoor/fridgedoorapi"
-	"github.com/digitalfridgedoor/fridgedoordatabase/recipe"
+	"github.com/digitalfridgedoor/fridgedoorapi/recipeapi"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
@@ -30,6 +30,7 @@ type UpdateRecipeRequest struct {
 
 var errCannotParse = errors.New("Could not parse request")
 var errMissingProperties = errors.New("Request is missing properties")
+var errNoUpdates = errors.New("No updates")
 
 // Handler is your Lambda function handler
 // It uses Amazon API Gateway request/responses provided by the aws-lambda-go/events package,
@@ -50,36 +51,39 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 		return events.APIGatewayProxyResponse{StatusCode: 500}, errMissingProperties
 	}
 
-	if r.UpdateType == "STEP_ADD" {
-		r, err := addMethodStep(context.Background(), r)
+	if r.UpdateType == "R_UPDATE" {
+		r, err := updateRecipe(context.Background(), &request, r)
+		return createResponse(r, err)
+	} else if r.UpdateType == "STEP_ADD" {
+		r, err := addMethodStep(context.Background(), &request, r)
 		return createResponse(r, err)
 	} else if r.UpdateType == "STEP_UPDATE" {
-		r, err := updateMethodStep(context.Background(), r)
+		r, err := updateMethodStep(context.Background(), &request, r)
 		return createResponse(r, err)
 	} else if r.UpdateType == "STEP_DELETE" {
-		r, err := removeMethodStep(context.Background(), r)
+		r, err := removeMethodStep(context.Background(), &request, r)
 		return createResponse(r, err)
 	} else if r.UpdateType == "ING_ADD" {
-		r, err := addIngredient(context.Background(), r)
+		r, err := addIngredient(context.Background(), &request, r)
 		return createResponse(r, err)
 	} else if r.UpdateType == "ING_UPDATE" {
-		r, err := updateIngredient(context.Background(), r)
+		r, err := updateIngredient(context.Background(), &request, r)
 		return createResponse(r, err)
 	} else if r.UpdateType == "ING_DELETE" {
-		r, err := removeIngredient(context.Background(), r)
+		r, err := removeIngredient(context.Background(), &request, r)
 		return createResponse(r, err)
 	} else if r.UpdateType == "SUB_ADD" {
-		r, err := addSubRecipe(context.Background(), r)
+		r, err := addSubRecipe(context.Background(), &request, r)
 		return createResponse(r, err)
 	} else if r.UpdateType == "SUB_DELETE" {
-		r, err := removeSubRecipe(context.Background(), r)
+		r, err := removeSubRecipe(context.Background(), &request, r)
 		return createResponse(r, err)
 	}
 
 	return events.APIGatewayProxyResponse{StatusCode: 400}, errors.New("Unknown update type")
 }
 
-func createResponse(r *recipe.Recipe, err error) (events.APIGatewayProxyResponse, error) {
+func createResponse(r *recipeapi.Recipe, err error) (events.APIGatewayProxyResponse, error) {
 
 	if err != nil {
 		return events.APIGatewayProxyResponse{StatusCode: 500}, err

@@ -14,7 +14,7 @@ func TestHandler(t *testing.T) {
 
 	// Arrange
 	claims := make(map[string]interface{})
-	claims["cognito:username"] = "Test"
+	claims["cognito:username"] = "TestUser"
 	authorizor := make(map[string]interface{})
 	authorizor["claims"] = claims
 
