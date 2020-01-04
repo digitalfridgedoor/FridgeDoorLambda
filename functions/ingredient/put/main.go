@@ -26,7 +26,7 @@ type CreateIngredientRequest struct {
 func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 
 	// stdout and stderr are sent to AWS CloudWatch Logs
-	log.Printf("Processing a new Lambda request  CreateRecipe %s\n", request.RequestContext.RequestID)
+	log.Printf("Processing a new Lambda request CreateRecipe %s\n", request.RequestContext.RequestID)
 
 	r := &CreateIngredientRequest{}
 	err := json.Unmarshal([]byte(request.Body), r)
