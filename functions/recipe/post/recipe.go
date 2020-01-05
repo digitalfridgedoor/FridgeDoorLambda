@@ -18,11 +18,5 @@ func updateRecipe(ctx context.Context, apiRequest *events.APIGatewayProxyRequest
 		return r, err
 	}
 
-	if hasImage, ok := request.Updates["hasImage"]; ok {
-		b := hasImage == "true"
-		r, err := recipeapi.SetImageFlag(context.Background(), apiRequest, request.RecipeID, b)
-		return r, err
-	}
-
-	return nil, errNoUpdates
+	return recipeapi.UpdateMetadata(context.Background(), apiRequest, request.RecipeID, request.Updates)
 }
