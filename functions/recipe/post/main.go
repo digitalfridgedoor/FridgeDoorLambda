@@ -78,6 +78,12 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	} else if r.UpdateType == "SUB_DELETE" {
 		r, err := removeSubRecipe(context.Background(), &request, r)
 		return createResponse(r, err)
+	} else if r.UpdateType == "TAG_ADD" {
+		r, err := addTag(context.Background(), &request, r)
+		return createResponse(r, err)
+	} else if r.UpdateType == "TAG_DELETE" {
+		r, err := removeTag(context.Background(), &request, r)
+		return createResponse(r, err)
 	}
 
 	return events.APIGatewayProxyResponse{StatusCode: 400}, errors.New("Unknown update type")

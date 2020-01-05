@@ -4,12 +4,11 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"log"
+	"strings"
 
 	"github.com/digitalfridgedoor/fridgedoorapi"
-	"github.com/digitalfridgedoor/fridgedoorapi/userviewapi"
-	"github.com/digitalfridgedoor/fridgedoordatabase/recipe"
+	"github.com/digitalfridgedoor/fridgedoorapi/recipeapi"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
@@ -19,11 +18,6 @@ var errConnect = errors.New("Cannot connect")
 var errFind = errors.New("Cannot find expected entity")
 var errParseResult = errors.New("Result cannot be parsed")
 
-// UserRecipeCollection is the type returned by viewrecipes handler
-type UserRecipeCollection struct {
-	Recipes map[string][]*recipe.Description `json:"recipes"`
-}
-
 // Handler is your Lambda function handler
 // It uses Amazon API Gateway request/responses provided by the aws-lambda-go/events package,
 // However you could use other event sources (S3, Kinesis etc), or JSON-decoded primitive types such as 'string'.
@@ -32,28 +26,20 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	// stdout and stderr are sent to AWS CloudWatch Logs
 	log.Printf("Processing Lambda request ViewRecipes %s\n", request.RequestContext.RequestID)
 
-	userview, err := userviewapi.GetOrCreateUserView(context.Background(), &request)
-	if err != nil {
-		fmt.Printf("Error getting userview: %v.\n", err)
-		return events.APIGatewayProxyResponse{}, errConnect
+	tags := []string{}
+	notTags := []string{}
+
+	if tagsParam, ok := request.PathParameters["tags"]; ok {
+		tags = strings.Split(tagsParam, ",")
 	}
 
-	recipes := make(map[string][]*recipe.Description)
-
-	for name, recipeCollection := range userview.Collections {
-		descriptions, err := userviewapi.GetCollectionRecipes(context.Background(), recipeCollection)
-		if err != nil {
-			fmt.Printf("Error reading collection: %v.\n", err)
-		} else {
-			recipes[name] = descriptions
-		}
+	if notTagsParam, ok := request.PathParameters["notTags"]; ok {
+		notTags = strings.Split(notTagsParam, ",")
 	}
 
-	userRecipeCollection := &UserRecipeCollection{
-		Recipes: recipes,
-	}
+	results, err := recipeapi.FindByTags(context.TODO(), &request, tags, notTags)
 
-	b, err := json.Marshal(userRecipeCollection)
+	b, err := json.Marshal(results)
 	if err != nil {
 		return events.APIGatewayProxyResponse{}, errParseResult
 	}
