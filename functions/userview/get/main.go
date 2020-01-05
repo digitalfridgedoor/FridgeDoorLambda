@@ -24,7 +24,7 @@ var errParseResult = errors.New("Result cannot be parsed")
 func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 
 	// stdout and stderr are sent to AWS CloudWatch Logs
-	log.Printf("Processing Lambda request ViewUserViews %s\n", request.RequestContext.RequestID)
+	log.Printf("Processing Lambda request  ViewUserViews %s\n", request.RequestContext.RequestID)
 
 	userviews, err := userviewapi.GetOtherUsersRecipes(context.Background())
 	if err != nil {
