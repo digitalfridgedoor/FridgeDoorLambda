@@ -1,7 +1,7 @@
   {{Name}}:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: bin/
+      CodeUri: bin{{CodeUri}}/
       Handler: {{Handler}}
       Runtime: go1.x
       Tracing: Active

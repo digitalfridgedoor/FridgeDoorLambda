@@ -27,9 +27,14 @@ function generate(lambdaDefinitions) {
             .replace(/\//g, '') // replace all / with nothing
             .replace(/_/g, '') // replace all _ with nothing
             .replace(/[\{\}]/g, ''); // replace brackets with nothing
+
+        const codeUri = /(.*)\/\w+$/g.exec(localRelativePath)[1]
+        const handler = /(\/\w+)$/g.exec(localRelativePath)[1]
+
         let template = functionTemplate;
         template = replaceProperty(template, 'Name', clean);
-        template = replaceProperty(template, 'Handler', localRelativePath);
+        template = replaceProperty(template, 'CodeUri', codeUri);
+        template = replaceProperty(template, 'Handler', handler);
         template = replaceProperty(template, 'Path', urlPath);
         template = replaceProperty(template, 'Method', method);
 

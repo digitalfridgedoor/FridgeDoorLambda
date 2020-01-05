@@ -11,3 +11,4 @@ go build -o bin/recipe/put ./functions/recipe/put
 go build -o bin/recipe/search/get ./functions/recipe/search/get
 go build -o bin/userview/get ./functions/userview/get
 go build -o bin/userview/p_id/get ./functions/userview/p_id/get
+go build -o bin/userview/tags/get ./functions/userview/tags/get
