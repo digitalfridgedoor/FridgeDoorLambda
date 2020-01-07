@@ -6,6 +6,7 @@ import (
 	"log"
 
 	"github.com/digitalfridgedoor/fridgedoorapi"
+	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgateway"
 	"github.com/digitalfridgedoor/fridgedoorapi/recipeapi"
 
 	"github.com/aws/aws-lambda-go/events"
@@ -29,12 +30,17 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 		return events.APIGatewayProxyResponse{}, errMissingParameter
 	}
 
-	err := recipeapi.DeleteRecipe(context.Background(), &request, "public", recipeID)
+	user, err := fridgedoorgateway.GetOrCreateAuthenticatedUser(context.TODO(), &request)
 	if err != nil {
 		return events.APIGatewayProxyResponse{}, errFind
 	}
 
-	resp := fridgedoorapi.ResponseSuccessful("")
+	err = recipeapi.DeleteRecipe(context.Background(), user, "public", recipeID)
+	if err != nil {
+		return events.APIGatewayProxyResponse{}, errFind
+	}
+
+	resp := fridgedoorgateway.ResponseSuccessful("")
 	return resp, nil
 }
 

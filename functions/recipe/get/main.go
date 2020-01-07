@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/digitalfridgedoor/fridgedoorapi"
+	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgateway"
 	"github.com/digitalfridgedoor/fridgedoorapi/recipeapi"
 
 	"github.com/aws/aws-lambda-go/events"
@@ -37,14 +38,22 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 		notTags = strings.Split(notTagsParam, ",")
 	}
 
-	results, err := recipeapi.FindByTags(context.TODO(), &request, tags, notTags)
+	user, err := fridgedoorgateway.GetOrCreateAuthenticatedUser(context.TODO(), &request)
+	if err != nil {
+		return events.APIGatewayProxyResponse{}, errParseResult
+	}
+
+	results, err := recipeapi.FindByTags(context.TODO(), user, tags, notTags)
+	if err != nil {
+		return events.APIGatewayProxyResponse{}, errParseResult
+	}
 
 	b, err := json.Marshal(results)
 	if err != nil {
 		return events.APIGatewayProxyResponse{}, errParseResult
 	}
 
-	resp := fridgedoorapi.ResponseSuccessful(string(b))
+	resp := fridgedoorgateway.ResponseSuccessful(string(b))
 	return resp, nil
 }
 

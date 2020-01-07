@@ -6,9 +6,9 @@ import (
 	"errors"
 	"log"
 
-	"github.com/digitalfridgedoor/fridgedoorapi/recipeapi"
-
 	"github.com/digitalfridgedoor/fridgedoorapi"
+	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgateway"
+	"github.com/digitalfridgedoor/fridgedoorapi/recipeapi"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
@@ -16,6 +16,7 @@ import (
 
 var errFind = errors.New("Error finding results")
 var errParseResult = errors.New("Result cannot be parsed")
+var errAuth = errors.New("Auth")
 
 // Handler is your Lambda function handler
 // It uses Amazon API Gateway request/responses provided by the aws-lambda-go/events package,
@@ -27,7 +28,12 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 
 	q, _ := request.QueryStringParameters["q"]
 
-	recipes, err := recipeapi.FindByName(context.TODO(), &request, q)
+	user, err := fridgedoorgateway.GetOrCreateAuthenticatedUser(context.TODO(), &request)
+	if err != nil {
+		return events.APIGatewayProxyResponse{}, errAuth
+	}
+
+	recipes, err := recipeapi.FindByName(context.TODO(), user, q)
 	if err != nil {
 		return events.APIGatewayProxyResponse{}, errFind
 	}
@@ -37,7 +43,7 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 		return events.APIGatewayProxyResponse{}, errParseResult
 	}
 
-	resp := fridgedoorapi.ResponseSuccessful(string(b))
+	resp := fridgedoorgateway.ResponseSuccessful(string(b))
 	return resp, nil
 }
 

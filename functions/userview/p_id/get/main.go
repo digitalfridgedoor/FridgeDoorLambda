@@ -8,6 +8,7 @@ import (
 	"log"
 
 	"github.com/digitalfridgedoor/fridgedoorapi"
+	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgateway"
 	"github.com/digitalfridgedoor/fridgedoorapi/userviewapi"
 
 	"github.com/aws/aws-lambda-go/events"
@@ -42,7 +43,7 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 		return events.APIGatewayProxyResponse{}, errParseResult
 	}
 
-	resp := fridgedoorapi.ResponseSuccessful(string(b))
+	resp := fridgedoorgateway.ResponseSuccessful(string(b))
 	return resp, nil
 }
 

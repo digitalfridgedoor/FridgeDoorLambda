@@ -1,6 +1,7 @@
 package main
 
 import (
+	"digitalfridgedoor/fridgedoorapi/dfdtesting"
 	"encoding/json"
 	"testing"
 
@@ -42,7 +43,7 @@ func TestHandler(t *testing.T) {
 	// Arrange
 	pathParameters := make(map[string]string)
 	pathParameters["id"] = "5de3f416aaef34b1c212f7b7"
-	apirequest := createTestAuthorizedRequest("TestUser")
+	apirequest := dfdtesting.CreateTestAuthorizedRequest("TestUser")
 	apirequest.PathParameters = pathParameters
 
 	// Act
@@ -60,20 +61,7 @@ func TestHandler(t *testing.T) {
 	assert.Equal(t, "5de3f416aaef34b1c212f7b7", recipe.ID.Hex())
 	assert.Equal(t, "Roast Dinner", recipe.Name)
 	assert.Equal(t, 1, len(recipe.Method))
-	assert.Equal(t, 0, len(recipe.Recipes))
-}
+	assert.Equal(t, 1, len(recipe.Recipes))
 
-func createTestAuthorizedRequest(username string) *events.APIGatewayProxyRequest {
-	claims := make(map[string]interface{})
-	claims["cognito:username"] = username
-	authorizer := make(map[string]interface{})
-	authorizer["claims"] = claims
-	context := events.APIGatewayProxyRequestContext{
-		Authorizer: authorizer,
-	}
-	request := &events.APIGatewayProxyRequest{
-		RequestContext: context,
-	}
-
-	return request
+	dfdtesting.DeleteUserForRequest(apirequest)
 }

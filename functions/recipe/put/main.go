@@ -8,6 +8,7 @@ import (
 	"log"
 
 	"github.com/digitalfridgedoor/fridgedoorapi"
+	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgateway"
 	"github.com/digitalfridgedoor/fridgedoorapi/recipeapi"
 
 	"github.com/aws/aws-lambda-go/events"
@@ -16,6 +17,7 @@ import (
 
 var errServer = errors.New("Server Error")
 var errBadRequest = errors.New("Bad request")
+var errAuth = errors.New("Auth")
 
 // CreateRecipeRequest is the expected type for updating recipe
 type CreateRecipeRequest struct {
@@ -44,7 +46,12 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 
 	ctx := context.Background()
 
-	recipe, err := recipeapi.CreateRecipe(ctx, &request, r.Collection, r.Name)
+	user, err := fridgedoorgateway.GetOrCreateAuthenticatedUser(context.TODO(), &request)
+	if err != nil {
+		return events.APIGatewayProxyResponse{}, errAuth
+	}
+
+	recipe, err := recipeapi.CreateRecipe(ctx, user, r.Collection, r.Name)
 	if err != nil {
 		fmt.Printf("Error creating recipe: %v.\n", err)
 		return events.APIGatewayProxyResponse{StatusCode: 500}, errServer
@@ -56,7 +63,7 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 
 	json, err := json.Marshal(recipe)
 
-	resp := fridgedoorapi.ResponseSuccessful(string(json))
+	resp := fridgedoorgateway.ResponseSuccessful(string(json))
 	return resp, nil
 }
 

@@ -6,17 +6,18 @@ import (
 	"testing"
 	"unicode"
 
+	"github.com/digitalfridgedoor/fridgedoorapi/dfdtesting"
+
 	"github.com/digitalfridgedoor/fridgedoorapi"
 	"github.com/digitalfridgedoor/fridgedoordatabase/ingredient"
 
-	"github.com/aws/aws-lambda-go/events"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestHandler(t *testing.T) {
 
 	// Arrange
-	apirequest := CreateTestAuthorizedRequest("TestUser")
+	apirequest := dfdtesting.CreateTestAuthorizedRequest("TestUser")
 
 	// Act
 	fridgedoorapi.ConnectOrSkip(t)
@@ -31,12 +32,14 @@ func TestHandler(t *testing.T) {
 	assert.Nil(t, err)
 	assert.NotNil(t, ingredients)
 	assert.Greater(t, len(ingredients), 0)
+
+	dfdtesting.DeleteUserForRequest(apirequest)
 }
 
 func TestHandlerWithQuery(t *testing.T) {
 
 	// Arrange
-	apirequest := CreateTestAuthorizedRequest("TestUser")
+	apirequest := dfdtesting.CreateTestAuthorizedRequest("TestUser")
 	apirequest.QueryStringParameters = make(map[string]string)
 	apirequest.QueryStringParameters["q"] = "c"
 
@@ -57,21 +60,8 @@ func TestHandlerWithQuery(t *testing.T) {
 		startswith := []rune("c")[0]
 		assert.True(t, oneWordStartsWith(ing.Name, startswith))
 	}
-}
 
-func CreateTestAuthorizedRequest(username string) *events.APIGatewayProxyRequest {
-	claims := make(map[string]interface{})
-	claims["cognito:username"] = username
-	authorizer := make(map[string]interface{})
-	authorizer["claims"] = claims
-	context := events.APIGatewayProxyRequestContext{
-		Authorizer: authorizer,
-	}
-	request := &events.APIGatewayProxyRequest{
-		RequestContext: context,
-	}
-
-	return request
+	dfdtesting.DeleteUserForRequest(apirequest)
 }
 
 func oneWordStartsWith(ing string, startswith rune) bool {

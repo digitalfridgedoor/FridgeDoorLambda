@@ -8,6 +8,7 @@ import (
 	"log"
 
 	"github.com/digitalfridgedoor/fridgedoorapi"
+	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgateway"
 	"github.com/digitalfridgedoor/fridgedoorapi/recipeapi"
 
 	"github.com/aws/aws-lambda-go/events"
@@ -16,6 +17,7 @@ import (
 
 var errServer = errors.New("Server Error")
 var errBadRequest = errors.New("Bad request")
+var errAuth = errors.New("Auth")
 
 // UpdateRecipeRequest is the expected type for updating recipe
 type UpdateRecipeRequest struct {
@@ -51,32 +53,37 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 		return events.APIGatewayProxyResponse{StatusCode: 500}, errMissingProperties
 	}
 
+	user, err := fridgedoorgateway.GetOrCreateAuthenticatedUser(context.TODO(), &request)
+	if err != nil {
+		return events.APIGatewayProxyResponse{}, errAuth
+	}
+
 	if r.UpdateType == "R_UPDATE" {
-		r, err := updateRecipe(context.Background(), &request, r)
+		r, err := updateRecipe(context.Background(), user, r)
 		return createResponse(r, err)
 	} else if r.UpdateType == "STEP_ADD" {
-		r, err := addMethodStep(context.Background(), &request, r)
+		r, err := addMethodStep(context.Background(), user, r)
 		return createResponse(r, err)
 	} else if r.UpdateType == "STEP_UPDATE" {
-		r, err := updateMethodStep(context.Background(), &request, r)
+		r, err := updateMethodStep(context.Background(), user, r)
 		return createResponse(r, err)
 	} else if r.UpdateType == "STEP_DELETE" {
-		r, err := removeMethodStep(context.Background(), &request, r)
+		r, err := removeMethodStep(context.Background(), user, r)
 		return createResponse(r, err)
 	} else if r.UpdateType == "ING_ADD" {
-		r, err := addIngredient(context.Background(), &request, r)
+		r, err := addIngredient(context.Background(), user, r)
 		return createResponse(r, err)
 	} else if r.UpdateType == "ING_UPDATE" {
-		r, err := updateIngredient(context.Background(), &request, r)
+		r, err := updateIngredient(context.Background(), user, r)
 		return createResponse(r, err)
 	} else if r.UpdateType == "ING_DELETE" {
-		r, err := removeIngredient(context.Background(), &request, r)
+		r, err := removeIngredient(context.Background(), user, r)
 		return createResponse(r, err)
 	} else if r.UpdateType == "SUB_ADD" {
-		r, err := addSubRecipe(context.Background(), &request, r)
+		r, err := addSubRecipe(context.Background(), user, r)
 		return createResponse(r, err)
 	} else if r.UpdateType == "SUB_DELETE" {
-		r, err := removeSubRecipe(context.Background(), &request, r)
+		r, err := removeSubRecipe(context.Background(), user, r)
 		return createResponse(r, err)
 	}
 
@@ -91,7 +98,7 @@ func createResponse(r *recipeapi.Recipe, err error) (events.APIGatewayProxyRespo
 
 	b, err := json.Marshal(r)
 
-	resp := fridgedoorapi.ResponseSuccessful(string(b))
+	resp := fridgedoorgateway.ResponseSuccessful(string(b))
 	return resp, nil
 }
 

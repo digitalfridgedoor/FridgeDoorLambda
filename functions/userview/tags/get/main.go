@@ -8,6 +8,7 @@ import (
 	"log"
 
 	"github.com/digitalfridgedoor/fridgedoorapi"
+	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgateway"
 	"github.com/digitalfridgedoor/fridgedoorapi/userviewapi"
 
 	"github.com/aws/aws-lambda-go/events"
@@ -17,6 +18,7 @@ import (
 var errConnect = errors.New("Cannot connect")
 var errFind = errors.New("Cannot find expected entity")
 var errParseResult = errors.New("Result cannot be parsed")
+var errAuth = errors.New("Auth")
 
 // Handler is your Lambda function handler
 // It uses Amazon API Gateway request/responses provided by the aws-lambda-go/events package,
@@ -26,7 +28,12 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	// stdout and stderr are sent to AWS CloudWatch Logs
 	log.Printf("Processing Lambda request ViewUserViews %s\n", request.RequestContext.RequestID)
 
-	view, err := userviewapi.GetOrCreateUserView(context.Background(), &request)
+	user, err := fridgedoorgateway.GetOrCreateAuthenticatedUser(context.TODO(), &request)
+	if err != nil {
+		return events.APIGatewayProxyResponse{}, errAuth
+	}
+
+	view, err := userviewapi.GetUserViewByID(context.Background(), user.ViewID.Hex())
 	if err != nil {
 		fmt.Printf("Error getting userview: %v.\n", err)
 		return events.APIGatewayProxyResponse{}, errConnect
@@ -37,7 +44,7 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 		return events.APIGatewayProxyResponse{}, errParseResult
 	}
 
-	resp := fridgedoorapi.ResponseSuccessful(string(b))
+	resp := fridgedoorgateway.ResponseSuccessful(string(b))
 	return resp, nil
 }
 

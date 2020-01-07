@@ -57,5 +57,5 @@ func TestHandler(t *testing.T) {
 	err = json.Unmarshal([]byte(response.Body), &uv)
 	assert.Nil(t, err)
 	assert.NotNil(t, uv)
-	assert.Equal(t, 1, len(uv.Collections))
+	assert.Equal(t, 0, len(uv.Tags))
 }

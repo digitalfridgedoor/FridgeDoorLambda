@@ -1,35 +1,25 @@
 package main
 
 import (
+	"digitalfridgedoor/fridgedoorapi/dfdtesting"
 	"encoding/json"
 	"testing"
 
 	"github.com/digitalfridgedoor/fridgedoorapi"
 	"github.com/digitalfridgedoor/fridgedoorapi/userviewapi"
 
-	"github.com/aws/aws-lambda-go/events"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestHandler(t *testing.T) {
 
 	// Arrange
-	claims := make(map[string]interface{})
-	claims["cognito:username"] = "TestUser"
-	authorizor := make(map[string]interface{})
-	authorizor["claims"] = claims
-
-	context := events.APIGatewayProxyRequestContext{
-		Authorizer: authorizor,
-	}
-	apirequest := events.APIGatewayProxyRequest{
-		RequestContext: context,
-	}
+	apirequest := dfdtesting.CreateTestAuthorizedRequest("TestUser")
 
 	// Act
 	fridgedoorapi.ConnectOrSkip(t)
 
-	response, err := Handler(apirequest)
+	response, err := Handler(*apirequest)
 
 	// Assert
 	assert.Nil(t, err)
@@ -39,4 +29,6 @@ func TestHandler(t *testing.T) {
 	assert.Nil(t, err)
 	assert.NotNil(t, recipes)
 	assert.Greater(t, len(recipes), 0)
+
+	dfdtesting.DeleteUserForRequest(apirequest)
 }
