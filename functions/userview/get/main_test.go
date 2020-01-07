@@ -1,11 +1,11 @@
 package main
 
 import (
-	"digitalfridgedoor/fridgedoorapi/dfdtesting"
 	"encoding/json"
 	"testing"
 
 	"github.com/digitalfridgedoor/fridgedoorapi"
+	"github.com/digitalfridgedoor/fridgedoorapi/dfdtesting"
 	"github.com/digitalfridgedoor/fridgedoorapi/userviewapi"
 
 	"github.com/stretchr/testify/assert"
