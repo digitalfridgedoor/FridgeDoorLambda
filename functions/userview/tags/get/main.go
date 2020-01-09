@@ -33,7 +33,7 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 		return events.APIGatewayProxyResponse{}, errAuth
 	}
 
-	view, err := userviewapi.GetUserViewByID(context.Background(), user.ViewID.Hex())
+	view, err := userviewapi.GetUserViewByID(context.Background(), user)
 	if err != nil {
 		fmt.Printf("Error getting userview: %v.\n", err)
 		return events.APIGatewayProxyResponse{}, errConnect

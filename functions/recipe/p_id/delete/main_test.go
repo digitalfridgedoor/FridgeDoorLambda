@@ -44,7 +44,7 @@ func TestHandler(t *testing.T) {
 	ctx := context.Background()
 	collectionName := "public"
 	recipeName := "test-recipe"
-	testUserName := "test-user"
+	testUserName := "TestUser"
 	testUser := dfdtesting.CreateTestAuthenticatedUser(testUserName)
 	recipe, err := recipeapi.CreateRecipe(ctx, testUser, collectionName, recipeName)
 	assert.Nil(t, err)

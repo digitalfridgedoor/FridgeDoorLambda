@@ -8,7 +8,6 @@ go vet ./functions/recipe/post
 go vet ./functions/recipe/put
 go vet ./functions/recipe/search/get
 go vet ./functions/userview/get
-go vet ./functions/userview/p_id/get
 go vet ./functions/userview/tags/get
 
 go test ./functions/image/get
@@ -21,5 +20,4 @@ go test ./functions/recipe/post
 go test ./functions/recipe/put
 go test ./functions/recipe/search/get
 go test ./functions/userview/get
-go test ./functions/userview/p_id/get
 go test ./functions/userview/tags/get
