@@ -4,9 +4,10 @@ import (
 	"encoding/json"
 	"testing"
 
+	"github.com/digitalfridgedoor/fridgedoorapi/linkeduserapi"
+
 	"github.com/digitalfridgedoor/fridgedoorapi"
 	"github.com/digitalfridgedoor/fridgedoorapi/dfdtesting"
-	"github.com/digitalfridgedoor/fridgedoorapi/userviewapi"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -23,12 +24,12 @@ func TestHandler(t *testing.T) {
 
 	// Assert
 	assert.Nil(t, err)
-	var recipes []*userviewapi.View
+	var linkedusers []*linkeduserapi.LinkedUser
 
-	err = json.Unmarshal([]byte(response.Body), &recipes)
+	err = json.Unmarshal([]byte(response.Body), &linkedusers)
 	assert.Nil(t, err)
-	assert.NotNil(t, recipes)
-	assert.Greater(t, len(recipes), 0)
+	assert.NotNil(t, linkedusers)
+	assert.Greater(t, len(linkedusers), 0)
 
 	dfdtesting.DeleteUserForRequest(apirequest)
 }
