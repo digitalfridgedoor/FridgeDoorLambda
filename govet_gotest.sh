@@ -1,6 +1,7 @@
 go vet ./functions/image/get
 go vet ./functions/ingredient/get
 go vet ./functions/ingredient/put
+go vet ./functions/public/image/get
 go vet ./functions/public/recipe/get
 go vet ./functions/recipe/get
 go vet ./functions/recipe/p_id/delete
@@ -14,6 +15,7 @@ go vet ./functions/userview/tags/get
 go test ./functions/image/get
 go test ./functions/ingredient/get
 go test ./functions/ingredient/put
+go test ./functions/public/image/get
 go test ./functions/public/recipe/get
 go test ./functions/recipe/get
 go test ./functions/recipe/p_id/delete

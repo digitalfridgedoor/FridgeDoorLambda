@@ -1,7 +1,6 @@
 package main
 
 import (
-	"digitalfridgedoor/fridgedoorapi/imageapi"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -31,18 +30,14 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	// stdout and stderr are sent to AWS CloudWatch Logs
 	log.Printf("Processing Lambda request SearchIngredient %s\n", request.RequestContext.RequestID)
 
-	verb, ok := request.QueryStringParameters["verb"]
-	if !ok {
-		fmt.Println("Missing parameter 'verb'.")
-		return events.APIGatewayProxyResponse{}, errMissingParameters
-	}
 	key, ok := request.QueryStringParameters["key"]
 	if !ok {
 		fmt.Println("Missing parameter 'key'.")
 		return events.APIGatewayProxyResponse{}, errMissingParameters
 	}
 
-	url, err := imageapi.CreatePresignedURL(verb, key)
+	url, err := imageapi.CreatePresignedURL("get", key)
+
 	if err != nil {
 		log.Fatal(err.Error())
 	}
