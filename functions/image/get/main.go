@@ -1,7 +1,6 @@
 package main
 
 import (
-	"digitalfridgedoor/fridgedoorapi/imageapi"
 	"encoding/json"
 	"errors"
 	"fmt"
