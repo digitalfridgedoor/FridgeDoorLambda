@@ -30,11 +30,11 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	tags := []string{}
 	notTags := []string{}
 
-	if tagsParam, ok := request.PathParameters["tags"]; ok {
+	if tagsParam, ok := request.QueryStringParameters["tags"]; ok {
 		tags = strings.Split(tagsParam, ",")
 	}
 
-	if notTagsParam, ok := request.PathParameters["notTags"]; ok {
+	if notTagsParam, ok := request.QueryStringParameters["notTags"]; ok {
 		notTags = strings.Split(notTagsParam, ",")
 	}
 
