@@ -93,6 +93,54 @@ Resources:
       VpcConfig:
         SecurityGroupIds: !Ref SecurityGroupIds
         SubnetIds: !Ref VpcSubnetIds
+  planget:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: bin/plan/
+      Handler: /get
+      Runtime: go1.x
+      Tracing: Active
+      Role: arn:aws:iam::266057577872:role/dfd-api-lambda-role
+      Events:
+        GetEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref DfdApi
+            Path: /plan
+            Method: get
+            Auth:
+              Authorizer: CognitoAuthorizer
+      Policies:
+        - VPCAccessPolicy: {}
+        # This policy gives permission for Lambdas to create/manage ENIs
+        # SAM Policy templates you can use: https://github.com/awslabs/serverless-application-model/blob/develop/examples/2016-10-31/policy_templates/all_policy_templates.yaml
+      VpcConfig:
+        SecurityGroupIds: !Ref SecurityGroupIds
+        SubnetIds: !Ref VpcSubnetIds
+  planput:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: bin/plan/
+      Handler: /put
+      Runtime: go1.x
+      Tracing: Active
+      Role: arn:aws:iam::266057577872:role/dfd-api-lambda-role
+      Events:
+        GetEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref DfdApi
+            Path: /plan
+            Method: put
+            Auth:
+              Authorizer: CognitoAuthorizer
+      Policies:
+        - VPCAccessPolicy: {}
+        # This policy gives permission for Lambdas to create/manage ENIs
+        # SAM Policy templates you can use: https://github.com/awslabs/serverless-application-model/blob/develop/examples/2016-10-31/policy_templates/all_policy_templates.yaml
+      VpcConfig:
+        SecurityGroupIds: !Ref SecurityGroupIds
+        SubnetIds: !Ref VpcSubnetIds
   publicimageget:
     Type: AWS::Serverless::Function
     Properties:
