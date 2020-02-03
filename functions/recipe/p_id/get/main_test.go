@@ -42,7 +42,7 @@ func TestHandler(t *testing.T) {
 
 	// Arrange
 	pathParameters := make(map[string]string)
-	pathParameters["id"] = "5de3f416aaef34b1c212f7b7"
+	pathParameters["id"] = "5dff9eb2f53f35f9fdcefde2"
 	apirequest := dfdtesting.CreateTestAuthorizedRequest("TestUser")
 	apirequest.PathParameters = pathParameters
 
@@ -58,8 +58,8 @@ func TestHandler(t *testing.T) {
 	err = json.Unmarshal([]byte(response.Body), recipe)
 	assert.Nil(t, err)
 	assert.NotNil(t, recipe)
-	assert.Equal(t, "5de3f416aaef34b1c212f7b7", recipe.ID.Hex())
-	assert.Equal(t, "Roast Dinner", recipe.Name)
+	assert.Equal(t, "5dff9eb2f53f35f9fdcefde2", recipe.ID.Hex())
+	assert.Equal(t, "Macho Peas", recipe.Name)
 	assert.Equal(t, 1, len(recipe.Method))
 	assert.Equal(t, 1, len(recipe.Recipes))
 

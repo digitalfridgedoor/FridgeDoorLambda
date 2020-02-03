@@ -109,6 +109,4 @@ func main() {
 
 		fridgedoorapi.Disconnect()
 	}
-
-	lambda.Start(Handler)
 }
