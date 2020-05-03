@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/digitalfridgedoor/fridgedoorapi"
 	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgateway"
+	"github.com/digitalfridgedoor/fridgedoorapi/search"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
@@ -25,14 +25,11 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 
 	q, _ := request.QueryStringParameters["q"]
 
-	ingredient, err := fridgedoorapi.IngredientCollection(context.TODO())
-	if err != nil {
-		return fridgedoorgateway.ResponseUnsuccessful(500), err
-	}
-	ings, err := ingredient.FindByName(context.TODO(), q)
+	ings, err := search.FindIngredientByName(context.TODO(), q)
 
 	if err != nil {
 		fmt.Printf("Error searching for ingredients, %v", err)
+		return fridgedoorgateway.ResponseUnsuccessful(500), err
 	}
 
 	fmt.Printf("Searching for %v, got %v results.", q, len(ings))
