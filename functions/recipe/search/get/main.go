@@ -2,11 +2,11 @@ package main
 
 import (
 	"context"
+	"digitalfridgedoor/fridgedoorapi/search"
 	"errors"
 	"log"
 
 	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgateway"
-	"github.com/digitalfridgedoor/fridgedoorapi/recipeapi"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
@@ -31,7 +31,7 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 		return fridgedoorgateway.ResponseUnsuccessful(401), errAuth
 	}
 
-	recipes, err := recipeapi.FindByName(context.TODO(), user, q)
+	recipes, err := search.FindRecipeByName(context.TODO(), q, user.ViewID, 20)
 	if err != nil {
 		return fridgedoorgateway.ResponseUnsuccessful(500), errFind
 	}
