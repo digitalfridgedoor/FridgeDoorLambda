@@ -8,7 +8,6 @@ import (
 	"github.com/digitalfridgedoor/fridgedoorapi/recipeapi"
 
 	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgatewaytesting"
-	"github.com/digitalfridgedoor/fridgedoordatabase/dfdmodels"
 	"github.com/digitalfridgedoor/fridgedoordatabase/dfdtesting"
 
 	"github.com/aws/aws-lambda-go/events"
@@ -62,7 +61,44 @@ func TestHandler(t *testing.T) {
 
 	// Assert
 	assert.Nil(t, err)
-	recipe := &dfdmodels.Recipe{}
+	recipe := &recipeapi.Recipe{}
+
+	err = json.Unmarshal([]byte(response.Body), recipe)
+	assert.Nil(t, err)
+	assert.NotNil(t, recipe)
+	assert.Equal(t, *r.ID, *recipe.ID)
+	assert.Equal(t, recipeName, recipe.Name)
+
+	fridgedoorgatewaytesting.DeleteUserForRequest(apirequest)
+}
+
+func TestHandlerCanViewLinkedUserRecipe(t *testing.T) {
+
+	// Arrange
+	dfdtesting.SetTestCollectionOverride()
+	dfdtesting.SetUserViewFindByUsernamePredicate()
+
+	linkedUser := fridgedoorgatewaytesting.CreateTestAuthenticatedUser("Linked")
+
+	recipeName := "recipe"
+	r, err := recipeapi.CreateRecipe(context.TODO(), linkedUser, recipeName)
+	updates := make(map[string]string)
+	updates["viewableby_everyone"] = "true"
+	recipeapi.UpdateMetadata(context.TODO(), linkedUser, r.ID, updates)
+	assert.Nil(t, err)
+
+	apirequest := fridgedoorgatewaytesting.CreateTestAuthorizedRequest("TestUser")
+
+	pathParameters := make(map[string]string)
+	pathParameters["id"] = r.ID.Hex()
+	apirequest.PathParameters = pathParameters
+
+	// Act
+	response, err := Handler(*apirequest)
+
+	// Assert
+	assert.Nil(t, err)
+	recipe := &recipeapi.Recipe{}
 
 	err = json.Unmarshal([]byte(response.Body), recipe)
 	assert.Nil(t, err)
