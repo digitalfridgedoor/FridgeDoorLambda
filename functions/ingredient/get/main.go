@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"log"
@@ -24,7 +25,11 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 
 	q, _ := request.QueryStringParameters["q"]
 
-	ings, err := fridgedoorapi.SearchIngredients(q)
+	ingredient, err := fridgedoorapi.IngredientCollection(context.TODO())
+	if err != nil {
+		return fridgedoorgateway.ResponseUnsuccessful(500), err
+	}
+	ings, err := ingredient.FindByName(context.TODO(), q)
 
 	if err != nil {
 		fmt.Printf("Error searching for ingredients, %v", err)

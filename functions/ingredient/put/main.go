@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -41,7 +42,12 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 		return fridgedoorgateway.ResponseUnsuccessful(400), errBadRequest
 	}
 
-	ingredient, err := fridgedoorapi.CreateIngredient(r.Name)
+	ingredient, err := fridgedoorapi.IngredientCollection(context.TODO())
+	if err != nil {
+		return fridgedoorgateway.ResponseUnsuccessful(500), err
+	}
+
+	ing, err := ingredient.Create(context.TODO(), r.Name)
 	if err != nil {
 		fmt.Printf("Error creating recipe: %v.\n", err)
 		return fridgedoorgateway.ResponseUnsuccessful(500), errServer
@@ -51,7 +57,7 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 		return fridgedoorgateway.ResponseUnsuccessful(500), errServer
 	}
 
-	return fridgedoorgateway.ResponseSuccessful(ingredient), nil
+	return fridgedoorgateway.ResponseSuccessful(ing), nil
 }
 
 func main() {
