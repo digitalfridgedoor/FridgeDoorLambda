@@ -4,9 +4,10 @@ import (
 	"encoding/json"
 	"testing"
 
+	"github.com/digitalfridgedoor/fridgedoordatabase/dfdmodels"
+
 	"github.com/digitalfridgedoor/fridgedoorapi"
-	"github.com/digitalfridgedoor/fridgedoorapi/dfdtesting"
-	"github.com/digitalfridgedoor/fridgedoordatabase/recipe"
+	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgatewaytesting"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/stretchr/testify/assert"
@@ -43,7 +44,7 @@ func TestHandler(t *testing.T) {
 	// Arrange
 	pathParameters := make(map[string]string)
 	pathParameters["id"] = "5dff9eb2f53f35f9fdcefde2"
-	apirequest := dfdtesting.CreateTestAuthorizedRequest("TestUser")
+	apirequest := fridgedoorgatewaytesting.CreateTestAuthorizedRequest("TestUser")
 	apirequest.PathParameters = pathParameters
 
 	// Act
@@ -53,7 +54,7 @@ func TestHandler(t *testing.T) {
 
 	// Assert
 	assert.Nil(t, err)
-	recipe := &recipe.Recipe{}
+	recipe := &dfdmodels.Recipe{}
 
 	err = json.Unmarshal([]byte(response.Body), recipe)
 	assert.Nil(t, err)
@@ -63,5 +64,5 @@ func TestHandler(t *testing.T) {
 	assert.Equal(t, 1, len(recipe.Method))
 	assert.Equal(t, 1, len(recipe.Recipes))
 
-	dfdtesting.DeleteUserForRequest(apirequest)
+	fridgedoorgatewaytesting.DeleteUserForRequest(apirequest)
 }

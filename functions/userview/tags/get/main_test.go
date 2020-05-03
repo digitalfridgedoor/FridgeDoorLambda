@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/digitalfridgedoor/fridgedoorapi/dfdtesting"
+	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgatewaytesting"
 
 	"github.com/digitalfridgedoor/fridgedoorapi"
 
@@ -14,7 +14,7 @@ import (
 func TestHandler(t *testing.T) {
 
 	// Arrange
-	apirequest := dfdtesting.CreateTestAuthorizedRequest("TestUser")
+	apirequest := fridgedoorgatewaytesting.CreateTestAuthorizedRequest("TestUser")
 
 	// Act
 	fridgedoorapi.ConnectOrSkip(t)
@@ -29,5 +29,5 @@ func TestHandler(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Nil(t, tags)
 
-	dfdtesting.DeleteUserForRequest(apirequest)
+	fridgedoorgatewaytesting.DeleteUserForRequest(apirequest)
 }

@@ -6,10 +6,10 @@ import (
 	"testing"
 	"unicode"
 
-	"github.com/digitalfridgedoor/fridgedoorapi/dfdtesting"
+	"github.com/digitalfridgedoor/fridgedoordatabase/dfdmodels"
 
 	"github.com/digitalfridgedoor/fridgedoorapi"
-	"github.com/digitalfridgedoor/fridgedoordatabase/ingredient"
+	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgatewaytesting"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -17,7 +17,7 @@ import (
 func TestHandler(t *testing.T) {
 
 	// Arrange
-	apirequest := dfdtesting.CreateTestAuthorizedRequest("TestUser")
+	apirequest := fridgedoorgatewaytesting.CreateTestAuthorizedRequest("TestUser")
 
 	// Act
 	fridgedoorapi.ConnectOrSkip(t)
@@ -26,20 +26,20 @@ func TestHandler(t *testing.T) {
 
 	// Assert
 	assert.Nil(t, err)
-	ingredients := []*ingredient.Ingredient{}
+	ingredients := []*dfdmodels.Ingredient{}
 
 	err = json.Unmarshal([]byte(response.Body), &ingredients)
 	assert.Nil(t, err)
 	assert.NotNil(t, ingredients)
 	assert.Greater(t, len(ingredients), 0)
 
-	dfdtesting.DeleteUserForRequest(apirequest)
+	fridgedoorgatewaytesting.DeleteUserForRequest(apirequest)
 }
 
 func TestHandlerWithQuery(t *testing.T) {
 
 	// Arrange
-	apirequest := dfdtesting.CreateTestAuthorizedRequest("TestUser")
+	apirequest := fridgedoorgatewaytesting.CreateTestAuthorizedRequest("TestUser")
 	apirequest.QueryStringParameters = make(map[string]string)
 	apirequest.QueryStringParameters["q"] = "c"
 
@@ -50,7 +50,7 @@ func TestHandlerWithQuery(t *testing.T) {
 
 	// Assert
 	assert.Nil(t, err)
-	ingredients := []*ingredient.Ingredient{}
+	ingredients := []*dfdmodels.Ingredient{}
 
 	err = json.Unmarshal([]byte(response.Body), &ingredients)
 	assert.Nil(t, err)
@@ -61,7 +61,7 @@ func TestHandlerWithQuery(t *testing.T) {
 		assert.True(t, oneWordStartsWith(ing.Name, startswith))
 	}
 
-	dfdtesting.DeleteUserForRequest(apirequest)
+	fridgedoorgatewaytesting.DeleteUserForRequest(apirequest)
 }
 
 func oneWordStartsWith(ing string, startswith rune) bool {

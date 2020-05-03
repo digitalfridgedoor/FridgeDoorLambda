@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/digitalfridgedoor/fridgedoorapi"
-	"github.com/digitalfridgedoor/fridgedoorapi/dfdtesting"
+	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgatewaytesting"
 	"github.com/digitalfridgedoor/fridgedoorapi/recipeapi"
 
 	"github.com/stretchr/testify/assert"
@@ -14,7 +14,7 @@ import (
 func TestHandler(t *testing.T) {
 
 	// Arrange
-	apirequest := dfdtesting.CreateTestAuthorizedRequest("TestUser")
+	apirequest := fridgedoorgatewaytesting.CreateTestAuthorizedRequest("TestUser")
 
 	// Act
 	fridgedoorapi.ConnectOrSkip(t)
@@ -30,5 +30,5 @@ func TestHandler(t *testing.T) {
 	assert.NotNil(t, recipeCollection)
 	assert.Equal(t, len(recipeCollection), 0)
 
-	dfdtesting.DeleteUserForRequest(apirequest)
+	fridgedoorgatewaytesting.DeleteUserForRequest(apirequest)
 }

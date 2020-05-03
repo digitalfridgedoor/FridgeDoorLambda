@@ -6,6 +6,8 @@ import (
 	"errors"
 	"log"
 
+	"go.mongodb.org/mongo-driver/bson/primitive"
+
 	"github.com/digitalfridgedoor/fridgedoorapi"
 	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgateway"
 	"github.com/digitalfridgedoor/fridgedoorapi/recipeapi"
@@ -31,12 +33,17 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 		return events.APIGatewayProxyResponse{}, errMissingParameter
 	}
 
+	rID, err := primitive.ObjectIDFromHex(recipeID)
+	if err != nil {
+		return events.APIGatewayProxyResponse{}, errMissingParameter
+	}
+
 	user, err := fridgedoorgateway.GetOrCreateAuthenticatedUser(context.TODO(), &request)
 	if err != nil {
 		return events.APIGatewayProxyResponse{}, errFind
 	}
 
-	r, err := recipeapi.FindOne(context.Background(), user, recipeID)
+	r, err := recipeapi.FindOne(context.Background(), user, &rID)
 	if err != nil {
 		return events.APIGatewayProxyResponse{}, errFind
 	}

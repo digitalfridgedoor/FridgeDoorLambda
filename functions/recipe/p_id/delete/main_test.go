@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/digitalfridgedoor/fridgedoorapi"
-	"github.com/digitalfridgedoor/fridgedoorapi/dfdtesting"
+	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgatewaytesting"
 	"github.com/digitalfridgedoor/fridgedoorapi/recipeapi"
 
 	"github.com/aws/aws-lambda-go/events"
@@ -45,18 +45,17 @@ func TestHandler(t *testing.T) {
 	collectionName := "public"
 	recipeName := "test-recipe"
 	testUserName := "TestUser"
-	testUser := dfdtesting.CreateTestAuthenticatedUser(testUserName)
+	testUser := fridgedoorgatewaytesting.CreateTestAuthenticatedUser(testUserName)
 	recipe, err := recipeapi.CreateRecipe(ctx, testUser, collectionName, recipeName)
 	assert.Nil(t, err)
 
-	recipeID := recipe.ID.Hex()
-	r, err := recipeapi.FindOne(ctx, testUser, recipeID)
+	r, err := recipeapi.FindOne(ctx, testUser, recipe.ID)
 	assert.Nil(t, err)
 	assert.NotNil(t, r)
 
 	pathParameters := make(map[string]string)
 	pathParameters["id"] = recipe.ID.Hex()
-	deleterequest := dfdtesting.CreateTestAuthorizedRequest(testUserName)
+	deleterequest := fridgedoorgatewaytesting.CreateTestAuthorizedRequest(testUserName)
 	deleterequest.PathParameters = pathParameters
 
 	// Act
@@ -68,9 +67,9 @@ func TestHandler(t *testing.T) {
 	assert.Equal(t, 200, response.StatusCode)
 	assert.Nil(t, err)
 
-	r, err = recipeapi.FindOne(ctx, testUser, recipeID)
+	r, err = recipeapi.FindOne(ctx, testUser, recipe.ID)
 	assert.NotNil(t, err)
 	assert.Nil(t, r)
 
-	dfdtesting.DeleteTestUser(testUser)
+	fridgedoorgatewaytesting.DeleteTestUser(testUser)
 }
