@@ -4,9 +4,12 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/digitalfridgedoor/fridgedoorapi"
+	"go.mongodb.org/mongo-driver/bson/primitive"
+
 	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgatewaytesting"
 	"github.com/digitalfridgedoor/fridgedoorapi/recipeapi"
+	"github.com/digitalfridgedoor/fridgedoordatabase/dfdmodels"
+	"github.com/digitalfridgedoor/fridgedoordatabase/dfdtesting"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -14,11 +17,14 @@ import (
 func TestHandler(t *testing.T) {
 
 	// Arrange
+	dfdtesting.SetTestCollectionOverride()
+	dfdtesting.SetUserViewFindPredicate(func(uv *dfdmodels.UserView, m primitive.M) bool {
+		return m["username"] == uv.Username
+	})
+
 	apirequest := fridgedoorgatewaytesting.CreateTestAuthorizedRequest("TestUser")
 
 	// Act
-	fridgedoorapi.ConnectOrSkip(t)
-
 	response, err := Handler(*apirequest)
 
 	// Assert
@@ -28,7 +34,7 @@ func TestHandler(t *testing.T) {
 	err = json.Unmarshal([]byte(response.Body), &recipeCollection)
 	assert.Nil(t, err)
 	assert.NotNil(t, recipeCollection)
-	assert.Equal(t, len(recipeCollection), 0)
+	assert.Equal(t, 0, len(recipeCollection))
 
 	fridgedoorgatewaytesting.DeleteUserForRequest(apirequest)
 }

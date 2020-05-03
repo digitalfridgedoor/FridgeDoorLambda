@@ -2,11 +2,8 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"log"
-
-	"go.mongodb.org/mongo-driver/bson/primitive"
 
 	"github.com/digitalfridgedoor/fridgedoorapi"
 	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgateway"
@@ -28,33 +25,22 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	// stdout and stderr are sent to AWS CloudWatch Logs
 	log.Printf("Processing Lambda request ViewRecipe %s\n", request.RequestContext.RequestID)
 
-	recipeID, ok := request.PathParameters["id"]
-	if !ok || recipeID == "" {
-		return events.APIGatewayProxyResponse{}, errMissingParameter
-	}
-
-	rID, err := primitive.ObjectIDFromHex(recipeID)
+	recipeID, err := fridgedoorgateway.ReadPathParameterAsObjectID(&request, "id")
 	if err != nil {
-		return events.APIGatewayProxyResponse{}, errMissingParameter
+		return fridgedoorgateway.ResponseUnsuccessful(400), errMissingParameter
 	}
 
 	user, err := fridgedoorgateway.GetOrCreateAuthenticatedUser(context.TODO(), &request)
 	if err != nil {
-		return events.APIGatewayProxyResponse{}, errFind
+		return fridgedoorgateway.ResponseUnsuccessful(401), errFind
 	}
 
-	r, err := recipeapi.FindOne(context.Background(), user, &rID)
+	r, err := recipeapi.FindOne(context.Background(), user, recipeID)
 	if err != nil {
-		return events.APIGatewayProxyResponse{}, errFind
+		return fridgedoorgateway.ResponseUnsuccessful(500), errFind
 	}
 
-	b, err := json.Marshal(r)
-	if err != nil {
-		return events.APIGatewayProxyResponse{}, errParseResult
-	}
-
-	resp := fridgedoorgateway.ResponseSuccessful(string(b))
-	return resp, nil
+	return fridgedoorgateway.ResponseSuccessful(r), nil
 }
 
 func main() {

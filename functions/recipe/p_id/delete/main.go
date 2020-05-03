@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"errors"
+	"fmt"
 	"log"
 
 	"github.com/digitalfridgedoor/fridgedoorapi"
@@ -25,23 +26,23 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	// stdout and stderr are sent to AWS CloudWatch Logs
 	log.Printf("Processing Lambda request DeleteRecipe %s\n", request.RequestContext.RequestID)
 
-	recipeID, ok := request.PathParameters["id"]
-	if !ok || recipeID == "" {
-		return events.APIGatewayProxyResponse{}, errMissingParameter
+	recipeID, err := fridgedoorgateway.ReadPathParameterAsObjectID(&request, "id")
+	if err != nil {
+		fmt.Printf("Error reading recipeID, %v\n", err)
+		return fridgedoorgateway.ResponseUnsuccessful(400), errMissingParameter
 	}
 
 	user, err := fridgedoorgateway.GetOrCreateAuthenticatedUser(context.TODO(), &request)
 	if err != nil {
-		return events.APIGatewayProxyResponse{}, errFind
+		return fridgedoorgateway.ResponseUnsuccessful(401), errFind
 	}
 
 	err = recipeapi.DeleteRecipe(context.Background(), user, "public", recipeID)
 	if err != nil {
-		return events.APIGatewayProxyResponse{}, errFind
+		return fridgedoorgateway.ResponseUnsuccessful(500), errFind
 	}
 
-	resp := fridgedoorgateway.ResponseSuccessful("")
-	return resp, nil
+	return fridgedoorgateway.ResponseSuccessfulString(""), nil
 }
 
 func main() {

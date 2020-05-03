@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"errors"
 	"fmt"
 	"log"
@@ -27,15 +26,13 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 
 	ings, err := fridgedoorapi.SearchIngredients(q)
 
-	fmt.Printf("Searching for %v, got %v results.", q, len(ings))
-
-	b, err := json.Marshal(ings)
 	if err != nil {
-		return events.APIGatewayProxyResponse{}, errParseResult
+		fmt.Printf("Error searching for ingredients, %v", err)
 	}
 
-	resp := fridgedoorgateway.ResponseSuccessful(string(b))
-	return resp, nil
+	fmt.Printf("Searching for %v, got %v results.", q, len(ings))
+
+	return fridgedoorgateway.ResponseSuccessful(ings), nil
 }
 
 func main() {

@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"log"
 
@@ -30,21 +29,15 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 
 	user, err := fridgedoorgateway.GetOrCreateAuthenticatedUser(context.TODO(), &request)
 	if err != nil {
-		return events.APIGatewayProxyResponse{}, errAuth
+		return fridgedoorgateway.ResponseUnsuccessful(401), errAuth
 	}
 
 	recipes, err := recipeapi.FindByName(context.TODO(), user, q)
 	if err != nil {
-		return events.APIGatewayProxyResponse{}, errFind
+		return fridgedoorgateway.ResponseUnsuccessful(500), errFind
 	}
 
-	b, err := json.Marshal(recipes)
-	if err != nil {
-		return events.APIGatewayProxyResponse{}, errParseResult
-	}
-
-	resp := fridgedoorgateway.ResponseSuccessful(string(b))
-	return resp, nil
+	return fridgedoorgateway.ResponseSuccessful(recipes), nil
 }
 
 func main() {

@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"log"
@@ -32,32 +31,26 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 
 	user, err := fridgedoorgateway.GetOrCreateAuthenticatedUser(context.TODO(), &request)
 	if err != nil {
-		return events.APIGatewayProxyResponse{}, errAuth
+		return fridgedoorgateway.ResponseUnsuccessful(401), errAuth
 	}
 
 	month, ok := tryGetIntQueryParameter(&request, "month")
 	if !ok {
-		return events.APIGatewayProxyResponse{}, errBadRequest
+		return fridgedoorgateway.ResponseUnsuccessful(400), errBadRequest
 	}
 
 	year, ok := tryGetIntQueryParameter(&request, "year")
 	if !ok {
-		return events.APIGatewayProxyResponse{}, errBadRequest
+		return fridgedoorgateway.ResponseUnsuccessful(400), errBadRequest
 	}
 
 	plan, err := planapi.FindOne(context.TODO(), user, month, year)
 	if err != nil {
 		fmt.Printf("Error retrieving plan: %v\n", err)
-		return events.APIGatewayProxyResponse{}, errGetResult
+		return fridgedoorgateway.ResponseUnsuccessful(500), errGetResult
 	}
 
-	b, err := json.Marshal(plan)
-	if err != nil {
-		return events.APIGatewayProxyResponse{}, errParse
-	}
-
-	resp := fridgedoorgateway.ResponseSuccessful(string(b))
-	return resp, nil
+	return fridgedoorgateway.ResponseSuccessful(plan), nil
 }
 
 func tryGetIntQueryParameter(request *events.APIGatewayProxyRequest, paramName string) (int, bool) {

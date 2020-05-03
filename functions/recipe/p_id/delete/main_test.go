@@ -42,11 +42,10 @@ func TestHandler(t *testing.T) {
 
 	// Arrange
 	ctx := context.Background()
-	collectionName := "public"
 	recipeName := "test-recipe"
 	testUserName := "TestUser"
 	testUser := fridgedoorgatewaytesting.CreateTestAuthenticatedUser(testUserName)
-	recipe, err := recipeapi.CreateRecipe(ctx, testUser, collectionName, recipeName)
+	recipe, err := recipeapi.CreateRecipe(ctx, testUser, recipeName)
 	assert.Nil(t, err)
 
 	r, err := recipeapi.FindOne(ctx, testUser, recipe.ID)

@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"log"
 
@@ -28,16 +27,10 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 
 	results, err := linkeduserapi.GetPublicRecipes(context.TODO())
 	if err != nil {
-		return events.APIGatewayProxyResponse{}, errParseResult
+		return fridgedoorgateway.ResponseUnsuccessful(500), errParseResult
 	}
 
-	b, err := json.Marshal(results)
-	if err != nil {
-		return events.APIGatewayProxyResponse{}, errParseResult
-	}
-
-	resp := fridgedoorgateway.ResponseSuccessful(string(b))
-	return resp, nil
+	return fridgedoorgateway.ResponseSuccessful(results), nil
 }
 
 func main() {

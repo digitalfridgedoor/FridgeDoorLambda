@@ -41,14 +41,14 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 
 	user, err := fridgedoorgateway.GetOrCreateAuthenticatedUser(context.TODO(), &request)
 	if err != nil {
-		return events.APIGatewayProxyResponse{}, errAuth
+		return fridgedoorgateway.ResponseUnsuccessful(401), errAuth
 	}
 
 	r := &updatePlanRequest{}
 	err = json.Unmarshal([]byte(request.Body), r)
 	if err != nil {
 		fmt.Printf("Error attempting to parse body: %v.\n", err)
-		return events.APIGatewayProxyResponse{StatusCode: 400}, errBadRequest
+		return fridgedoorgateway.ResponseUnsuccessful(400), errBadRequest
 	}
 	// todo: validate request
 
@@ -64,13 +64,10 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	plan, err := planapi.UpdatePlan(context.TODO(), user, apirequest)
 	if err != nil {
 		fmt.Printf("Error updating plan: %v.\n", err)
-		return events.APIGatewayProxyResponse{StatusCode: 500}, errServer
+		return fridgedoorgateway.ResponseUnsuccessful(500), errServer
 	}
 
-	json, err := json.Marshal(plan)
-
-	resp := fridgedoorgateway.ResponseSuccessful(string(json))
-	return resp, nil
+	return fridgedoorgateway.ResponseSuccessful(plan), nil
 }
 
 func main() {

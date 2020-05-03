@@ -7,6 +7,8 @@ import (
 	"fmt"
 	"log"
 
+	"go.mongodb.org/mongo-driver/bson/primitive"
+
 	"github.com/digitalfridgedoor/fridgedoorapi"
 	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgateway"
 	"github.com/digitalfridgedoor/fridgedoorapi/recipeapi"
@@ -21,13 +23,13 @@ var errAuth = errors.New("Auth")
 
 // UpdateRecipeRequest is the expected type for updating recipe
 type UpdateRecipeRequest struct {
-	RecipeID        string            `json:"recipeID"`
-	MethodStepIndex int               `json:"methodStepIndex"`
-	Action          string            `json:"action"`
-	IngredientID    string            `json:"ingredientID"`
-	SubRecipeID     string            `json:"subRecipeID"`
-	UpdateType      string            `json:"updateType"`
-	Updates         map[string]string `json:"updates"`
+	RecipeID        *primitive.ObjectID `json:"recipeID"`
+	MethodStepIndex int                 `json:"methodStepIndex"`
+	Action          string              `json:"action"`
+	IngredientID    string              `json:"ingredientID"`
+	SubRecipeID     *primitive.ObjectID `json:"subRecipeID"`
+	UpdateType      string              `json:"updateType"`
+	Updates         map[string]string   `json:"updates"`
 }
 
 var errCannotParse = errors.New("Could not parse request")
@@ -42,20 +44,19 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	// stdout and stderr are sent to AWS CloudWatch Logs
 	log.Printf("Processing a new Lambda request UpdateRecipe %s\n", request.RequestContext.RequestID)
 
-	r := &UpdateRecipeRequest{}
-	err := json.Unmarshal([]byte(request.Body), r)
+	r, err := parseRequest(&request)
 	if err != nil {
 		fmt.Printf("Could not parse body: %v.\n", request.Body)
-		return events.APIGatewayProxyResponse{StatusCode: 500}, errCannotParse
+		return fridgedoorgateway.ResponseUnsuccessful(400), errCannotParse
 	}
 
-	if r.RecipeID == "" || r.UpdateType == "" {
-		return events.APIGatewayProxyResponse{StatusCode: 500}, errMissingProperties
+	if r.RecipeID == nil || r.UpdateType == "" {
+		return fridgedoorgateway.ResponseUnsuccessful(400), errMissingProperties
 	}
 
 	user, err := fridgedoorgateway.GetOrCreateAuthenticatedUser(context.TODO(), &request)
 	if err != nil {
-		return events.APIGatewayProxyResponse{}, errAuth
+		return fridgedoorgateway.ResponseUnsuccessful(401), errAuth
 	}
 
 	if r.UpdateType == "R_UPDATE" {
@@ -87,19 +88,27 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 		return createResponse(r, err)
 	}
 
-	return events.APIGatewayProxyResponse{StatusCode: 400}, errors.New("Unknown update type")
+	return fridgedoorgateway.ResponseUnsuccessful(400), errors.New("Unknown update type")
+}
+
+func parseRequest(request *events.APIGatewayProxyRequest) (*UpdateRecipeRequest, error) {
+	r := &UpdateRecipeRequest{}
+	err := json.Unmarshal([]byte(request.Body), r)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return r, nil
 }
 
 func createResponse(r *recipeapi.Recipe, err error) (events.APIGatewayProxyResponse, error) {
 
 	if err != nil {
-		return events.APIGatewayProxyResponse{StatusCode: 500}, err
+		return fridgedoorgateway.ResponseUnsuccessful(500), err
 	}
 
-	b, err := json.Marshal(r)
-
-	resp := fridgedoorgateway.ResponseSuccessful(string(b))
-	return resp, nil
+	return fridgedoorgateway.ResponseSuccessful(r), nil
 }
 
 func main() {

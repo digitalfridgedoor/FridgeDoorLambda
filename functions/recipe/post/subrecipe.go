@@ -9,7 +9,7 @@ import (
 
 func addSubRecipe(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, request *UpdateRecipeRequest) (*recipeapi.Recipe, error) {
 
-	if request.SubRecipeID == "" {
+	if request.SubRecipeID == nil {
 		return nil, errMissingProperties
 	}
 
@@ -20,7 +20,7 @@ func addSubRecipe(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser
 
 func removeSubRecipe(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, request *UpdateRecipeRequest) (*recipeapi.Recipe, error) {
 
-	if request.SubRecipeID == "" {
+	if request.SubRecipeID == nil {
 		return nil, errMissingProperties
 	}
 

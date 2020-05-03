@@ -21,8 +21,7 @@ var errAuth = errors.New("Auth")
 
 // CreateRecipeRequest is the expected type for updating recipe
 type CreateRecipeRequest struct {
-	Name       string `json:"name"`
-	Collection string `json:"collection"`
+	Name string `json:"name"`
 }
 
 // Handler is your Lambda function handler
@@ -37,34 +36,31 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	err := json.Unmarshal([]byte(request.Body), r)
 	if err != nil {
 		fmt.Printf("Error attempting to parse body: %v.\n", err)
-		return events.APIGatewayProxyResponse{StatusCode: 400}, errBadRequest
+		return fridgedoorgateway.ResponseUnsuccessful(400), errBadRequest
 	}
-	if r.Name == "" || r.Collection == "" {
+	if r.Name == "" {
 		fmt.Printf("Missing fields: %v.\n", r)
-		return events.APIGatewayProxyResponse{StatusCode: 400}, errBadRequest
+		return fridgedoorgateway.ResponseUnsuccessful(400), errBadRequest
 	}
 
 	ctx := context.Background()
 
 	user, err := fridgedoorgateway.GetOrCreateAuthenticatedUser(context.TODO(), &request)
 	if err != nil {
-		return events.APIGatewayProxyResponse{}, errAuth
+		return fridgedoorgateway.ResponseUnsuccessful(401), errAuth
 	}
 
-	recipe, err := recipeapi.CreateRecipe(ctx, user, r.Collection, r.Name)
+	recipe, err := recipeapi.CreateRecipe(ctx, user, r.Name)
 	if err != nil {
 		fmt.Printf("Error creating recipe: %v.\n", err)
-		return events.APIGatewayProxyResponse{StatusCode: 500}, errServer
+		return fridgedoorgateway.ResponseUnsuccessful(500), errServer
 	}
 
 	if err != nil {
-		return events.APIGatewayProxyResponse{StatusCode: 500}, errServer
+		return fridgedoorgateway.ResponseUnsuccessful(400), errServer
 	}
 
-	json, err := json.Marshal(recipe)
-
-	resp := fridgedoorgateway.ResponseSuccessful(string(json))
-	return resp, nil
+	return fridgedoorgateway.ResponseSuccessful(recipe), nil
 }
 
 func main() {

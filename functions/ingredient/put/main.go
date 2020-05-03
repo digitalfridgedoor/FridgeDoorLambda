@@ -34,27 +34,24 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	err := json.Unmarshal([]byte(request.Body), r)
 	if err != nil {
 		fmt.Printf("Error attempting to parse body: %v.\n", err)
-		return events.APIGatewayProxyResponse{StatusCode: 400}, errBadRequest
+		return fridgedoorgateway.ResponseUnsuccessful(400), errBadRequest
 	}
 	if r.Name == "" {
 		fmt.Printf("Missing fields: %v.\n", r)
-		return events.APIGatewayProxyResponse{StatusCode: 400}, errBadRequest
+		return fridgedoorgateway.ResponseUnsuccessful(400), errBadRequest
 	}
 
 	ingredient, err := fridgedoorapi.CreateIngredient(r.Name)
 	if err != nil {
 		fmt.Printf("Error creating recipe: %v.\n", err)
-		return events.APIGatewayProxyResponse{StatusCode: 500}, errServer
+		return fridgedoorgateway.ResponseUnsuccessful(500), errServer
 	}
 
 	if err != nil {
-		return events.APIGatewayProxyResponse{StatusCode: 500}, errServer
+		return fridgedoorgateway.ResponseUnsuccessful(500), errServer
 	}
 
-	json, err := json.Marshal(ingredient)
-
-	resp := fridgedoorgateway.ResponseSuccessful(string(json))
-	return resp, nil
+	return fridgedoorgateway.ResponseSuccessful(ingredient), nil
 }
 
 func main() {

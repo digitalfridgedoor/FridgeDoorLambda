@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"errors"
 	"fmt"
 	"log"
@@ -33,7 +32,7 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	key, ok := request.QueryStringParameters["key"]
 	if !ok {
 		fmt.Println("Missing parameter 'key'.")
-		return events.APIGatewayProxyResponse{}, errMissingParameters
+		return fridgedoorgateway.ResponseUnsuccessful(400), errMissingParameters
 	}
 
 	url, err := imageapi.CreatePresignedURL("get", key)
@@ -46,13 +45,7 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 		URL: url,
 	}
 
-	b, err := json.Marshal(response)
-	if err != nil {
-		return events.APIGatewayProxyResponse{}, errParseResult
-	}
-
-	resp := fridgedoorgateway.ResponseSuccessful(string(b))
-	return resp, nil
+	return fridgedoorgateway.ResponseSuccessful(response), nil
 }
 
 func main() {

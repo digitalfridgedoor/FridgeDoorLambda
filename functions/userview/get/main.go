@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"log"
@@ -30,22 +29,16 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 
 	user, err := fridgedoorgateway.GetOrCreateAuthenticatedUser(context.TODO(), &request)
 	if err != nil {
-		return events.APIGatewayProxyResponse{}, errAuth
+		return fridgedoorgateway.ResponseUnsuccessful(401), errAuth
 	}
 
 	userviews, err := linkeduserapi.GetOtherUsersRecipes(context.Background(), user)
 	if err != nil {
 		fmt.Printf("Error getting userview: %v.\n", err)
-		return events.APIGatewayProxyResponse{}, errConnect
+		return fridgedoorgateway.ResponseUnsuccessful(500), errConnect
 	}
 
-	b, err := json.Marshal(userviews)
-	if err != nil {
-		return events.APIGatewayProxyResponse{}, errParseResult
-	}
-
-	resp := fridgedoorgateway.ResponseSuccessful(string(b))
-	return resp, nil
+	return fridgedoorgateway.ResponseSuccessful(userviews), nil
 }
 
 func main() {
