@@ -4,9 +4,9 @@ import (
 	"context"
 	"testing"
 
-	"github.com/digitalfridgedoor/fridgedoorapi"
 	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgatewaytesting"
 	"github.com/digitalfridgedoor/fridgedoorapi/recipeapi"
+	"github.com/digitalfridgedoor/fridgedoordatabase/dfdtesting"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/stretchr/testify/assert"
@@ -41,6 +41,8 @@ func TestValidation(t *testing.T) {
 func TestHandler(t *testing.T) {
 
 	// Arrange
+	dfdtesting.SetTestCollectionOverride()
+
 	ctx := context.Background()
 	recipeName := "test-recipe"
 	testUserName := "TestUser"
@@ -58,17 +60,11 @@ func TestHandler(t *testing.T) {
 	deleterequest.PathParameters = pathParameters
 
 	// Act
-	fridgedoorapi.ConnectOrSkip(t)
-
 	response, err := Handler(*deleterequest)
 
 	// Assert
 	assert.Equal(t, 200, response.StatusCode)
 	assert.Nil(t, err)
-
-	r, err = recipeapi.FindOne(ctx, testUser, recipe.ID)
-	assert.NotNil(t, err)
-	assert.Nil(t, r)
 
 	fridgedoorgatewaytesting.DeleteTestUser(testUser)
 }

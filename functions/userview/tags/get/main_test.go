@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgatewaytesting"
+	"github.com/digitalfridgedoor/fridgedoordatabase/dfdtesting"
 
-	"github.com/digitalfridgedoor/fridgedoorapi"
+	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgatewaytesting"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -14,11 +14,10 @@ import (
 func TestHandler(t *testing.T) {
 
 	// Arrange
+	dfdtesting.SetTestCollectionOverride()
 	apirequest := fridgedoorgatewaytesting.CreateTestAuthorizedRequest("TestUser")
 
 	// Act
-	fridgedoorapi.ConnectOrSkip(t)
-
 	response, err := Handler(*apirequest)
 
 	// Assert

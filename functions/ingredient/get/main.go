@@ -41,10 +41,5 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 }
 
 func main() {
-	connected := fridgedoorapi.Connect()
-	if connected {
-		lambda.Start(Handler)
-
-		fridgedoorapi.Disconnect()
-	}
+	lambda.Start(Handler)
 }

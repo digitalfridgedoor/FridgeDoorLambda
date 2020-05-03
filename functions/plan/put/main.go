@@ -12,8 +12,6 @@ import (
 	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgateway"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 
-	"github.com/digitalfridgedoor/fridgedoorapi"
-
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 )
@@ -71,10 +69,5 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 }
 
 func main() {
-	connected := fridgedoorapi.Connect()
-	if connected {
-		lambda.Start(Handler)
-
-		fridgedoorapi.Disconnect()
-	}
+	lambda.Start(Handler)
 }

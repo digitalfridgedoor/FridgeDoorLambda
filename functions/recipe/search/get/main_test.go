@@ -1,12 +1,16 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"testing"
 
+	"github.com/digitalfridgedoor/fridgedoorapi/recipeapi"
+
+	"github.com/digitalfridgedoor/fridgedoordatabase/dfdtesting"
+
 	"github.com/digitalfridgedoor/fridgedoordatabase/dfdmodels"
 
-	"github.com/digitalfridgedoor/fridgedoorapi"
 	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgatewaytesting"
 
 	"github.com/stretchr/testify/assert"
@@ -15,14 +19,18 @@ import (
 func TestHandler(t *testing.T) {
 
 	// Arrange
-	apirequest := fridgedoorgatewaytesting.CreateTestAuthorizedRequest("7a401f20-86ca-442f-acf3-20d396c06d33")
+	dfdtesting.SetTestCollectionOverride()
+	dfdtesting.SetUserViewFindByUsernamePredicate()
+	dfdtesting.SetRecipeFindByNamePredicate()
+
+	user, apirequest := fridgedoorgatewaytesting.CreateTestAuthenticatedUserAndRequest("TestUser")
 
 	apirequest.QueryStringParameters = make(map[string]string)
 	apirequest.QueryStringParameters["q"] = "fi"
 
-	// Act
-	fridgedoorapi.ConnectOrSkip(t)
+	recipeapi.CreateRecipe(context.TODO(), user, "fi_recipe")
 
+	// Act
 	response, err := Handler(*apirequest)
 
 	// Assert

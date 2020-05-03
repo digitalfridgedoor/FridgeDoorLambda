@@ -5,7 +5,6 @@ import (
 	"errors"
 	"log"
 
-	"github.com/digitalfridgedoor/fridgedoorapi"
 	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgateway"
 	"github.com/digitalfridgedoor/fridgedoorapi/recipeapi"
 
@@ -41,10 +40,5 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 }
 
 func main() {
-	connected := fridgedoorapi.Connect()
-	if connected {
-		lambda.Start(Handler)
-
-		fridgedoorapi.Disconnect()
-	}
+	lambda.Start(Handler)
 }

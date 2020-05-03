@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/digitalfridgedoor/fridgedoorapi"
 	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgateway"
 	"github.com/digitalfridgedoor/fridgedoorapi/imageapi"
 
@@ -53,10 +52,5 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 }
 
 func main() {
-	connected := fridgedoorapi.Connect()
-	if connected {
-		lambda.Start(Handler)
-
-		fridgedoorapi.Disconnect()
-	}
+	lambda.Start(Handler)
 }

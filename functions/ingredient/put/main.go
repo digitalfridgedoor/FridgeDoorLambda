@@ -53,18 +53,9 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 		return fridgedoorgateway.ResponseUnsuccessful(500), errServer
 	}
 
-	if err != nil {
-		return fridgedoorgateway.ResponseUnsuccessful(500), errServer
-	}
-
 	return fridgedoorgateway.ResponseSuccessful(ing), nil
 }
 
 func main() {
-	connected := fridgedoorapi.Connect()
-	if connected {
-		lambda.Start(Handler)
-
-		fridgedoorapi.Disconnect()
-	}
+	lambda.Start(Handler)
 }

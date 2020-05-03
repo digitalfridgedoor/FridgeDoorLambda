@@ -7,8 +7,6 @@ import (
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
 
-	"go.mongodb.org/mongo-driver/bson"
-
 	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgatewaytesting"
 	"github.com/digitalfridgedoor/fridgedoorapi/recipeapi"
 	"github.com/digitalfridgedoor/fridgedoordatabase/dfdmodels"
@@ -20,9 +18,7 @@ import (
 func TestHandlerUpdateName(t *testing.T) {
 
 	dfdtesting.SetTestCollectionOverride()
-	dfdtesting.SetUserViewFindPredicate(func(uv *dfdmodels.UserView, m bson.M) bool {
-		return m["username"] == uv.Username
-	})
+	dfdtesting.SetUserViewFindByUsernamePredicate()
 
 	user := fridgedoorgatewaytesting.CreateTestAuthenticatedUser("TestUser")
 	recipeName := "recipe"

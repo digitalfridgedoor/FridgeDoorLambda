@@ -9,7 +9,6 @@ import (
 
 	"github.com/digitalfridgedoor/fridgedoorapi/planapi"
 
-	"github.com/digitalfridgedoor/fridgedoorapi"
 	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgateway"
 
 	"github.com/aws/aws-lambda-go/events"
@@ -29,19 +28,14 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	// stdout and stderr are sent to AWS CloudWatch Logs
 	log.Printf("Processing Lambda request GetPlan %s\n", request.RequestContext.RequestID)
 
+	ok, month, year := parseParameters(&request)
+	if !ok {
+		return fridgedoorgateway.ResponseUnsuccessful(400), errBadRequest
+	}
+
 	user, err := fridgedoorgateway.GetOrCreateAuthenticatedUser(context.TODO(), &request)
 	if err != nil {
 		return fridgedoorgateway.ResponseUnsuccessful(401), errAuth
-	}
-
-	month, ok := tryGetIntQueryParameter(&request, "month")
-	if !ok {
-		return fridgedoorgateway.ResponseUnsuccessful(400), errBadRequest
-	}
-
-	year, ok := tryGetIntQueryParameter(&request, "year")
-	if !ok {
-		return fridgedoorgateway.ResponseUnsuccessful(400), errBadRequest
 	}
 
 	plan, err := planapi.FindOne(context.TODO(), user, month, year)
@@ -51,6 +45,21 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	}
 
 	return fridgedoorgateway.ResponseSuccessful(plan), nil
+}
+
+func parseParameters(request *events.APIGatewayProxyRequest) (bool, int, int) {
+
+	month, ok := tryGetIntQueryParameter(request, "month")
+	if !ok {
+		return false, 0, 0
+	}
+
+	year, ok := tryGetIntQueryParameter(request, "year")
+	if !ok {
+		return false, 0, 0
+	}
+
+	return true, month, year
 }
 
 func tryGetIntQueryParameter(request *events.APIGatewayProxyRequest, paramName string) (int, bool) {
@@ -69,10 +78,5 @@ func tryGetIntQueryParameter(request *events.APIGatewayProxyRequest, paramName s
 }
 
 func main() {
-	connected := fridgedoorapi.Connect()
-	if connected {
-		lambda.Start(Handler)
-
-		fridgedoorapi.Disconnect()
-	}
+	lambda.Start(Handler)
 }
