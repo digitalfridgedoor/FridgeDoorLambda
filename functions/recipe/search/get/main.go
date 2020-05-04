@@ -2,9 +2,10 @@ package main
 
 import (
 	"context"
-	"digitalfridgedoor/fridgedoorapi/search"
 	"errors"
 	"log"
+
+	"github.com/digitalfridgedoor/fridgedoorapi/search"
 
 	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgateway"
 
