@@ -50,7 +50,7 @@ func TestHandler(t *testing.T) {
 	recipe, err := recipeapi.CreateRecipe(ctx, testUser, recipeName)
 	assert.Nil(t, err)
 
-	r, err := recipeapi.FindOne(ctx, testUser, recipe.ID)
+	r, err := recipeapi.FindOne(ctx, recipe.ID, testUser)
 	assert.Nil(t, err)
 	assert.NotNil(t, r)
 

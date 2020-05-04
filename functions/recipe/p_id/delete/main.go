@@ -36,7 +36,7 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 		return fridgedoorgateway.ResponseUnsuccessful(401), errFind
 	}
 
-	err = recipeapi.DeleteRecipe(context.Background(), user, "public", recipeID)
+	err = recipeapi.DeleteRecipe(context.Background(), user, recipeID)
 	if err != nil {
 		return fridgedoorgateway.ResponseUnsuccessful(500), errFind
 	}

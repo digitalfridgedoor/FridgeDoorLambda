@@ -13,7 +13,12 @@ func addSubRecipe(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser
 		return nil, errMissingProperties
 	}
 
-	r, err := recipeapi.AddSubRecipe(context.Background(), user, request.RecipeID, request.SubRecipeID)
+	editable, err := findRecipe(ctx, request.RecipeID, user)
+	if err != nil {
+		return nil, err
+	}
+
+	r, err := editable.AddSubRecipe(context.Background(), request.SubRecipeID)
 
 	return r, err
 }
@@ -24,7 +29,12 @@ func removeSubRecipe(ctx context.Context, user *fridgedoorgateway.AuthenticatedU
 		return nil, errMissingProperties
 	}
 
-	r, err := recipeapi.RemoveSubRecipe(context.Background(), user, request.RecipeID, request.SubRecipeID)
+	editable, err := findRecipe(ctx, request.RecipeID, user)
+	if err != nil {
+		return nil, err
+	}
+
+	r, err := editable.RemoveSubRecipe(context.Background(), request.SubRecipeID)
 
 	return r, err
 }

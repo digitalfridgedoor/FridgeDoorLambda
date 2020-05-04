@@ -13,7 +13,12 @@ func addMethodStep(ctx context.Context, user *fridgedoorgateway.AuthenticatedUse
 		return nil, errMissingProperties
 	}
 
-	r, err := recipeapi.AddMethodStep(context.Background(), user, request.RecipeID, request.Action)
+	editable, err := findRecipe(ctx, request.RecipeID, user)
+	if err != nil {
+		return nil, err
+	}
+
+	r, err := editable.AddMethodStep(context.Background(), request.Action)
 
 	return r, err
 }
@@ -24,14 +29,24 @@ func updateMethodStep(ctx context.Context, user *fridgedoorgateway.Authenticated
 		return nil, errMissingProperties
 	}
 
-	r, err := recipeapi.UpdateMethodStep(context.Background(), user, request.RecipeID, request.MethodStepIndex, request.Updates)
+	editable, err := findRecipe(ctx, request.RecipeID, user)
+	if err != nil {
+		return nil, err
+	}
+
+	r, err := editable.UpdateMethodStep(context.Background(), request.MethodStepIndex, request.Updates)
 
 	return r, err
 }
 
 func removeMethodStep(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, request *UpdateRecipeRequest) (*recipeapi.Recipe, error) {
 
-	r, err := recipeapi.RemoveMethodStep(context.Background(), user, request.RecipeID, request.MethodStepIndex)
+	editable, err := findRecipe(ctx, request.RecipeID, user)
+	if err != nil {
+		return nil, err
+	}
+
+	r, err := editable.RemoveMethodStep(context.Background(), request.MethodStepIndex)
 
 	return r, err
 }

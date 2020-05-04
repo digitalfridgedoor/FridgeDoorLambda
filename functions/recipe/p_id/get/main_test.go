@@ -78,13 +78,19 @@ func TestHandlerCanViewLinkedUserRecipe(t *testing.T) {
 	dfdtesting.SetTestCollectionOverride()
 	dfdtesting.SetUserViewFindByUsernamePredicate()
 
+	ctx := context.TODO()
+
 	linkedUser := fridgedoorgatewaytesting.CreateTestAuthenticatedUser("Linked")
 
 	recipeName := "recipe"
-	r, err := recipeapi.CreateRecipe(context.TODO(), linkedUser, recipeName)
+	r, err := recipeapi.CreateRecipe(ctx, linkedUser, recipeName)
+
+	editable, err := recipeapi.FindOneEditable(ctx, r.ID, linkedUser)
+	assert.Nil(t, err)
+
 	updates := make(map[string]string)
 	updates["viewableby_everyone"] = "true"
-	recipeapi.UpdateMetadata(context.TODO(), linkedUser, r.ID, updates)
+	editable.UpdateMetadata(ctx, updates)
 	assert.Nil(t, err)
 
 	apirequest := fridgedoorgatewaytesting.CreateTestAuthorizedRequest("TestUser")

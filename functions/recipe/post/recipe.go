@@ -13,10 +13,15 @@ func updateRecipe(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser
 		return nil, errMissingProperties
 	}
 
+	editable, err := findRecipe(ctx, request.RecipeID, user)
+	if err != nil {
+		return nil, err
+	}
+
 	if name, ok := request.Updates["name"]; ok {
-		r, err := recipeapi.Rename(context.Background(), user, request.RecipeID, name)
+		r, err := editable.Rename(context.Background(), name)
 		return r, err
 	}
 
-	return recipeapi.UpdateMetadata(context.Background(), user, request.RecipeID, request.Updates)
+	return editable.UpdateMetadata(context.Background(), request.Updates)
 }

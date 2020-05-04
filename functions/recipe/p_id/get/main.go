@@ -34,7 +34,7 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 		return fridgedoorgateway.ResponseUnsuccessful(401), errFind
 	}
 
-	r, err := recipeapi.FindOne(context.Background(), user, recipeID)
+	r, err := recipeapi.FindOne(context.Background(), recipeID, user)
 	if err != nil {
 		return fridgedoorgateway.ResponseUnsuccessful(500), errFind
 	}
