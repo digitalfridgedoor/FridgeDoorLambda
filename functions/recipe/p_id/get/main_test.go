@@ -5,10 +5,8 @@ import (
 	"encoding/json"
 	"testing"
 
+	"github.com/digitalfridgedoor/fridgedoorapi/dfdtesting"
 	"github.com/digitalfridgedoor/fridgedoorapi/recipeapi"
-
-	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgatewaytesting"
-	"github.com/digitalfridgedoor/fridgedoordatabase/dfdtesting"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/stretchr/testify/assert"
@@ -48,7 +46,7 @@ func TestHandler(t *testing.T) {
 
 	ctx := context.TODO()
 
-	user, apirequest := fridgedoorgatewaytesting.CreateTestAuthenticatedUserAndRequest("TestUser")
+	user, apirequest := dfdtesting.CreateTestAuthenticatedUserAndRequest("TestUser")
 
 	recipeName := "recipe"
 	r, err := recipeapi.CreateRecipe(ctx, user, recipeName)
@@ -71,7 +69,7 @@ func TestHandler(t *testing.T) {
 	assert.Equal(t, *r.ID, *recipe.ID)
 	assert.Equal(t, recipeName, recipe.Name)
 
-	fridgedoorgatewaytesting.DeleteUserForRequest(ctx, apirequest)
+	dfdtesting.DeleteUserForRequest(ctx, apirequest)
 }
 
 func TestHandlerCanViewLinkedUserRecipe(t *testing.T) {
@@ -82,7 +80,7 @@ func TestHandlerCanViewLinkedUserRecipe(t *testing.T) {
 
 	ctx := context.TODO()
 
-	linkedUser := fridgedoorgatewaytesting.CreateTestAuthenticatedUser("Linked")
+	linkedUser := dfdtesting.CreateTestAuthenticatedUser("Linked")
 
 	recipeName := "recipe"
 	r, err := recipeapi.CreateRecipe(ctx, linkedUser, recipeName)
@@ -95,7 +93,7 @@ func TestHandlerCanViewLinkedUserRecipe(t *testing.T) {
 	editable.UpdateMetadata(ctx, updates)
 	assert.Nil(t, err)
 
-	apirequest := fridgedoorgatewaytesting.CreateTestAuthorizedRequest("TestUser")
+	apirequest := dfdtesting.CreateTestAuthorizedRequest("TestUser")
 
 	pathParameters := make(map[string]string)
 	pathParameters["id"] = r.ID.Hex()
@@ -114,5 +112,5 @@ func TestHandlerCanViewLinkedUserRecipe(t *testing.T) {
 	assert.Equal(t, *r.ID, *recipe.ID)
 	assert.Equal(t, recipeName, recipe.Name)
 
-	fridgedoorgatewaytesting.DeleteUserForRequest(ctx, apirequest)
+	dfdtesting.DeleteUserForRequest(ctx, apirequest)
 }

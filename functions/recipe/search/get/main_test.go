@@ -5,13 +5,9 @@ import (
 	"encoding/json"
 	"testing"
 
+	"github.com/digitalfridgedoor/fridgedoorapi/dfdmodels"
+	"github.com/digitalfridgedoor/fridgedoorapi/dfdtesting"
 	"github.com/digitalfridgedoor/fridgedoorapi/recipeapi"
-
-	"github.com/digitalfridgedoor/fridgedoordatabase/dfdtesting"
-
-	"github.com/digitalfridgedoor/fridgedoordatabase/dfdmodels"
-
-	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgatewaytesting"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -23,7 +19,7 @@ func TestHandler(t *testing.T) {
 	dfdtesting.SetUserViewFindByUsernamePredicate()
 	dfdtesting.SetRecipeFindByNamePredicate()
 
-	user, apirequest := fridgedoorgatewaytesting.CreateTestAuthenticatedUserAndRequest("TestUser")
+	user, apirequest := dfdtesting.CreateTestAuthenticatedUserAndRequest("TestUser")
 
 	apirequest.QueryStringParameters = make(map[string]string)
 	apirequest.QueryStringParameters["q"] = "fi"

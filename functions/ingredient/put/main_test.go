@@ -6,9 +6,8 @@ import (
 	"testing"
 
 	"github.com/digitalfridgedoor/fridgedoorapi"
-	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgatewaytesting"
-	"github.com/digitalfridgedoor/fridgedoordatabase/dfdmodels"
-	"github.com/digitalfridgedoor/fridgedoordatabase/dfdtesting"
+	"github.com/digitalfridgedoor/fridgedoorapi/dfdmodels"
+	"github.com/digitalfridgedoor/fridgedoorapi/dfdtesting"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -21,7 +20,7 @@ func TestHandler(t *testing.T) {
 
 	ctx := context.TODO()
 
-	apirequest := fridgedoorgatewaytesting.CreateTestAuthorizedRequest("TestUser")
+	apirequest := dfdtesting.CreateTestAuthorizedRequest("TestUser")
 
 	request := &CreateIngredientRequest{
 		Name: "beans",
@@ -50,5 +49,5 @@ func TestHandler(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, *ing.ID, *i.ID)
 
-	fridgedoorgatewaytesting.DeleteUserForRequest(ctx, apirequest)
+	dfdtesting.DeleteUserForRequest(ctx, apirequest)
 }

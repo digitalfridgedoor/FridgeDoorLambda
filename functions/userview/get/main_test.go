@@ -5,16 +5,12 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/digitalfridgedoor/fridgedoordatabase/dfdmodels"
-	"go.mongodb.org/mongo-driver/bson"
-
-	"github.com/digitalfridgedoor/fridgedoordatabase/dfdtesting"
-
+	"github.com/digitalfridgedoor/fridgedoorapi/dfdmodels"
+	"github.com/digitalfridgedoor/fridgedoorapi/dfdtesting"
 	"github.com/digitalfridgedoor/fridgedoorapi/linkeduserapi"
 
-	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgatewaytesting"
-
 	"github.com/stretchr/testify/assert"
+	"go.mongodb.org/mongo-driver/bson"
 )
 
 func TestHandler(t *testing.T) {
@@ -27,9 +23,9 @@ func TestHandler(t *testing.T) {
 
 	ctx := context.TODO()
 
-	fridgedoorgatewaytesting.CreateTestAuthenticatedUser("linked")
+	dfdtesting.CreateTestAuthenticatedUser("linked")
 
-	apirequest := fridgedoorgatewaytesting.CreateTestAuthorizedRequest("TestUser")
+	apirequest := dfdtesting.CreateTestAuthorizedRequest("TestUser")
 
 	// Act
 	response, err := Handler(*apirequest)
@@ -43,5 +39,5 @@ func TestHandler(t *testing.T) {
 	assert.NotNil(t, linkedusers)
 	assert.Greater(t, len(linkedusers), 0)
 
-	fridgedoorgatewaytesting.DeleteUserForRequest(ctx, apirequest)
+	dfdtesting.DeleteUserForRequest(ctx, apirequest)
 }

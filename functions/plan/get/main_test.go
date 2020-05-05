@@ -5,9 +5,8 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgatewaytesting"
-	"github.com/digitalfridgedoor/fridgedoordatabase/dfdmodels"
-	"github.com/digitalfridgedoor/fridgedoordatabase/dfdtesting"
+	"github.com/digitalfridgedoor/fridgedoorapi/dfdmodels"
+	"github.com/digitalfridgedoor/fridgedoorapi/dfdtesting"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -21,7 +20,7 @@ func TestHandler(t *testing.T) {
 
 	ctx := context.TODO()
 
-	user, apirequest := fridgedoorgatewaytesting.CreateTestAuthenticatedUserAndRequest("TestUser")
+	user, apirequest := dfdtesting.CreateTestAuthenticatedUserAndRequest("TestUser")
 
 	params := make(map[string]string)
 	params["month"] = "1"
@@ -42,5 +41,5 @@ func TestHandler(t *testing.T) {
 	assert.Equal(t, 2020, plan.Year)
 	assert.Equal(t, user.ViewID, plan.UserID)
 
-	fridgedoorgatewaytesting.DeleteUserForRequest(ctx, apirequest)
+	dfdtesting.DeleteUserForRequest(ctx, apirequest)
 }

@@ -7,10 +7,9 @@ import (
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
 
-	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgatewaytesting"
+	"github.com/digitalfridgedoor/fridgedoorapi/dfdmodels"
+	"github.com/digitalfridgedoor/fridgedoorapi/dfdtesting"
 	"github.com/digitalfridgedoor/fridgedoorapi/recipeapi"
-	"github.com/digitalfridgedoor/fridgedoordatabase/dfdmodels"
-	"github.com/digitalfridgedoor/fridgedoordatabase/dfdtesting"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -22,7 +21,7 @@ func TestHandlerUpdateName(t *testing.T) {
 
 	ctx := context.TODO()
 
-	user := fridgedoorgatewaytesting.CreateTestAuthenticatedUser("TestUser")
+	user := dfdtesting.CreateTestAuthenticatedUser("TestUser")
 	recipeName := "recipe"
 	updatedRecipeName := "recipe_updated"
 
@@ -39,7 +38,7 @@ func TestHandlerUpdateName(t *testing.T) {
 	}
 
 	// Arrange
-	apirequest := fridgedoorgatewaytesting.CreateTestAuthorizedRequest("TestUser")
+	apirequest := dfdtesting.CreateTestAuthorizedRequest("TestUser")
 
 	b, err := json.Marshal(request)
 	assert.Nil(t, err)
@@ -61,7 +60,7 @@ func TestHandlerUpdateName(t *testing.T) {
 	assert.Equal(t, *r.ID, *recipe.ID)
 	assert.Equal(t, updatedRecipeName, recipe.Name)
 
-	fridgedoorgatewaytesting.DeleteUserForRequest(ctx, apirequest)
+	dfdtesting.DeleteUserForRequest(ctx, apirequest)
 }
 
 func TestRequestUnmarshalsCorrectly(t *testing.T) {
@@ -70,7 +69,7 @@ func TestRequestUnmarshalsCorrectly(t *testing.T) {
 	body := "{\"recipeId\": \"" + o.Hex() + "\"}"
 
 	// Arrange
-	apirequest := fridgedoorgatewaytesting.CreateTestAuthorizedRequest("TestUser")
+	apirequest := dfdtesting.CreateTestAuthorizedRequest("TestUser")
 	apirequest.Body = body
 
 	// Act
