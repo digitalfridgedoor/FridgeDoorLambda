@@ -21,10 +21,12 @@ func TestHandler(t *testing.T) {
 	dfdtesting.SetTestCollectionOverride()
 	dfdtesting.SetIngredientFindPredicate(dfdtesting.FindIngredientByNameTestPredicate)
 
-	ingredient, err := fridgedoorapi.IngredientCollection(context.TODO())
+	ctx := context.TODO()
+
+	ingredient, err := fridgedoorapi.IngredientCollection(ctx)
 	assert.Nil(t, err)
-	ingredient.Create(context.TODO(), "beans")
-	ingredient.Create(context.TODO(), "toast")
+	ingredient.Create(ctx, "beans")
+	ingredient.Create(ctx, "toast")
 
 	apirequest := fridgedoorgatewaytesting.CreateTestAuthorizedRequest("TestUser")
 
@@ -40,7 +42,7 @@ func TestHandler(t *testing.T) {
 	assert.NotNil(t, ingredients)
 	assert.Greater(t, len(ingredients), 0)
 
-	fridgedoorgatewaytesting.DeleteUserForRequest(apirequest)
+	fridgedoorgatewaytesting.DeleteUserForRequest(ctx, apirequest)
 }
 
 func TestHandlerWithQuery(t *testing.T) {
@@ -49,16 +51,18 @@ func TestHandlerWithQuery(t *testing.T) {
 	dfdtesting.SetTestCollectionOverride()
 	dfdtesting.SetIngredientFindPredicate(dfdtesting.FindIngredientByNameTestPredicate)
 
+	ctx := context.TODO()
+
 	apirequest := fridgedoorgatewaytesting.CreateTestAuthorizedRequest("TestUser")
 	apirequest.QueryStringParameters = make(map[string]string)
 	apirequest.QueryStringParameters["q"] = "c"
 
-	ingredient, err := fridgedoorapi.IngredientCollection(context.TODO())
+	ingredient, err := fridgedoorapi.IngredientCollection(ctx)
 	assert.Nil(t, err)
-	ingredient.Create(context.TODO(), "carrots")
-	ingredient.Create(context.TODO(), "cream")
-	ingredient.Create(context.TODO(), "tomatoes")
-	ingredient.Create(context.TODO(), "big crackers")
+	ingredient.Create(ctx, "carrots")
+	ingredient.Create(ctx, "cream")
+	ingredient.Create(ctx, "tomatoes")
+	ingredient.Create(ctx, "big crackers")
 
 	// Act
 	response, err := Handler(*apirequest)
@@ -76,7 +80,7 @@ func TestHandlerWithQuery(t *testing.T) {
 		assert.True(t, oneWordStartsWith(ing.Name, startswith))
 	}
 
-	fridgedoorgatewaytesting.DeleteUserForRequest(apirequest)
+	fridgedoorgatewaytesting.DeleteUserForRequest(ctx, apirequest)
 }
 
 func oneWordStartsWith(ing string, startswith rune) bool {

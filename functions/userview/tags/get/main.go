@@ -31,7 +31,7 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 		return fridgedoorgateway.ResponseUnsuccessful(401), errAuth
 	}
 
-	view, err := userviewapi.GetUserViewByID(context.Background(), user)
+	view, err := userviewapi.GetByID(context.Background(), user.ViewID)
 	if err != nil {
 		fmt.Printf("Error getting userview: %v.\n", err)
 		return fridgedoorgateway.ResponseUnsuccessful(500), errConnect

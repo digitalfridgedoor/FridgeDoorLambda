@@ -66,5 +66,5 @@ func TestHandler(t *testing.T) {
 	assert.Equal(t, 200, response.StatusCode)
 	assert.Nil(t, err)
 
-	fridgedoorgatewaytesting.DeleteTestUser(testUser)
+	fridgedoorgatewaytesting.DeleteTestUser(ctx, testUser)
 }

@@ -1,12 +1,12 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"testing"
 
-	"github.com/digitalfridgedoor/fridgedoordatabase/dfdtesting"
-
 	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgatewaytesting"
+	"github.com/digitalfridgedoor/fridgedoordatabase/dfdtesting"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -16,6 +16,8 @@ func TestHandler(t *testing.T) {
 	// Arrange
 	dfdtesting.SetTestCollectionOverride()
 	apirequest := fridgedoorgatewaytesting.CreateTestAuthorizedRequest("TestUser")
+
+	ctx := context.TODO()
 
 	// Act
 	response, err := Handler(*apirequest)
@@ -28,5 +30,5 @@ func TestHandler(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Nil(t, tags)
 
-	fridgedoorgatewaytesting.DeleteUserForRequest(apirequest)
+	fridgedoorgatewaytesting.DeleteUserForRequest(ctx, apirequest)
 }

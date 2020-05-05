@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"testing"
 
@@ -17,6 +18,8 @@ func TestHandler(t *testing.T) {
 	dfdtesting.SetTestCollectionOverride()
 	dfdtesting.SetPlanFindPredicate(dfdtesting.FindPlanByMonthAndYearTestPredicate)
 	dfdtesting.SetUserViewFindByUsernamePredicate()
+
+	ctx := context.TODO()
 
 	user, apirequest := fridgedoorgatewaytesting.CreateTestAuthenticatedUserAndRequest("TestUser")
 
@@ -39,5 +42,5 @@ func TestHandler(t *testing.T) {
 	assert.Equal(t, 2020, plan.Year)
 	assert.Equal(t, user.ViewID, plan.UserID)
 
-	fridgedoorgatewaytesting.DeleteUserForRequest(apirequest)
+	fridgedoorgatewaytesting.DeleteUserForRequest(ctx, apirequest)
 }

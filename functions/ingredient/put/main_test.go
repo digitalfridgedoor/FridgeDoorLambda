@@ -19,6 +19,8 @@ func TestHandler(t *testing.T) {
 	dfdtesting.SetTestCollectionOverride()
 	dfdtesting.SetIngredientFindPredicate(dfdtesting.FindIngredientByNameTestPredicate)
 
+	ctx := context.TODO()
+
 	apirequest := fridgedoorgatewaytesting.CreateTestAuthorizedRequest("TestUser")
 
 	request := &CreateIngredientRequest{
@@ -42,11 +44,11 @@ func TestHandler(t *testing.T) {
 	assert.Equal(t, "beans", ing.Name)
 	assert.NotNil(t, ing.ID)
 
-	ingredient, err := fridgedoorapi.IngredientCollection(context.TODO())
+	ingredient, err := fridgedoorapi.IngredientCollection(ctx)
 	assert.Nil(t, err)
-	i, err := ingredient.FindOne(context.TODO(), ing.ID)
+	i, err := ingredient.FindOne(ctx, ing.ID)
 	assert.Nil(t, err)
 	assert.Equal(t, *ing.ID, *i.ID)
 
-	fridgedoorgatewaytesting.DeleteUserForRequest(apirequest)
+	fridgedoorgatewaytesting.DeleteUserForRequest(ctx, apirequest)
 }

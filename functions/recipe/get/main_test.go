@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"testing"
 
@@ -17,6 +18,8 @@ func TestHandler(t *testing.T) {
 	dfdtesting.SetTestCollectionOverride()
 	dfdtesting.SetRecipeFindByTagsPredicate()
 
+	ctx := context.TODO()
+
 	apirequest := fridgedoorgatewaytesting.CreateTestAuthorizedRequest("TestUser")
 
 	// Act
@@ -31,5 +34,5 @@ func TestHandler(t *testing.T) {
 	assert.NotNil(t, recipeCollection)
 	assert.Equal(t, len(recipeCollection), 0)
 
-	fridgedoorgatewaytesting.DeleteUserForRequest(apirequest)
+	fridgedoorgatewaytesting.DeleteUserForRequest(ctx, apirequest)
 }

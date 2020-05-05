@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"testing"
 
@@ -24,6 +25,8 @@ func TestHandler(t *testing.T) {
 		return true
 	})
 
+	ctx := context.TODO()
+
 	fridgedoorgatewaytesting.CreateTestAuthenticatedUser("linked")
 
 	apirequest := fridgedoorgatewaytesting.CreateTestAuthorizedRequest("TestUser")
@@ -40,5 +43,5 @@ func TestHandler(t *testing.T) {
 	assert.NotNil(t, linkedusers)
 	assert.Greater(t, len(linkedusers), 0)
 
-	fridgedoorgatewaytesting.DeleteUserForRequest(apirequest)
+	fridgedoorgatewaytesting.DeleteUserForRequest(ctx, apirequest)
 }

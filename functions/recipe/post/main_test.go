@@ -20,11 +20,13 @@ func TestHandlerUpdateName(t *testing.T) {
 	dfdtesting.SetTestCollectionOverride()
 	dfdtesting.SetUserViewFindByUsernamePredicate()
 
+	ctx := context.TODO()
+
 	user := fridgedoorgatewaytesting.CreateTestAuthenticatedUser("TestUser")
 	recipeName := "recipe"
 	updatedRecipeName := "recipe_updated"
 
-	r, err := recipeapi.CreateRecipe(context.TODO(), user, recipeName)
+	r, err := recipeapi.CreateRecipe(ctx, user, recipeName)
 	assert.Nil(t, err)
 
 	updates := make(map[string]string)
@@ -59,7 +61,7 @@ func TestHandlerUpdateName(t *testing.T) {
 	assert.Equal(t, *r.ID, *recipe.ID)
 	assert.Equal(t, updatedRecipeName, recipe.Name)
 
-	fridgedoorgatewaytesting.DeleteUserForRequest(apirequest)
+	fridgedoorgatewaytesting.DeleteUserForRequest(ctx, apirequest)
 }
 
 func TestRequestUnmarshalsCorrectly(t *testing.T) {

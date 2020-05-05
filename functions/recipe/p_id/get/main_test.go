@@ -46,10 +46,12 @@ func TestHandler(t *testing.T) {
 	dfdtesting.SetTestCollectionOverride()
 	dfdtesting.SetUserViewFindByUsernamePredicate()
 
+	ctx := context.TODO()
+
 	user, apirequest := fridgedoorgatewaytesting.CreateTestAuthenticatedUserAndRequest("TestUser")
 
 	recipeName := "recipe"
-	r, err := recipeapi.CreateRecipe(context.TODO(), user, recipeName)
+	r, err := recipeapi.CreateRecipe(ctx, user, recipeName)
 	assert.Nil(t, err)
 
 	pathParameters := make(map[string]string)
@@ -69,7 +71,7 @@ func TestHandler(t *testing.T) {
 	assert.Equal(t, *r.ID, *recipe.ID)
 	assert.Equal(t, recipeName, recipe.Name)
 
-	fridgedoorgatewaytesting.DeleteUserForRequest(apirequest)
+	fridgedoorgatewaytesting.DeleteUserForRequest(ctx, apirequest)
 }
 
 func TestHandlerCanViewLinkedUserRecipe(t *testing.T) {
@@ -112,5 +114,5 @@ func TestHandlerCanViewLinkedUserRecipe(t *testing.T) {
 	assert.Equal(t, *r.ID, *recipe.ID)
 	assert.Equal(t, recipeName, recipe.Name)
 
-	fridgedoorgatewaytesting.DeleteUserForRequest(apirequest)
+	fridgedoorgatewaytesting.DeleteUserForRequest(ctx, apirequest)
 }
