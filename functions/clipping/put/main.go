@@ -7,10 +7,9 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/digitalfridgedoor/fridgedoorapi/planapi"
+	"github.com/digitalfridgedoor/fridgedoorapi/clippingapi"
 
 	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgateway"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
@@ -20,14 +19,8 @@ var errAuth = errors.New("Auth")
 var errServer = errors.New("Server Error")
 var errBadRequest = errors.New("Bad request")
 
-type updatePlanRequest struct {
-	Month      int                 `json:"month"`
-	Year       int                 `json:"year"`
-	Day        int                 `json:"day"`
-	MealIndex  int                 `json:"mealIndex"`
-	RecipeName string              `json:"recipeName"`
-	RecipeID   *primitive.ObjectID `json:"recipeID"`
-	ClippingID *primitive.ObjectID `json:"clippingID"`
+type createClippingRequest struct {
+	Name string `json:"name"`
 }
 
 // Handler is your Lambda function handler
@@ -43,31 +36,24 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 		return fridgedoorgateway.ResponseUnsuccessful(401), errAuth
 	}
 
-	r := &updatePlanRequest{}
+	r := &createClippingRequest{}
 	err = json.Unmarshal([]byte(request.Body), r)
 	if err != nil {
 		fmt.Printf("Error attempting to parse body: %v.\n", err)
 		return fridgedoorgateway.ResponseUnsuccessful(400), errBadRequest
 	}
+
 	// todo: validate request
 
-	apirequest := &planapi.UpdateDayPlanRequest{
-		Year:       r.Year,
-		Month:      r.Month,
-		Day:        r.Day,
-		MealIndex:  r.MealIndex,
-		RecipeName: r.RecipeName,
-		RecipeID:   r.RecipeID,
-		ClippingID: r.ClippingID,
-	}
+	ctx := context.TODO()
 
-	plan, err := planapi.UpdatePlan(context.TODO(), user, apirequest)
+	clippingID, err := clippingapi.Create(ctx, user, r.Name)
 	if err != nil {
-		fmt.Printf("Error updating plan: %v.\n", err)
-		return fridgedoorgateway.ResponseUnsuccessful(500), errServer
+		fmt.Printf("Error creating clipping: %v.\n", err)
+		return fridgedoorgateway.ResponseUnsuccessful(500), errBadRequest
 	}
 
-	return fridgedoorgateway.ResponseSuccessful(plan), nil
+	return fridgedoorgateway.ResponseSuccessful(clippingID), nil
 }
 
 func main() {

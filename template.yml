@@ -21,6 +21,78 @@ Resources:
         Authorizers:
           CognitoAuthorizer:
             UserPoolArn: arn:aws:cognito-idp:eu-west-2:266057577872:userpool/eu-west-2_9F1r0K7GW
+  clippingpidget:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: bin/clipping/p_id/
+      Handler: /get
+      Runtime: go1.x
+      Tracing: Active
+      Role: arn:aws:iam::266057577872:role/dfd-api-lambda-role
+      Events:
+        GetEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref DfdApi
+            Path: /clipping/{id}
+            Method: get
+            Auth:
+              Authorizer: CognitoAuthorizer
+      Policies:
+        - VPCAccessPolicy: {}
+        # This policy gives permission for Lambdas to create/manage ENIs
+        # SAM Policy templates you can use: https://github.com/awslabs/serverless-application-model/blob/develop/examples/2016-10-31/policy_templates/all_policy_templates.yaml
+      VpcConfig:
+        SecurityGroupIds: !Ref SecurityGroupIds
+        SubnetIds: !Ref VpcSubnetIds
+  clippingpost:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: bin/clipping/
+      Handler: /post
+      Runtime: go1.x
+      Tracing: Active
+      Role: arn:aws:iam::266057577872:role/dfd-api-lambda-role
+      Events:
+        GetEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref DfdApi
+            Path: /clipping
+            Method: post
+            Auth:
+              Authorizer: CognitoAuthorizer
+      Policies:
+        - VPCAccessPolicy: {}
+        # This policy gives permission for Lambdas to create/manage ENIs
+        # SAM Policy templates you can use: https://github.com/awslabs/serverless-application-model/blob/develop/examples/2016-10-31/policy_templates/all_policy_templates.yaml
+      VpcConfig:
+        SecurityGroupIds: !Ref SecurityGroupIds
+        SubnetIds: !Ref VpcSubnetIds
+  clippingput:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: bin/clipping/
+      Handler: /put
+      Runtime: go1.x
+      Tracing: Active
+      Role: arn:aws:iam::266057577872:role/dfd-api-lambda-role
+      Events:
+        GetEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref DfdApi
+            Path: /clipping
+            Method: put
+            Auth:
+              Authorizer: CognitoAuthorizer
+      Policies:
+        - VPCAccessPolicy: {}
+        # This policy gives permission for Lambdas to create/manage ENIs
+        # SAM Policy templates you can use: https://github.com/awslabs/serverless-application-model/blob/develop/examples/2016-10-31/policy_templates/all_policy_templates.yaml
+      VpcConfig:
+        SecurityGroupIds: !Ref SecurityGroupIds
+        SubnetIds: !Ref VpcSubnetIds
   imageget:
     Type: AWS::Serverless::Function
     Properties:
@@ -156,6 +228,8 @@ Resources:
             RestApiId: !Ref DfdApi
             Path: /public/image
             Method: get
+            Auth:
+              Authorizer: CognitoAuthorizer
       Policies:
         - VPCAccessPolicy: {}
         # This policy gives permission for Lambdas to create/manage ENIs
@@ -178,6 +252,8 @@ Resources:
             RestApiId: !Ref DfdApi
             Path: /public/recipe
             Method: get
+            Auth:
+              Authorizer: CognitoAuthorizer
       Policies:
         - VPCAccessPolicy: {}
         # This policy gives permission for Lambdas to create/manage ENIs

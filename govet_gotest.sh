@@ -1,3 +1,6 @@
+go vet ./functions/clipping/p_id/get
+go vet ./functions/clipping/post
+go vet ./functions/clipping/put
 go vet ./functions/image/get
 go vet ./functions/ingredient/get
 go vet ./functions/ingredient/put
@@ -14,6 +17,9 @@ go vet ./functions/recipe/search/get
 go vet ./functions/userview/get
 go vet ./functions/userview/tags/get
 
+go test ./functions/clipping/p_id/get
+go test ./functions/clipping/post
+go test ./functions/clipping/put
 go test ./functions/image/get
 go test ./functions/ingredient/get
 go test ./functions/ingredient/put
