@@ -26,7 +26,6 @@ var errMissingProperties = errors.New("Request is missing properties")
 
 type updateClippingRequest struct {
 	ClippingID *primitive.ObjectID `json:"clippingID"`
-	Name       string              `json:"name"`
 	UpdateType string              `json:"updateType"`
 	Updates    map[string]string   `json:"updates"`
 }

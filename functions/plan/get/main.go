@@ -7,6 +7,10 @@ import (
 	"log"
 	"strconv"
 
+	"github.com/digitalfridgedoor/fridgedoorapi/dfdmodels"
+
+	"go.mongodb.org/mongo-driver/bson/primitive"
+
 	"github.com/digitalfridgedoor/fridgedoorapi/planapi"
 
 	"github.com/digitalfridgedoor/fridgedoorapi/fridgedoorgateway"
@@ -33,18 +37,46 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 		return fridgedoorgateway.ResponseUnsuccessful(400), errBadRequest
 	}
 
+	isplanninggroup, planningGroupID := tryParsePlanningGroup(&request)
+
 	user, err := fridgedoorgateway.GetOrCreateAuthenticatedUser(context.TODO(), &request)
 	if err != nil {
 		return fridgedoorgateway.ResponseUnsuccessful(401), errAuth
 	}
 
-	plan, err := planapi.FindOne(context.TODO(), user, month, year)
+	ctx := context.TODO()
+
+	if isplanninggroup {
+		plan, err := planapi.FindOneForGroup(ctx, *planningGroupID, month, year)
+		return planAsResponse(plan, err)
+	} else {
+		plan, err := planapi.FindOne(ctx, user, month, year)
+		return planAsResponse(plan, err)
+	}
+}
+
+func planAsResponse(plan *dfdmodels.Plan, err error) (events.APIGatewayProxyResponse, error) {
 	if err != nil {
 		fmt.Printf("Error retrieving plan: %v\n", err)
 		return fridgedoorgateway.ResponseUnsuccessful(500), errGetResult
 	}
 
 	return fridgedoorgateway.ResponseSuccessful(plan), nil
+}
+
+func tryParsePlanningGroup(request *events.APIGatewayProxyRequest) (bool, *primitive.ObjectID) {
+	paramValue, ok := request.QueryStringParameters["planningGroupId"]
+	if !ok {
+		return false, nil
+	}
+
+	planningGroupID, err := primitive.ObjectIDFromHex(paramValue)
+	if err != nil {
+		fmt.Printf("Could not parse query parameter 'planningGroupId' to string, val = '%v'.\n", paramValue)
+		return false, nil
+	}
+
+	return true, &planningGroupID
 }
 
 func parseParameters(request *events.APIGatewayProxyRequest) (bool, int, int) {

@@ -21,13 +21,14 @@ var errServer = errors.New("Server Error")
 var errBadRequest = errors.New("Bad request")
 
 type updatePlanRequest struct {
-	Month      int                 `json:"month"`
-	Year       int                 `json:"year"`
-	Day        int                 `json:"day"`
-	MealIndex  int                 `json:"mealIndex"`
-	RecipeName string              `json:"recipeName"`
-	RecipeID   *primitive.ObjectID `json:"recipeID"`
-	ClippingID *primitive.ObjectID `json:"clippingID"`
+	Month           int                 `json:"month"`
+	Year            int                 `json:"year"`
+	Day             int                 `json:"day"`
+	MealIndex       int                 `json:"mealIndex"`
+	RecipeName      string              `json:"recipeName"`
+	RecipeID        *primitive.ObjectID `json:"recipeID"`
+	ClippingID      *primitive.ObjectID `json:"clippingID"`
+	PlanningGroupID *primitive.ObjectID `json:"planningGroupID"`
 }
 
 // Handler is your Lambda function handler
@@ -52,13 +53,14 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	// todo: validate request
 
 	apirequest := &planapi.UpdateDayPlanRequest{
-		Year:       r.Year,
-		Month:      r.Month,
-		Day:        r.Day,
-		MealIndex:  r.MealIndex,
-		RecipeName: r.RecipeName,
-		RecipeID:   r.RecipeID,
-		ClippingID: r.ClippingID,
+		Year:            r.Year,
+		Month:           r.Month,
+		Day:             r.Day,
+		MealIndex:       r.MealIndex,
+		RecipeName:      r.RecipeName,
+		RecipeID:        r.RecipeID,
+		ClippingID:      r.ClippingID,
+		PlanningGroupID: r.PlanningGroupID,
 	}
 
 	plan, err := planapi.UpdatePlan(context.TODO(), user, apirequest)

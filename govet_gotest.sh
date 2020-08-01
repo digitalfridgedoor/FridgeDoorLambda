@@ -6,6 +6,8 @@ go vet ./functions/ingredient/get
 go vet ./functions/ingredient/put
 go vet ./functions/plan/get
 go vet ./functions/plan/put
+go vet ./functions/planninggroup/get
+go vet ./functions/planninggroup/p_id/get
 go vet ./functions/public/image/get
 go vet ./functions/public/recipe/get
 go vet ./functions/recipe/get
@@ -25,6 +27,8 @@ go test ./functions/ingredient/get
 go test ./functions/ingredient/put
 go test ./functions/plan/get
 go test ./functions/plan/put
+go test ./functions/planninggroup/get
+go test ./functions/planninggroup/p_id/get
 go test ./functions/public/image/get
 go test ./functions/public/recipe/get
 go test ./functions/recipe/get
