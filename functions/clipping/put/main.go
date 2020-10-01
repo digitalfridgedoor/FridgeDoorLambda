@@ -29,7 +29,7 @@ type createClippingRequest struct {
 func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 
 	// stdout and stderr are sent to AWS CloudWatch Logs
-	log.Printf("Processing a new Lambda request CreateRecipe %s\n", request.RequestContext.RequestID)
+	log.Printf("Processing a new Lambda request CreateClipping %s\n", request.RequestContext.RequestID)
 
 	user, err := fridgedoorgateway.GetOrCreateAuthenticatedUser(context.TODO(), &request)
 	if err != nil {

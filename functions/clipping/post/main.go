@@ -77,6 +77,44 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 		}
 		clipping, err := clippingapi.RemoveLink(ctx, user, r.ClippingID, linkidx)
 		return response(clipping, err)
+	} else if r.UpdateType == "LINK_UPDATE" {
+		linkidxs, linkok := r.Updates["linkidx"]
+		if !linkok {
+			return fridgedoorgateway.ResponseUnsuccessful(400), errMissingProperties
+		}
+		linkidx, err := strconv.Atoi(linkidxs)
+		if err != nil {
+			return fridgedoorgateway.ResponseUnsuccessful(400), errBadRequest
+		}
+		property, propertyok := r.Updates["property"]
+		if !propertyok {
+			return fridgedoorgateway.ResponseUnsuccessful(400), errMissingProperties
+		}
+		value, valueok := r.Updates["value"]
+		if !valueok {
+			return fridgedoorgateway.ResponseUnsuccessful(400), errMissingProperties
+		}
+		clipping, err := clippingapi.UpdateLink(ctx, user, r.ClippingID, linkidx, property, value)
+		return response(clipping, err)
+	} else if r.UpdateType == "LINK_REORDER" {
+		linkidxs1, linkok1 := r.Updates["linkidx1"]
+		if !linkok1 {
+			return fridgedoorgateway.ResponseUnsuccessful(400), errMissingProperties
+		}
+		linkidx1, err := strconv.Atoi(linkidxs1)
+		if err != nil {
+			return fridgedoorgateway.ResponseUnsuccessful(400), errBadRequest
+		}
+		linkidxs2, linkok2 := r.Updates["linkidx2"]
+		if !linkok2 {
+			return fridgedoorgateway.ResponseUnsuccessful(400), errMissingProperties
+		}
+		linkidx2, err := strconv.Atoi(linkidxs2)
+		if err != nil {
+			return fridgedoorgateway.ResponseUnsuccessful(400), errBadRequest
+		}
+		clipping, err := clippingapi.SwapLinkPosition(ctx, user, r.ClippingID, linkidx1, linkidx2)
+		return response(clipping, err)
 	} else if r.UpdateType == "UPDATE" {
 		clipping, err := clippingapi.Update(ctx, user, r.ClippingID, r.Updates)
 		return response(clipping, err)
