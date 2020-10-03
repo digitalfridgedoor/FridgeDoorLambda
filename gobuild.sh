@@ -1,5 +1,6 @@
 mkdir bin
 
+go build -o bin/clipping/p_id/delete ./functions/clipping/p_id/delete
 go build -o bin/clipping/p_id/get ./functions/clipping/p_id/get
 go build -o bin/clipping/post ./functions/clipping/post
 go build -o bin/clipping/put ./functions/clipping/put
