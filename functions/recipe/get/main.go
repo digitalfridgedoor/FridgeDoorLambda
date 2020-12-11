@@ -39,11 +39,13 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 
 	user, err := fridgedoorgateway.GetOrCreateAuthenticatedUser(context.TODO(), &request)
 	if err != nil {
+		log.Println("could not find user")
 		return fridgedoorgateway.ResponseUnsuccessful(401), errParseResult
 	}
 
 	results, err := search.FindRecipeByTags(context.TODO(), user.ViewID, tags, notTags, 20)
 	if err != nil {
+		log.Printf("response unsuccessful: %v\n", err)
 		return fridgedoorgateway.ResponseUnsuccessful(500), errParseResult
 	}
 
