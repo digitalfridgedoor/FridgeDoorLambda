@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"errors"
-	"fmt"
 	"log"
 	"strings"
 
@@ -13,9 +12,6 @@ import (
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/ssm"
 )
 
 var errConnect = errors.New("Cannot connect")
@@ -29,28 +25,6 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 
 	// stdout and stderr are sent to AWS CloudWatch Logs
 	log.Printf("Processing Lambda request ViewRecipes %s\n", request.RequestContext.RequestID)
-
-	log.Println("Trying to connect")
-	region := "eu-west-2"
-	sess, err := session.NewSessionWithOptions(session.Options{
-		Config:            aws.Config{Region: aws.String(region)},
-		SharedConfigState: session.SharedConfigEnable,
-	})
-
-	log.Printf("Done, session is %v, err is %v.\n", sess, err)
-
-	ssmsvc := ssm.New(sess, aws.NewConfig().WithRegion(region))
-	keyname := "mongodb"
-	withDecryption := true
-
-	fmt.Println("getting parameter")
-
-	paramOutput, err := ssmsvc.GetParameter(&ssm.GetParameterInput{
-		Name:           &keyname,
-		WithDecryption: &withDecryption,
-	})
-
-	fmt.Printf("request complete, param is %v, err is %v\n", len(paramOutput.GoString()), err)
 
 	tags := []string{}
 	notTags := []string{}
