@@ -42,9 +42,7 @@ Resources:
         - VPCAccessPolicy: {}
         # This policy gives permission for Lambdas to create/manage ENIs
         # SAM Policy templates you can use: https://github.com/awslabs/serverless-application-model/blob/develop/examples/2016-10-31/policy_templates/all_policy_templates.yaml
-      VpcConfig:
-        SecurityGroupIds: !Ref SecurityGroupIds
-        SubnetIds: !Ref VpcSubnetIds
+
   clippingpidget:
     Type: AWS::Serverless::Function
     Properties:
@@ -66,9 +64,7 @@ Resources:
         - VPCAccessPolicy: {}
         # This policy gives permission for Lambdas to create/manage ENIs
         # SAM Policy templates you can use: https://github.com/awslabs/serverless-application-model/blob/develop/examples/2016-10-31/policy_templates/all_policy_templates.yaml
-      VpcConfig:
-        SecurityGroupIds: !Ref SecurityGroupIds
-        SubnetIds: !Ref VpcSubnetIds
+
   clippingpost:
     Type: AWS::Serverless::Function
     Properties:
@@ -90,9 +86,7 @@ Resources:
         - VPCAccessPolicy: {}
         # This policy gives permission for Lambdas to create/manage ENIs
         # SAM Policy templates you can use: https://github.com/awslabs/serverless-application-model/blob/develop/examples/2016-10-31/policy_templates/all_policy_templates.yaml
-      VpcConfig:
-        SecurityGroupIds: !Ref SecurityGroupIds
-        SubnetIds: !Ref VpcSubnetIds
+
   clippingput:
     Type: AWS::Serverless::Function
     Properties:
@@ -114,9 +108,7 @@ Resources:
         - VPCAccessPolicy: {}
         # This policy gives permission for Lambdas to create/manage ENIs
         # SAM Policy templates you can use: https://github.com/awslabs/serverless-application-model/blob/develop/examples/2016-10-31/policy_templates/all_policy_templates.yaml
-      VpcConfig:
-        SecurityGroupIds: !Ref SecurityGroupIds
-        SubnetIds: !Ref VpcSubnetIds
+
   clippingsearchget:
     Type: AWS::Serverless::Function
     Properties:
@@ -138,9 +130,7 @@ Resources:
         - VPCAccessPolicy: {}
         # This policy gives permission for Lambdas to create/manage ENIs
         # SAM Policy templates you can use: https://github.com/awslabs/serverless-application-model/blob/develop/examples/2016-10-31/policy_templates/all_policy_templates.yaml
-      VpcConfig:
-        SecurityGroupIds: !Ref SecurityGroupIds
-        SubnetIds: !Ref VpcSubnetIds
+
   imageget:
     Type: AWS::Serverless::Function
     Properties:
@@ -162,9 +152,7 @@ Resources:
         - VPCAccessPolicy: {}
         # This policy gives permission for Lambdas to create/manage ENIs
         # SAM Policy templates you can use: https://github.com/awslabs/serverless-application-model/blob/develop/examples/2016-10-31/policy_templates/all_policy_templates.yaml
-      VpcConfig:
-        SecurityGroupIds: !Ref SecurityGroupIds
-        SubnetIds: !Ref VpcSubnetIds
+
   ingredientget:
     Type: AWS::Serverless::Function
     Properties:
@@ -186,9 +174,7 @@ Resources:
         - VPCAccessPolicy: {}
         # This policy gives permission for Lambdas to create/manage ENIs
         # SAM Policy templates you can use: https://github.com/awslabs/serverless-application-model/blob/develop/examples/2016-10-31/policy_templates/all_policy_templates.yaml
-      VpcConfig:
-        SecurityGroupIds: !Ref SecurityGroupIds
-        SubnetIds: !Ref VpcSubnetIds
+
   ingredientput:
     Type: AWS::Serverless::Function
     Properties:
@@ -210,9 +196,7 @@ Resources:
         - VPCAccessPolicy: {}
         # This policy gives permission for Lambdas to create/manage ENIs
         # SAM Policy templates you can use: https://github.com/awslabs/serverless-application-model/blob/develop/examples/2016-10-31/policy_templates/all_policy_templates.yaml
-      VpcConfig:
-        SecurityGroupIds: !Ref SecurityGroupIds
-        SubnetIds: !Ref VpcSubnetIds
+
   planget:
     Type: AWS::Serverless::Function
     Properties:
@@ -234,9 +218,7 @@ Resources:
         - VPCAccessPolicy: {}
         # This policy gives permission for Lambdas to create/manage ENIs
         # SAM Policy templates you can use: https://github.com/awslabs/serverless-application-model/blob/develop/examples/2016-10-31/policy_templates/all_policy_templates.yaml
-      VpcConfig:
-        SecurityGroupIds: !Ref SecurityGroupIds
-        SubnetIds: !Ref VpcSubnetIds
+
   planput:
     Type: AWS::Serverless::Function
     Properties:
@@ -258,9 +240,7 @@ Resources:
         - VPCAccessPolicy: {}
         # This policy gives permission for Lambdas to create/manage ENIs
         # SAM Policy templates you can use: https://github.com/awslabs/serverless-application-model/blob/develop/examples/2016-10-31/policy_templates/all_policy_templates.yaml
-      VpcConfig:
-        SecurityGroupIds: !Ref SecurityGroupIds
-        SubnetIds: !Ref VpcSubnetIds
+
   planninggroupget:
     Type: AWS::Serverless::Function
     Properties:
@@ -282,9 +262,7 @@ Resources:
         - VPCAccessPolicy: {}
         # This policy gives permission for Lambdas to create/manage ENIs
         # SAM Policy templates you can use: https://github.com/awslabs/serverless-application-model/blob/develop/examples/2016-10-31/policy_templates/all_policy_templates.yaml
-      VpcConfig:
-        SecurityGroupIds: !Ref SecurityGroupIds
-        SubnetIds: !Ref VpcSubnetIds
+
   planninggrouppidget:
     Type: AWS::Serverless::Function
     Properties:
@@ -306,9 +284,7 @@ Resources:
         - VPCAccessPolicy: {}
         # This policy gives permission for Lambdas to create/manage ENIs
         # SAM Policy templates you can use: https://github.com/awslabs/serverless-application-model/blob/develop/examples/2016-10-31/policy_templates/all_policy_templates.yaml
-      VpcConfig:
-        SecurityGroupIds: !Ref SecurityGroupIds
-        SubnetIds: !Ref VpcSubnetIds
+
   publicimageget:
     Type: AWS::Serverless::Function
     Properties:
@@ -330,9 +306,7 @@ Resources:
         - VPCAccessPolicy: {}
         # This policy gives permission for Lambdas to create/manage ENIs
         # SAM Policy templates you can use: https://github.com/awslabs/serverless-application-model/blob/develop/examples/2016-10-31/policy_templates/all_policy_templates.yaml
-      VpcConfig:
-        SecurityGroupIds: !Ref SecurityGroupIds
-        SubnetIds: !Ref VpcSubnetIds
+
   publicrecipeget:
     Type: AWS::Serverless::Function
     Properties:
@@ -354,9 +328,7 @@ Resources:
         - VPCAccessPolicy: {}
         # This policy gives permission for Lambdas to create/manage ENIs
         # SAM Policy templates you can use: https://github.com/awslabs/serverless-application-model/blob/develop/examples/2016-10-31/policy_templates/all_policy_templates.yaml
-      VpcConfig:
-        SecurityGroupIds: !Ref SecurityGroupIds
-        SubnetIds: !Ref VpcSubnetIds
+
   recipeget:
     Type: AWS::Serverless::Function
     Properties:
@@ -378,9 +350,7 @@ Resources:
         - VPCAccessPolicy: {}
         # This policy gives permission for Lambdas to create/manage ENIs
         # SAM Policy templates you can use: https://github.com/awslabs/serverless-application-model/blob/develop/examples/2016-10-31/policy_templates/all_policy_templates.yaml
-      VpcConfig:
-        SecurityGroupIds: !Ref SecurityGroupIds
-        SubnetIds: !Ref VpcSubnetIds
+
   recipepiddelete:
     Type: AWS::Serverless::Function
     Properties:
@@ -402,9 +372,7 @@ Resources:
         - VPCAccessPolicy: {}
         # This policy gives permission for Lambdas to create/manage ENIs
         # SAM Policy templates you can use: https://github.com/awslabs/serverless-application-model/blob/develop/examples/2016-10-31/policy_templates/all_policy_templates.yaml
-      VpcConfig:
-        SecurityGroupIds: !Ref SecurityGroupIds
-        SubnetIds: !Ref VpcSubnetIds
+
   recipepidget:
     Type: AWS::Serverless::Function
     Properties:
@@ -426,9 +394,7 @@ Resources:
         - VPCAccessPolicy: {}
         # This policy gives permission for Lambdas to create/manage ENIs
         # SAM Policy templates you can use: https://github.com/awslabs/serverless-application-model/blob/develop/examples/2016-10-31/policy_templates/all_policy_templates.yaml
-      VpcConfig:
-        SecurityGroupIds: !Ref SecurityGroupIds
-        SubnetIds: !Ref VpcSubnetIds
+
   recipepost:
     Type: AWS::Serverless::Function
     Properties:
@@ -450,9 +416,7 @@ Resources:
         - VPCAccessPolicy: {}
         # This policy gives permission for Lambdas to create/manage ENIs
         # SAM Policy templates you can use: https://github.com/awslabs/serverless-application-model/blob/develop/examples/2016-10-31/policy_templates/all_policy_templates.yaml
-      VpcConfig:
-        SecurityGroupIds: !Ref SecurityGroupIds
-        SubnetIds: !Ref VpcSubnetIds
+
   recipeput:
     Type: AWS::Serverless::Function
     Properties:
@@ -474,9 +438,7 @@ Resources:
         - VPCAccessPolicy: {}
         # This policy gives permission for Lambdas to create/manage ENIs
         # SAM Policy templates you can use: https://github.com/awslabs/serverless-application-model/blob/develop/examples/2016-10-31/policy_templates/all_policy_templates.yaml
-      VpcConfig:
-        SecurityGroupIds: !Ref SecurityGroupIds
-        SubnetIds: !Ref VpcSubnetIds
+
   recipesearchallget:
     Type: AWS::Serverless::Function
     Properties:
@@ -498,9 +460,7 @@ Resources:
         - VPCAccessPolicy: {}
         # This policy gives permission for Lambdas to create/manage ENIs
         # SAM Policy templates you can use: https://github.com/awslabs/serverless-application-model/blob/develop/examples/2016-10-31/policy_templates/all_policy_templates.yaml
-      VpcConfig:
-        SecurityGroupIds: !Ref SecurityGroupIds
-        SubnetIds: !Ref VpcSubnetIds
+
   recipesearchget:
     Type: AWS::Serverless::Function
     Properties:
@@ -522,9 +482,7 @@ Resources:
         - VPCAccessPolicy: {}
         # This policy gives permission for Lambdas to create/manage ENIs
         # SAM Policy templates you can use: https://github.com/awslabs/serverless-application-model/blob/develop/examples/2016-10-31/policy_templates/all_policy_templates.yaml
-      VpcConfig:
-        SecurityGroupIds: !Ref SecurityGroupIds
-        SubnetIds: !Ref VpcSubnetIds
+
   userviewget:
     Type: AWS::Serverless::Function
     Properties:
@@ -546,9 +504,7 @@ Resources:
         - VPCAccessPolicy: {}
         # This policy gives permission for Lambdas to create/manage ENIs
         # SAM Policy templates you can use: https://github.com/awslabs/serverless-application-model/blob/develop/examples/2016-10-31/policy_templates/all_policy_templates.yaml
-      VpcConfig:
-        SecurityGroupIds: !Ref SecurityGroupIds
-        SubnetIds: !Ref VpcSubnetIds
+
   userviewtagsget:
     Type: AWS::Serverless::Function
     Properties:
@@ -570,6 +526,3 @@ Resources:
         - VPCAccessPolicy: {}
         # This policy gives permission for Lambdas to create/manage ENIs
         # SAM Policy templates you can use: https://github.com/awslabs/serverless-application-model/blob/develop/examples/2016-10-31/policy_templates/all_policy_templates.yaml
-      VpcConfig:
-        SecurityGroupIds: !Ref SecurityGroupIds
-        SubnetIds: !Ref VpcSubnetIds
