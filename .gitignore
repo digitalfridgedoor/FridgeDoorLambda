@@ -3,5 +3,6 @@ deployment.zip
 packaged.yml
 bin
 node_modules
+compiled
 
 todo.md

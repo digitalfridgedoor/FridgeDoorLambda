@@ -1,6 +1,6 @@
 const https = require("https");
 
-function getHtml(url) {
+export function getHtml(url: string): Promise<string> {
     return new Promise<string>((resolve, reject) => {
         https.get(url, (res => {
             if (res.statusCode === 200) {
@@ -13,5 +13,3 @@ function getHtml(url) {
         }))
     })
 }
-
-exports.getHtml = getHtml;
