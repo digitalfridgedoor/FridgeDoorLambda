@@ -1,0 +1,50 @@
+name: Deploy JS Lambdas
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  pipeline:
+    name: Create CF Stack
+    runs-on: ubuntu-latest
+    outputs:
+      lambda_function_name: ${{ steps.deploy_cfstack.outputs.lambda_function_name }}
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Configure AWS credentials
+        id: creds
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: "eu-west-2"
+
+      - name: Run deploy
+        id: deploy_cfstack
+        shell: bash
+        run: ./deploy-foundation-pipeline.sh
+
+  deploy:
+    name: Deploy Lambda function code
+    runs-on: ubuntu-latest
+    needs: [ pipeline ]
+    env:
+      LAMBDA_FUNCTION_NAME: ${{ needs.pipeline.outputs.lambda_function_name }}
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Configure AWS credentials
+        id: creds
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: "eu-west-2"
+
+      - name: Push latest code
+        shell: bash
+        run: ./functions_js/deploy-lambda-function-code.sh
