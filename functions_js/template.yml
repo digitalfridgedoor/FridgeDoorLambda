@@ -55,6 +55,12 @@ Resources:
       Runtime: nodejs12.x
       Handler: index.handler
       Role:  !GetAtt ParseRecipeLambdaRole.Arn
+      Code:
+        ZipFile: |
+          exports.handler = function(event, context, callback) {
+            console.log('Update code using deploy-lambda-function-code.sh')
+            callback(null, 200)
+          }
       Description: Parse recipe instructions
       TracingConfig:
         Mode: Active
