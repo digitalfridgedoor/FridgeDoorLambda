@@ -1,4 +1,4 @@
-cd code
+cd ./functions_js/code
 
 echo "Updating "$LAMBDA_FUNCTION_NAME
 
