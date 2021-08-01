@@ -25,7 +25,7 @@ jobs:
       - name: Run deploy
         id: deploy_cfstack
         shell: bash
-        run: ./deploy-foundation-pipeline.sh
+        run: ./functions_js/deploy-cf-stack.sh
 
   deploy:
     name: Deploy Lambda function code
