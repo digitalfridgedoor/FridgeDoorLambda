@@ -1,4 +1,4 @@
-const https = require("https");
+import * as https from 'https';
 
 export function getHtml(url: string): Promise<string> {
     return new Promise<string>((resolve, reject) => {
