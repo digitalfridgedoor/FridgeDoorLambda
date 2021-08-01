@@ -7,3 +7,6 @@ zip -r lambda-function-code.zip .
 aws lambda update-function-code \
     --function-name $LAMBDA_FUNCTION_NAME \
     --zip-file fileb://$(pwd)/lambda-function-code.zip
+
+node
+npm
