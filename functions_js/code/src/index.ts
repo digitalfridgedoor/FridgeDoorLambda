@@ -1,9 +1,7 @@
-import {
-    SNSEvent,
-} from "aws-lambda";
+import { SNSEvent } from "aws-lambda";
 import { getHtml } from './getHtml';
 
-export const lambdaHandler = async (
+export const handler = async (
     event: SNSEvent
 ): Promise<void> => {
     console.log('Hello, world');
