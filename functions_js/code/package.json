@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "tsc",
     "test": "mocha --require ts-node/register test/**/**.ts",
-    "build": "tsc"
+    "generatetestdata": "node test/generate-test-data.js"
   },
   "author": "",
   "license": "ISC",

@@ -1,5 +1,6 @@
 import { SNSEvent } from "aws-lambda";
 import { getHtml } from './getHtml';
+import { IngredientTagFinder } from "./IngredientFinder/IngredientTagFinder";
 
 export const handler = async (
     event: SNSEvent
@@ -11,5 +12,6 @@ export const handler = async (
     console.log('getting html from ' + messageContents.url);
 
     const html = await getHtml(messageContents.url)
-    console.log(html)
+    const sections = IngredientTagFinder.find(html);
+    console.log(sections)
 };
