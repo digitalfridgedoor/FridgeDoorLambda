@@ -3,7 +3,6 @@ cd ./functions_js/code
 echo "Updating "$LAMBDA_FUNCTION_NAME
 
 npm run build
-npm run test
 
 cd compiled
 

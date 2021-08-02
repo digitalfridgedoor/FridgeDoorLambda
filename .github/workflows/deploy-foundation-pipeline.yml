@@ -45,6 +45,10 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: "eu-west-2"
 
+      - name: Run tests
+        shell: bash
+        run: ./functions_js/run-tests.sh
+
       - name: Push latest code
         shell: bash
         run: ./functions_js/deploy-lambda-function-code.sh
