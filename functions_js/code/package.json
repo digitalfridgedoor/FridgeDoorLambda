@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha --require ts-node/register test/**/**.ts",
+    "build": "tsc"
   },
   "author": "",
   "license": "ISC",
@@ -12,9 +13,15 @@
     "https": "^1.0.0"
   },
   "devDependencies": {
-    "aws-sdk": "^2.655.0",
     "@types/aws-lambda": "^8.10.51",
+    "@types/chai": "^4.2.21",
+    "@types/mocha": "^9.0.0",
     "@types/node": "^13.13.5",
+    "aws-sdk": "^2.655.0",
+    "faker": "^5.5.3",
+    "mocha": "^9.0.3",
+    "sinon": "^11.1.2",
+    "ts-node": "^10.1.0",
     "typescript": "^3.8.3"
   }
 }
