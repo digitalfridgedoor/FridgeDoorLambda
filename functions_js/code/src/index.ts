@@ -1,12 +1,18 @@
+import {
+    SNSEvent,
+} from "aws-lambda";
 import { getHtml } from './getHtml';
 
-exports.handler = async function (event, context, callback) {
+export const lambdaHandler = async (
+    event: SNSEvent
+): Promise<void> => {
     console.log('Hello, world');
 
     const message = event.Records[0].Sns.Message;
     console.log(event.Records[0].Sns);
     const messageContents = JSON.parse(message);
+
     console.log('getting html from ' + messageContents.url);
-    const html = await getHtml(message.url)
+    const html = await getHtml(messageContents.url)
     console.log(html)
 };

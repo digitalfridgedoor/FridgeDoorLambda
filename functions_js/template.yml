@@ -52,7 +52,7 @@ Resources:
   ParseRecipeLambda:
     Type: AWS::Lambda::Function
     Properties:
-      Runtime: nodejs12.x
+      Runtime: nodejs14.x
       Handler: index.handler
       Role:  !GetAtt ParseRecipeLambdaRole.Arn
       Code:
