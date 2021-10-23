@@ -20,7 +20,7 @@ Resources:
       Auth:
         Authorizers:
           CognitoAuthorizer:
-            UserPoolArn: arn:aws:cognito-idp:eu-west-2:266057577872:userpool/eu-west-2_9F1r0K7GW
+            UserPoolArn: arn:aws:cognito-idp:eu-west-2:195082537297:userpool/eu-west-2_DHttvQ5ba
   clippingpiddelete:
     Type: AWS::Serverless::Function
     Properties:
