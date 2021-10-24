@@ -9,5 +9,5 @@ require (
 	github.com/digitalfridgedoor/fridgedoordatabase v0.0.0-20200505190218-22afa2586633 // indirect
 	github.com/maisiesadler/gomongo v0.0.0-20200719114939-0e3d766ebb9c // indirect
 	github.com/stretchr/testify v1.7.0
-	go.mongodb.org/mongo-driver v1.7.3
+	go.mongodb.org/mongo-driver v1.7.3 // indirect
 )
