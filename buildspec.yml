@@ -23,6 +23,16 @@ phases:
       - ls
       - pwd
 
+  pre_build:
+    commands:
+      # Make sure we're in the project directory within our GOPATH
+      - cd "/go/src/${PACKAGE}"
+      # Fetch all dependencies
+      - go mod init
+      # Check for common Go problems with 'go vet'
+      # Run all tests included with the application
+      # - ./govet_gotest.sh
+
   build:
     commands:
       # Build the go application
