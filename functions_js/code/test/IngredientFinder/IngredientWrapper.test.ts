@@ -1,6 +1,5 @@
 import { IngredientWrapperLocator } from '../../src/IngredientFinder/IngredientWrapperLocator';
 import { HtmlSection } from '../../src/IngredientFinder/HtmlSection';
-import { IngredientSection } from '../../src/IngredientFinder/Models';
 import { expect } from 'chai';
 import 'mocha';
 

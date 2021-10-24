@@ -74,6 +74,27 @@ const testCases: { file: string, expected: IngredientSection[] }[] = [{
 //     }]
 // },
 {
+    file: 'ratatouille',
+    expected: [{
+        ingredients: ['5 medium tomatoes (a mixture of different colours looks nice)',
+            '1 aubergine',
+            '2tbsp olive oil',
+            '2 red onions, sliced',
+            '4 garlic cloves, crushed',
+            '1tbsp caster sugar',
+            '2 courgettes (we used 1 green and 1 yellow)',
+            '20g grated parmesan or vegetarian alternative',]
+    },
+    {
+        ingredients: ['150g butter',
+            '300g plain flour, plus extra for dusting',
+            '4tbsp polenta',
+            '50g extra mature cheddar, coarsely grated',
+            'small bunch of thyme, leaves picked',
+            '1 egg yolk, beaten (freeze the white for another recipe)',]
+    }]
+},
+{
     file: 'thai_green_curry',
     expected: [{
         ingredients: ['2 tsp. vegetable oil',
@@ -101,7 +122,17 @@ const testCases: { file: string, expected: IngredientSection[] }[] = [{
     // }
 ]
 
-export const TestCases: ITestCase[] = testCases.map(({ file, expected }) => {
+const testCaseLookup = {}
+testCases.forEach(({ file, expected }) => {
     const html = readTestCase(file)
+    testCaseLookup[file] = { name: file, html, expected };
+})
+
+export function FindTestCase(name: string) : ITestCase | undefined {
+    return testCases[name]
+}
+
+export const TestCases: ITestCase[] = testCases.map(({ file, expected }) => {
+    const html = testCaseLookup[file]
     return { name: file, html, expected };
 })

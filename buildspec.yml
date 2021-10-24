@@ -20,8 +20,6 @@ phases:
       - env
       # Match local setup
       - cd "/go/src/${PACKAGE}"
-      - ls
-      - pwd
 
   pre_build:
     commands:

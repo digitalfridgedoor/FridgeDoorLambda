@@ -19,24 +19,6 @@ export class ClassNameFinder {
                             }
                         })
                     }
-                    // stack.push({ name, attribs, text: '', selectNode })
-                },
-                ontext: function (text) {
-                    // console.log('text', text)
-                    // if (stack.length > 0) {
-                    //     text = text.split(/\s+/g).filter(x => !!x).join(' ')
-                    //     stack[stack.length - 1].text += text
-                    // }
-                },
-                onclosetag: () => {
-                    // insideCount--;
-                    // const last = stack.pop()
-                    // if (last.selectNode) {
-                    //     results.push(options.value(last.name, last.attribs, last.text));
-                    // }
-                    // if (stack.length > 0) {
-                    //     stack[stack.length - 1].text += last.text
-                    // }
                 },
                 onend: () => {
                     resolve(tags);

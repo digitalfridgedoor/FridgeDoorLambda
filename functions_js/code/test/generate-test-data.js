@@ -42,6 +42,7 @@ async function runAll() {
     await run('https://www.jamieoliver.com/recipes/cauliflower-recipes/spiced-whole-roast-cauli/', 'jamie_cauli')
     await run('https://www.recipetineats.com/chicken-sharwama-middle-eastern/', 'chicken_shwarma')
     await run('https://www.bbc.co.uk/food/recipes/red_pepper_and_aubergine_84745', 'shashuska_traybake')
+    await run('https://www.bbcgoodfood.com/recipes/ratatouille-tart-with-flaky-cheddar-thyme-pastry', 'ratatouille')
     await run('https://www.delish.com/uk/cooking/recipes/a31011824/thai-green-curry/', 'thai_green_curry')
     await run('https://pinchofyum.com/creamy-thai-sweet-potato-curry', 'pot_curry')
 }
