@@ -8,10 +8,6 @@ go build -o bin/clipping/search/get ./functions/clipping/search/get
 go build -o bin/image/get ./functions/image/get
 go build -o bin/ingredient/get ./functions/ingredient/get
 go build -o bin/ingredient/put ./functions/ingredient/put
-go build -o bin/plan/get ./functions/plan/get
-go build -o bin/plan/put ./functions/plan/put
-go build -o bin/planninggroup/get ./functions/planninggroup/get
-go build -o bin/planninggroup/p_id/get ./functions/planninggroup/p_id/get
 go build -o bin/public/image/get ./functions/public/image/get
 go build -o bin/public/recipe/get ./functions/public/recipe/get
 go build -o bin/recipe/get ./functions/recipe/get

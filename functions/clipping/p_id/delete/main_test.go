@@ -7,6 +7,7 @@ import (
 	"github.com/digitalfridgedoor/fridgedoorapi/clippingapi"
 
 	"github.com/digitalfridgedoor/fridgedoorapi/dfdtesting"
+	"github.com/digitalfridgedoor/fridgedoorapi/dfdtestingapi"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -19,7 +20,7 @@ func TestHandler(t *testing.T) {
 	ctx := context.Background()
 	name := "clipping name"
 	testUserName := "TestUser"
-	testUser := dfdtesting.CreateTestAuthenticatedUser(testUserName)
+	testUser := dfdtestingapi.CreateTestAuthenticatedUser(testUserName)
 	clippingID, err := clippingapi.Create(ctx, testUser, name)
 	assert.Nil(t, err)
 
@@ -29,7 +30,7 @@ func TestHandler(t *testing.T) {
 
 	pathParameters := make(map[string]string)
 	pathParameters["id"] = clippingID.Hex()
-	deleterequest := dfdtesting.CreateTestAuthorizedRequest(testUserName)
+	deleterequest := dfdtestingapi.CreateTestAuthorizedRequest(testUserName)
 	deleterequest.PathParameters = pathParameters
 
 	// Act
@@ -39,5 +40,5 @@ func TestHandler(t *testing.T) {
 	assert.Equal(t, 200, response.StatusCode)
 	assert.Nil(t, err)
 
-	dfdtesting.DeleteTestUser(ctx, testUser)
+	dfdtestingapi.DeleteTestUser(ctx, testUser)
 }

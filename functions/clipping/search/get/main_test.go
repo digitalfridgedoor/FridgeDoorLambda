@@ -8,6 +8,7 @@ import (
 	"github.com/digitalfridgedoor/fridgedoorapi/clippingapi"
 	"github.com/digitalfridgedoor/fridgedoorapi/dfdmodels"
 	"github.com/digitalfridgedoor/fridgedoorapi/dfdtesting"
+	"github.com/digitalfridgedoor/fridgedoorapi/dfdtestingapi"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -19,7 +20,7 @@ func TestHandler(t *testing.T) {
 	dfdtesting.SetUserViewFindByUsernamePredicate()
 	dfdtesting.SetClippingByNamePredicate()
 
-	user, apirequest := dfdtesting.CreateTestAuthenticatedUserAndRequest("TestUser")
+	user, apirequest := dfdtestingapi.CreateTestAuthenticatedUserAndRequest("TestUser")
 
 	apirequest.QueryStringParameters = make(map[string]string)
 	apirequest.QueryStringParameters["q"] = "fi"

@@ -9,6 +9,7 @@ import (
 
 	"github.com/digitalfridgedoor/fridgedoorapi/dfdmodels"
 	"github.com/digitalfridgedoor/fridgedoorapi/dfdtesting"
+	"github.com/digitalfridgedoor/fridgedoorapi/dfdtestingapi"
 	"github.com/digitalfridgedoor/fridgedoorapi/recipeapi"
 
 	"github.com/stretchr/testify/assert"
@@ -21,7 +22,7 @@ func TestHandlerUpdateName(t *testing.T) {
 
 	ctx := context.TODO()
 
-	user := dfdtesting.CreateTestAuthenticatedUser("TestUser")
+	user := dfdtestingapi.CreateTestAuthenticatedUser("TestUser")
 	recipeName := "recipe"
 	updatedRecipeName := "recipe_updated"
 
@@ -38,7 +39,7 @@ func TestHandlerUpdateName(t *testing.T) {
 	}
 
 	// Arrange
-	apirequest := dfdtesting.CreateTestAuthorizedRequest("TestUser")
+	apirequest := dfdtestingapi.CreateTestAuthorizedRequest("TestUser")
 
 	b, err := json.Marshal(request)
 	assert.Nil(t, err)
@@ -60,7 +61,7 @@ func TestHandlerUpdateName(t *testing.T) {
 	assert.Equal(t, *r.ID, *recipe.ID)
 	assert.Equal(t, updatedRecipeName, recipe.Name)
 
-	dfdtesting.DeleteUserForRequest(ctx, apirequest)
+	dfdtestingapi.DeleteUserForRequest(ctx, apirequest)
 }
 
 func TestRequestUnmarshalsCorrectly(t *testing.T) {
@@ -69,7 +70,7 @@ func TestRequestUnmarshalsCorrectly(t *testing.T) {
 	body := "{\"recipeId\": \"" + o.Hex() + "\"}"
 
 	// Arrange
-	apirequest := dfdtesting.CreateTestAuthorizedRequest("TestUser")
+	apirequest := dfdtestingapi.CreateTestAuthorizedRequest("TestUser")
 	apirequest.Body = body
 
 	// Act

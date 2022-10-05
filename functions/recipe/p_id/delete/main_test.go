@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/digitalfridgedoor/fridgedoorapi/dfdtesting"
+	"github.com/digitalfridgedoor/fridgedoorapi/dfdtestingapi"
 	"github.com/digitalfridgedoor/fridgedoorapi/recipeapi"
 
 	"github.com/aws/aws-lambda-go/events"
@@ -45,7 +46,7 @@ func TestHandler(t *testing.T) {
 	ctx := context.Background()
 	recipeName := "test-recipe"
 	testUserName := "TestUser"
-	testUser := dfdtesting.CreateTestAuthenticatedUser(testUserName)
+	testUser := dfdtestingapi.CreateTestAuthenticatedUser(testUserName)
 	recipe, err := recipeapi.CreateRecipe(ctx, testUser, recipeName)
 	assert.Nil(t, err)
 
@@ -55,7 +56,7 @@ func TestHandler(t *testing.T) {
 
 	pathParameters := make(map[string]string)
 	pathParameters["id"] = recipe.ID.Hex()
-	deleterequest := dfdtesting.CreateTestAuthorizedRequest(testUserName)
+	deleterequest := dfdtestingapi.CreateTestAuthorizedRequest(testUserName)
 	deleterequest.PathParameters = pathParameters
 
 	// Act
@@ -65,5 +66,5 @@ func TestHandler(t *testing.T) {
 	assert.Equal(t, 200, response.StatusCode)
 	assert.Nil(t, err)
 
-	dfdtesting.DeleteTestUser(ctx, testUser)
+	dfdtestingapi.DeleteTestUser(ctx, testUser)
 }

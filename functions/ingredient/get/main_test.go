@@ -7,9 +7,10 @@ import (
 	"testing"
 	"unicode"
 
-	"github.com/digitalfridgedoor/fridgedoorapi"
 	"github.com/digitalfridgedoor/fridgedoorapi/dfdmodels"
 	"github.com/digitalfridgedoor/fridgedoorapi/dfdtesting"
+	"github.com/digitalfridgedoor/fridgedoorapi/dfdtestingapi"
+	"github.com/digitalfridgedoor/fridgedoorapi/ingredients"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -22,12 +23,12 @@ func TestHandler(t *testing.T) {
 
 	ctx := context.TODO()
 
-	ingredient, err := fridgedoorapi.IngredientCollection(ctx)
+	ingredient, err := ingredients.IngredientCollection(ctx)
 	assert.Nil(t, err)
 	ingredient.Create(ctx, "beans")
 	ingredient.Create(ctx, "toast")
 
-	apirequest := dfdtesting.CreateTestAuthorizedRequest("TestUser")
+	apirequest := dfdtestingapi.CreateTestAuthorizedRequest("TestUser")
 
 	// Act
 	response, err := Handler(*apirequest)
@@ -41,7 +42,7 @@ func TestHandler(t *testing.T) {
 	assert.NotNil(t, ingredients)
 	assert.Greater(t, len(ingredients), 0)
 
-	dfdtesting.DeleteUserForRequest(ctx, apirequest)
+	dfdtestingapi.DeleteUserForRequest(ctx, apirequest)
 }
 
 func TestHandlerWithQuery(t *testing.T) {
@@ -52,11 +53,11 @@ func TestHandlerWithQuery(t *testing.T) {
 
 	ctx := context.TODO()
 
-	apirequest := dfdtesting.CreateTestAuthorizedRequest("TestUser")
+	apirequest := dfdtestingapi.CreateTestAuthorizedRequest("TestUser")
 	apirequest.QueryStringParameters = make(map[string]string)
 	apirequest.QueryStringParameters["q"] = "c"
 
-	ingredient, err := fridgedoorapi.IngredientCollection(ctx)
+	ingredient, err := ingredients.IngredientCollection(ctx)
 	assert.Nil(t, err)
 	ingredient.Create(ctx, "carrots")
 	ingredient.Create(ctx, "cream")
@@ -79,7 +80,7 @@ func TestHandlerWithQuery(t *testing.T) {
 		assert.True(t, oneWordStartsWith(ing.Name, startswith))
 	}
 
-	dfdtesting.DeleteUserForRequest(ctx, apirequest)
+	dfdtestingapi.DeleteUserForRequest(ctx, apirequest)
 }
 
 func oneWordStartsWith(ing string, startswith rune) bool {
