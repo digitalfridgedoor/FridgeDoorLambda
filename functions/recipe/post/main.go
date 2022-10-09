@@ -24,7 +24,6 @@ var errAuth = errors.New("Auth")
 type UpdateRecipeRequest struct {
 	RecipeID        *primitive.ObjectID `json:"recipeID"`
 	MethodStepIndex int                 `json:"methodStepIndex"`
-	Action          string              `json:"action"`
 	IngredientID    string              `json:"ingredientID"`
 	SubRecipeID     *primitive.ObjectID `json:"subRecipeID"`
 	UpdateType      string              `json:"updateType"`

@@ -14,7 +14,7 @@ func addMethodStep(ctx context.Context, user *fridgedoorgateway.AuthenticatedUse
 		return nil, err
 	}
 
-	r, err := editable.AddMethodStep(context.Background(), request.Action)
+	r, err := editable.AddMethodStep(context.Background())
 
 	return r, err
 }
