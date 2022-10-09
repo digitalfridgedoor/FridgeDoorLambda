@@ -9,10 +9,6 @@ import (
 
 func addMethodStep(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, request *UpdateRecipeRequest) (*recipeapi.Recipe, error) {
 
-	if request.Action == "" {
-		return nil, errMissingProperties
-	}
-
 	editable, err := findRecipe(ctx, request.RecipeID, user)
 	if err != nil {
 		return nil, err
