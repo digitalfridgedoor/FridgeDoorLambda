@@ -23,5 +23,10 @@ func updateRecipe(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser
 		return r, err
 	}
 
+	if notes, ok := request.Updates["notes"]; ok {
+		r, err := editable.UpdateNotes(context.Background(), notes)
+		return r, err
+	}
+
 	return editable.UpdateMetadata(context.Background(), request.Updates)
 }
