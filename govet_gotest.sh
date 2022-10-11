@@ -13,8 +13,6 @@ go vet ./functions/recipe/p_id/delete
 go vet ./functions/recipe/p_id/get
 go vet ./functions/recipe/post
 go vet ./functions/recipe/put
-go vet ./functions/recipe/search/all/get
-go vet ./functions/recipe/search/get
 go vet ./functions/userview/get
 go vet ./functions/userview/tags/get
 
@@ -33,7 +31,5 @@ go test ./functions/recipe/p_id/delete
 go test ./functions/recipe/p_id/get
 go test ./functions/recipe/post
 go test ./functions/recipe/put
-go test ./functions/recipe/search/all/get
-go test ./functions/recipe/search/get
 go test ./functions/userview/get
 go test ./functions/userview/tags/get
