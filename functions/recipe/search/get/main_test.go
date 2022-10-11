@@ -18,7 +18,7 @@ func TestHandler(t *testing.T) {
 	// Arrange
 	dfdtesting.SetTestCollectionOverride()
 	dfdtesting.SetUserViewFindByUsernamePredicate()
-	dfdtesting.SetRecipeFindByNamePredicate()
+	dfdtesting.SetRecipeFindByNameOrTagsPredicate()
 
 	user, apirequest := dfdtestingapi.CreateTestAuthenticatedUserAndRequest("TestUser")
 

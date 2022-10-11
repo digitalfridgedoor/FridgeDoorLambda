@@ -16,7 +16,7 @@ func TestHandler(t *testing.T) {
 
 	// Arrange
 	dfdtesting.SetTestCollectionOverride()
-	dfdtesting.SetRecipeFindByTagsPredicate()
+	dfdtesting.SetRecipeFindByNameOrTagsPredicate()
 
 	ctx := context.TODO()
 

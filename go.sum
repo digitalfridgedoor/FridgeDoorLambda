@@ -8,8 +8,8 @@ github.com/cpuguy83/go-md2man/v2 v2.0.0/go.mod h1:maD7wRr/U5Z6m/iR4s+kqSMx2CaBsr
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
-github.com/digitalfridgedoor/fridgedoorapi v1.0.4 h1:Sq/MQ8Ar4XAwvUwZWKVqDPbDGNm3O2Ciae//Qhy4ABQ=
-github.com/digitalfridgedoor/fridgedoorapi v1.0.4/go.mod h1:D8XCUGIdjvUwzpThBaYTHq48efX9LaDSivsCoVp30ik=
+github.com/digitalfridgedoor/fridgedoorapi v1.0.5 h1:/iGcYBbpndAyK44RkE6RkTBNii+6NVyVIHwUynbJhWU=
+github.com/digitalfridgedoor/fridgedoorapi v1.0.5/go.mod h1:D8XCUGIdjvUwzpThBaYTHq48efX9LaDSivsCoVp30ik=
 github.com/digitalfridgedoor/fridgedoordatabase v0.0.0-20200505190218-22afa2586633 h1:9DYPH+xnrDmAv9yQud6PskOeg34zjA/cqe9pcfE3QLE=
 github.com/digitalfridgedoor/fridgedoordatabase v0.0.0-20200505190218-22afa2586633/go.mod h1:6d+tnu3njZ0JvmcCblb0qU0lkwy5NiTqT3G5k3jvnl4=
 github.com/go-stack/stack v1.8.0/go.mod h1:v0f6uXyyMGvRgIKkXu+yp6POWl0qKG85gN/melR3HDY=
