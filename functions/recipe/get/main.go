@@ -26,6 +26,8 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	// stdout and stderr are sent to AWS CloudWatch Logs
 	log.Printf("Processing Lambda request ViewRecipes %s\n", request.RequestContext.RequestID)
 
+	q, _ := request.QueryStringParameters["q"]
+
 	tags := []string{}
 	notTags := []string{}
 
@@ -43,7 +45,7 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 		return fridgedoorgateway.ResponseUnsuccessful(401), errParseResult
 	}
 
-	results, err := search.FindRecipeByTags(context.TODO(), user.ViewID, tags, notTags, 20)
+	results, err := search.FindRecipe(context.TODO(), user.ViewID, q, tags, notTags, 20)
 	if err != nil {
 		log.Printf("response unsuccessful: %v\n", err)
 		return fridgedoorgateway.ResponseUnsuccessful(500), errParseResult
