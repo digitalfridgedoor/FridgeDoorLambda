@@ -12,6 +12,12 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestSubstring(t *testing.T) {
+	sort := "-name"
+
+	assert.Equal(t, "-", sort[0:1])
+}
+
 func TestHandler(t *testing.T) {
 
 	// Arrange

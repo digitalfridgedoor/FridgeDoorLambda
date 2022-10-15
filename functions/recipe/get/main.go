@@ -39,13 +39,35 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 		notTags = strings.Split(notTagsParam, ",")
 	}
 
+	sort := ""
+	sortAsc := false
+
+	if sortParam, ok := request.QueryStringParameters["sort"]; ok && len(sortParam) > 0 {
+		if sortParam[0:1] == "-" {
+			sort = sortParam[1:]
+			sortAsc = false
+		} else {
+			sort = sortParam
+			sortAsc = true
+		}
+	}
+
 	user, err := fridgedoorgateway.GetOrCreateAuthenticatedUser(context.TODO(), &request)
 	if err != nil {
 		log.Println("could not find user")
 		return fridgedoorgateway.ResponseUnsuccessful(401), errParseResult
 	}
 
-	results, err := search.FindRecipe(context.TODO(), user.ViewID, q, tags, notTags, 20)
+	findRecipeRequest := &search.FindRecipeRequest {
+		StartsWith: q,
+		Tags: tags,
+		NotTags: notTags,
+		Limit: 20,
+		Sort: sort,
+		SortAsc: sortAsc,
+	}
+
+	results, err := search.FindRecipe(context.TODO(), user.ViewID, *findRecipeRequest)
 	if err != nil {
 		log.Printf("response unsuccessful: %v\n", err)
 		return fridgedoorgateway.ResponseUnsuccessful(500), errParseResult
