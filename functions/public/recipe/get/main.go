@@ -26,6 +26,7 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 
 	results, err := linkeduserapi.GetPublicRecipes(context.TODO())
 	if err != nil {
+		log.Printf("Error during GetPublicRecipes, %v.\n", err)
 		return fridgedoorgateway.ResponseUnsuccessful(500), errParseResult
 	}
 
