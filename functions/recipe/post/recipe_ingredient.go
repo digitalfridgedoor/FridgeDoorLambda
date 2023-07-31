@@ -9,7 +9,7 @@ import (
 	"github.com/digitalfridgedoor/fridgedoorapi/recipeapi"
 )
 
-func addIngredient(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, request *UpdateRecipeRequest) (*recipeapi.Recipe, error) {
+func addStepIngredient(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, request *UpdateRecipeRequest) (*recipeapi.Recipe, error) {
 
 	if request.IngredientID == "" {
 		return nil, errMissingProperties
@@ -25,12 +25,12 @@ func addIngredient(ctx context.Context, user *fridgedoorgateway.AuthenticatedUse
 		return nil, err
 	}
 
-	r, err := editable.AddIngredient(context.Background(), &ingID)
+	r, err := editable.AddStepIngredient(context.Background(), request.MethodStepIndex, &ingID)
 
 	return r, err
 }
 
-func updateIngredient(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, request *UpdateRecipeRequest) (*recipeapi.Recipe, error) {
+func updateStepIngredient(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, request *UpdateRecipeRequest) (*recipeapi.Recipe, error) {
 
 	if request.IngredientID == "" || request.Updates == nil {
 		return nil, errMissingProperties
@@ -41,12 +41,12 @@ func updateIngredient(ctx context.Context, user *fridgedoorgateway.Authenticated
 		return nil, err
 	}
 
-	r, err := editable.UpdateIngredient(context.Background(), request.IngredientID, request.Updates)
+	r, err := editable.UpdateStepIngredient(context.Background(), request.MethodStepIndex, request.IngredientID, request.Updates)
 
 	return r, err
 }
 
-func removeIngredient(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, request *UpdateRecipeRequest) (*recipeapi.Recipe, error) {
+func removeStepIngredient(ctx context.Context, user *fridgedoorgateway.AuthenticatedUser, request *UpdateRecipeRequest) (*recipeapi.Recipe, error) {
 
 	if request.IngredientID == "" {
 		return nil, errMissingProperties
@@ -57,7 +57,7 @@ func removeIngredient(ctx context.Context, user *fridgedoorgateway.Authenticated
 		return nil, err
 	}
 
-	r, err := editable.RemoveIngredient(context.Background(), request.IngredientID)
+	r, err := editable.RemoveStepIngredient(context.Background(), request.MethodStepIndex, request.IngredientID)
 
 	return r, err
 }

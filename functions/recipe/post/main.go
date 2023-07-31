@@ -78,6 +78,15 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	} else if r.UpdateType == "ING_DELETE" {
 		r, err := removeIngredient(context.Background(), user, r)
 		return createResponse(r, err)
+	} else if r.UpdateType == "STEP_ING_ADD" {
+		r, err := addStepIngredient(context.Background(), user, r)
+		return createResponse(r, err)
+	} else if r.UpdateType == "STEP_ING_UPDATE" {
+		r, err := updateStepIngredient(context.Background(), user, r)
+		return createResponse(r, err)
+	} else if r.UpdateType == "STEP_ING_DELETE" {
+		r, err := removeStepIngredient(context.Background(), user, r)
+		return createResponse(r, err)
 	} else if r.UpdateType == "SUB_ADD" {
 		r, err := addSubRecipe(context.Background(), user, r)
 		return createResponse(r, err)
