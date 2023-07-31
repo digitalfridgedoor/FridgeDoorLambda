@@ -95,7 +95,7 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 		return createResponse(r, err)
 	}
 
-	return fridgedoorgateway.ResponseUnsuccessful(400), errors.New("Unknown update type")
+	return fridgedoorgateway.ResponseUnsuccessful(400), errors.New("Unknown update type '" + r.UpdateType + "'")
 }
 
 func findRecipe(ctx context.Context, recipeID *primitive.ObjectID, user *fridgedoorgateway.AuthenticatedUser) (*recipeapi.EditableRecipe, error) {
