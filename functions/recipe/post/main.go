@@ -39,22 +39,40 @@ var errNoUpdates = errors.New("No updates")
 // However you could use other event sources (S3, Kinesis etc), or JSON-decoded primitive types such as 'string'.
 func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 
+	res, err := handleRequest(request)
+
+	if res == nil {
+		log.Println("Error caught processing request", err)
+		return fridgedoorgateway.ResponseUnsuccessfulString(500, "Unexpected Error"), nil
+	}
+
+	return *res, err
+}
+
+func handleRequest(request events.APIGatewayProxyRequest) (*events.APIGatewayProxyResponse, error) {
+
+	defer func() {
+		if err := recover(); err != nil {
+			log.Println("Error caught processing request", err)
+		}
+	}()
+
 	// stdout and stderr are sent to AWS CloudWatch Logs
 	log.Printf("Processing a new Lambda request UpdateRecipe %s\n", request.RequestContext.RequestID)
 
 	r, err := parseRequest(&request)
 	if err != nil {
 		fmt.Printf("Could not parse body: %v.\n", request.Body)
-		return fridgedoorgateway.ResponseUnsuccessful(400), errCannotParse
+		return createErrorResponse(400, "Could not parse request")
 	}
 
 	if r.RecipeID == nil || r.UpdateType == "" {
-		return fridgedoorgateway.ResponseUnsuccessful(400), errMissingProperties
+		return createErrorResponse(400, "Request is missing properties")
 	}
 
 	user, err := fridgedoorgateway.GetOrCreateAuthenticatedUser(context.TODO(), &request)
 	if err != nil {
-		return fridgedoorgateway.ResponseUnsuccessful(401), errAuth
+		return createErrorResponse(401, "Unauthorized")
 	}
 
 	if r.UpdateType == "R_UPDATE" {
@@ -93,9 +111,12 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	} else if r.UpdateType == "SUB_DELETE" {
 		r, err := removeSubRecipe(context.Background(), user, r)
 		return createResponse(r, err)
+	} else if r.UpdateType == "PANIC" {
+		panic("oh no!")
 	}
 
-	return fridgedoorgateway.ResponseUnsuccessful(400), errors.New("Unknown update type '" + r.UpdateType + "'")
+	log.Printf("Update type not known %s\n", r.UpdateType)
+	return createErrorResponse(400, "Update type not known: '" + r.UpdateType + "'")
 }
 
 func findRecipe(ctx context.Context, recipeID *primitive.ObjectID, user *fridgedoorgateway.AuthenticatedUser) (*recipeapi.EditableRecipe, error) {
@@ -113,13 +134,22 @@ func parseRequest(request *events.APIGatewayProxyRequest) (*UpdateRecipeRequest,
 	return r, nil
 }
 
-func createResponse(r *recipeapi.Recipe, err error) (events.APIGatewayProxyResponse, error) {
+func createResponse(r *recipeapi.Recipe, err error) (*events.APIGatewayProxyResponse, error) {
 
 	if err != nil {
-		return fridgedoorgateway.ResponseUnsuccessful(500), err
+		r := fridgedoorgateway.ResponseUnsuccessful(500)
+		return &r, err
 	}
 
-	return fridgedoorgateway.ResponseSuccessful(r), nil
+	rs := fridgedoorgateway.ResponseSuccessful(r)
+	return &rs, nil
+}
+
+func createErrorResponse(statusCode int, message string) (*events.APIGatewayProxyResponse, error) {
+
+	response := fridgedoorgateway.ResponseUnsuccessfulString(statusCode, message)
+
+	return &response, errors.New(message)
 }
 
 func main() {

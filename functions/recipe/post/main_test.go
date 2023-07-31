@@ -64,6 +64,80 @@ func TestHandlerUpdateName(t *testing.T) {
 	dfdtestingapi.DeleteUserForRequest(ctx, apirequest)
 }
 
+func TestUnknownTypeHandled(t *testing.T) {
+
+	dfdtesting.SetTestCollectionOverride()
+	dfdtesting.SetUserViewFindByUsernamePredicate()
+
+	ctx := context.TODO()
+
+	user := dfdtestingapi.CreateTestAuthenticatedUser("TestUser")
+
+	r, err := recipeapi.CreateRecipe(ctx, user, "name")
+	assert.Nil(t, err)
+
+	request := &UpdateRecipeRequest{
+		RecipeID:   r.ID,
+		UpdateType: "UNKNOWN",
+	}
+
+	// Arrange
+	apirequest := dfdtestingapi.CreateTestAuthorizedRequest("TestUser")
+
+	b, err := json.Marshal(request)
+	assert.Nil(t, err)
+	apirequest.Body = string(b)
+
+	// Act
+	response, err := Handler(*apirequest)
+
+	// Assert
+	assert.Nil(t, err)
+	assert.Equal(t, 400, response.StatusCode)
+	assert.NotNil(t, response)
+
+	assert.Equal(t, "Update type not known: 'UNKNOWN'", response.Body)
+
+	dfdtestingapi.DeleteUserForRequest(ctx, apirequest)
+}
+
+func TestPanicHandled(t *testing.T) {
+
+	dfdtesting.SetTestCollectionOverride()
+	dfdtesting.SetUserViewFindByUsernamePredicate()
+
+	ctx := context.TODO()
+
+	user := dfdtestingapi.CreateTestAuthenticatedUser("TestUser")
+
+	r, err := recipeapi.CreateRecipe(ctx, user, "name")
+	assert.Nil(t, err)
+
+	request := &UpdateRecipeRequest{
+		RecipeID:   r.ID,
+		UpdateType: "PANIC",
+	}
+
+	// Arrange
+	apirequest := dfdtestingapi.CreateTestAuthorizedRequest("TestUser")
+
+	b, err := json.Marshal(request)
+	assert.Nil(t, err)
+	apirequest.Body = string(b)
+
+	// Act
+	response, err := Handler(*apirequest)
+
+	// Assert
+	assert.Nil(t, err)
+	assert.Equal(t, 500, response.StatusCode)
+	assert.NotNil(t, response)
+
+	assert.Equal(t, "Unexpected Error", response.Body)
+
+	dfdtestingapi.DeleteUserForRequest(ctx, apirequest)
+}
+
 func TestRequestUnmarshalsCorrectly(t *testing.T) {
 
 	o := primitive.NewObjectID()
