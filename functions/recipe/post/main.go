@@ -41,8 +41,12 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 
 	res, err := handleRequest(request)
 
-	if res == nil {
+	if err != nil {
 		log.Println("Error caught processing request", err)
+	}
+
+	if res == nil {
+		log.Println("Response empty, returning unexpected error")
 		return fridgedoorgateway.ResponseUnsuccessfulString(500, "Unexpected Error"), nil
 	}
 
