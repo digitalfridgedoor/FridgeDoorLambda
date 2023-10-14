@@ -14,6 +14,7 @@ import (
 
 var errMissingParameters = errors.New("Missing parameters")
 var errParseResult = errors.New("Error parsing result")
+var errunexpected = errors.New("Unexpected error")
 
 // ImageURLResponse is the type returned by get image url
 type ImageURLResponse struct {
@@ -55,13 +56,11 @@ func handleRequest(request events.APIGatewayProxyRequest) (*events.APIGatewayPro
 
 	if err != nil {
 		log.Fatal(err.Error())
+		response :=  fridgedoorgateway.ResponseUnsuccessful(500)
+		return &response, errunexpected
 	}
 
-	response := &ImageURLResponse{
-		URL: url,
-	}
-
-	success := fridgedoorgateway.ResponseSuccessful(response)
+	success := fridgedoorgateway.ResponseSuccessfulString(url)
 	return &success, nil
 }
 
