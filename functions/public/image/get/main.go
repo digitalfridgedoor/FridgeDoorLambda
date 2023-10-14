@@ -25,13 +25,30 @@ type ImageURLResponse struct {
 // However you could use other event sources (S3, Kinesis etc), or JSON-decoded primitive types such as 'string'.
 func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 
+	res, err := handleRequest(request)
+
+	if err != nil {
+		log.Println("Error caught processing request", err)
+	}
+
+	if res == nil {
+		log.Println("Response empty, returning unexpected error")
+		return fridgedoorgateway.ResponseUnsuccessfulString(500, "Unexpected Error"), nil
+	}
+
+	return *res, err
+}
+
+func handleRequest(request events.APIGatewayProxyRequest) (*events.APIGatewayProxyResponse, error) {
+
 	// stdout and stderr are sent to AWS CloudWatch Logs
-	log.Printf("Processing Lambda request SearchIngredient %s\n", request.RequestContext.RequestID)
+	log.Printf("Processing Lambda request PublicImageGet %s\n", request.RequestContext.RequestID)
 
 	key, ok := request.QueryStringParameters["key"]
 	if !ok {
 		fmt.Println("Missing parameter 'key'.")
-		return fridgedoorgateway.ResponseUnsuccessful(400), errMissingParameters
+		response :=  fridgedoorgateway.ResponseUnsuccessful(400)
+		return &response, errMissingParameters
 	}
 
 	url, err := imageapi.CreatePresignedURL("get", key)
@@ -44,7 +61,8 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 		URL: url,
 	}
 
-	return fridgedoorgateway.ResponseSuccessful(response), nil
+	success := fridgedoorgateway.ResponseSuccessful(response)
+	return &success, nil
 }
 
 func main() {
